@@ -1,0 +1,36 @@
+.data-table {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  border-collapse: collapse;
+  .table-row {
+    display: flex;
+    flex: 1 0 auto;
+    align-items: stretch;
+    .t-columns {
+      // overflow: hidden;
+      // text-overflow: ellipsis;
+      // white-space: nowrap;
+      flex-wrap: wrap;
+      flex-grow: 0;
+    }
+    .t-columns,
+    .t-head {
+      // flex: 1;
+      border-right: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+      padding: 5px;
+      width: 120px;
+      flex: 100 0 auto;
+      word-break: break-word;
+      &:first-child {
+        border-left: 1px solid #ccc;
+      }
+    }
+  }
+}
+
+.container {
+  overflow-x: auto;
+  flex: 1;
+}
