@@ -1,23 +1,24 @@
 import './assets/style.scss';
-
 import React, { Component } from 'react';
 
 import Body from './Body';
 import Input from './Input';
 import Header from './Header';
 import Select from './Select';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 class Hagrid extends Component {
-  render() {
+  render () {
     const { data, columns } = this.props;
 
     return (
-      <div className="container">
         <div className="data-table">
-          <Header columns={columns} />
-          <Body data={data} columns={columns} />
+          <Scrollbars
+           >
+            <Header columns={columns} />
+            <Body data={data} columns={columns} />
+          </Scrollbars>
         </div>
-      </div>
     );
   }
 }
