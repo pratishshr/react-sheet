@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 
-import Hagrid, { Input, Select } from '../../src';
+import Hagrid, { Input, Select, withKeyEvents } from '../../src';
 
+const KeyHagrid = withKeyEvents(Hagrid);
 class Demo extends Component {
   constructor() {
     super();
     this.columns = [
       {
         Header: 'ID',
-        Cell: row => row.index + 1,
+        Cell: row => <span>{row.index + 1}</span>,
         className: 'font-weight-normal',
         width: 40
       },
@@ -19,10 +20,11 @@ class Demo extends Component {
         headerClassName: 'editable',
         className: 'editable',
         width: 90,
-        Cell: row => (
+        Cell: (row, { isFocused }) => (
           <Input
+            isFocused={isFocused}
             id={row.original.id}
-            name="input.depth"
+            name="depth"
             value={row.value}
             handleChange={this.handleChange}
           />
@@ -34,10 +36,11 @@ class Demo extends Component {
         headerClassName: 'editable',
         className: 'editable selectable',
         width: 100,
-        Cell: row => (
+        Cell: (row, { isFocused }) => (
           <Select
             id={row.original.id}
-            name="input.soilType"
+            isFocused={isFocused}
+            name="soilType"
             value={row.value}
             handleChange={this.handleChange}
             options={[
@@ -59,10 +62,11 @@ class Demo extends Component {
         headerClassName: 'editable',
         className: 'editable',
         width: 40,
-        Cell: row => (
+        Cell: (row, { isFocused }) => (
           <Input
+            isFocused={isFocused}
             id={row.original.id}
-            name="input.blowCount"
+            name="blowCount"
             value={row.value}
             handleChange={this.handleChange}
           />
@@ -74,10 +78,11 @@ class Demo extends Component {
         headerClassName: 'editable',
         className: 'editable',
         width: 50,
-        Cell: row => (
+        Cell: (row, { isFocused }) => (
           <Input
+            isFocused={isFocused}
             id={row.original.id}
-            name="input.const"
+            name="const"
             value={row.value}
             handleChange={this.handleChange}
           />
@@ -89,10 +94,11 @@ class Demo extends Component {
         headerClassName: 'editable',
         className: 'editable',
         width: 50,
-        Cell: row => (
+        Cell: (row, { isFocused }) => (
           <Input
+            isFocused={isFocused}
             id={row.original.id}
-            name="input.percentFines"
+            name="percentFines"
             value={row.value}
             handleChange={this.handleChange}
           />
@@ -104,10 +110,11 @@ class Demo extends Component {
         headerClassName: 'editable',
         className: 'editable',
         width: 40,
-        Cell: row => (
+        Cell: (row, { isFocused }) => (
           <Input
+            isFocused={isFocused}
             id={row.original.id}
-            name="input.MC"
+            name="MC"
             value={row.value}
             handleChange={this.handleChange}
           />
@@ -119,10 +126,11 @@ class Demo extends Component {
         headerClassName: 'editable',
         className: 'editable',
         width: 40,
-        Cell: row => (
+        Cell: (row, { isFocused }) => (
           <Input
+            isFocused={isFocused}
             id={row.original.id}
-            name="input.LL"
+            name="LL"
             value={row.value}
             handleChange={this.handleChange}
           />
@@ -164,118 +172,400 @@ class Demo extends Component {
         width: 100
       }
     ];
+    this.state = {
+      data: {
+        1: {
+          input: {
+            depth: '1',
+            soilType: '1',
+            percentFines: '4',
+            blowCount: '2',
+            MC: '1',
+            LL: '2',
+            const: '3'
+          },
+          calculated: {
+            depth_input: 1,
+            soilType_input: 'SM',
+            percentFines_input: 4,
+            blowCount_NF_input: 2,
+            elevation: 0,
+            currentUnitWeight: 139.23,
+            totalStress_SVo: 278.46,
+            effectiveStress_ESVO: 278.46,
+            energyCorrectionFactor_CE: 3.33,
+            boreholeCorrectionFactor_CB: 1,
+            rodLengthCorrectionFactor_CR: 0.75,
+            linerCorrectionFactor_CS: 1.1,
+            overburdenCorrectionFactor_CN: 1.7,
+            deltaN: 0,
+            N160: 4.67,
+            N160_CS: 4.67,
+            ESinKPA: 14.01,
+            ESinPSF: 292.63,
+            constrainedModulus: 146
+          },
+          override: {
+            elevation: null,
+            currentUnitWeight: null,
+            totalStress_SVo: null,
+            effectiveStress_ESVO: null,
+            energyCorrectionFactor_CE: null,
+            boreholeCorrectionFactor_CB: null,
+            rodLengthCorrectionFactor_CR: null,
+            linerCorrectionFactor_CS: null,
+            overburdenCorrectionFactor_CN: null,
+            deltaN: null,
+            N160: null,
+            N160_CS: null,
+            ESinKPA: null,
+            ESinPSF: null,
+            constrainedModulus: null
+          },
+          id: '1'
+        },
+        2: {
+          input: {
+            depth: '2',
+            soilType: '1',
+            percentFines: '5',
+            blowCount: '3',
+            MC: '5',
+            LL: '6',
+            const: '45'
+          },
+          calculated: {
+            depth_input: 2,
+            soilType_input: 'SM',
+            percentFines_input: 5,
+            blowCount_NF_input: 3,
+            elevation: -1,
+            currentUnitWeight: 139.23,
+            totalStress_SVo: 278.46,
+            effectiveStress_ESVO: 278.46,
+            energyCorrectionFactor_CE: 3.33,
+            boreholeCorrectionFactor_CB: 1,
+            rodLengthCorrectionFactor_CR: 0.75,
+            linerCorrectionFactor_CS: 1.1,
+            overburdenCorrectionFactor_CN: 1.7,
+            deltaN: 0,
+            N160: 4.67,
+            N160_CS: 4.67,
+            ESinKPA: 210.16,
+            ESinPSF: 4389.38,
+            constrainedModulus: 2195
+          },
+          override: {
+            elevation: null,
+            currentUnitWeight: null,
+            totalStress_SVo: null,
+            effectiveStress_ESVO: null,
+            energyCorrectionFactor_CE: null,
+            boreholeCorrectionFactor_CB: null,
+            rodLengthCorrectionFactor_CR: null,
+            linerCorrectionFactor_CS: null,
+            overburdenCorrectionFactor_CN: null,
+            deltaN: null,
+            N160: null,
+            N160_CS: null,
+            ESinKPA: null,
+            ESinPSF: null,
+            constrainedModulus: null
+          },
+          id: '2'
+        },
+        3: {
+          input: {
+            depth: '2',
+            soilType: '1',
+            percentFines: '5',
+            blowCount: '3',
+            MC: '5',
+            LL: '6',
+            const: '45'
+          },
+          calculated: {
+            depth_input: 2,
+            soilType_input: 'SM',
+            percentFines_input: 5,
+            blowCount_NF_input: 3,
+            elevation: -1,
+            currentUnitWeight: 139.23,
+            totalStress_SVo: 278.46,
+            effectiveStress_ESVO: 278.46,
+            energyCorrectionFactor_CE: 3.33,
+            boreholeCorrectionFactor_CB: 1,
+            rodLengthCorrectionFactor_CR: 0.75,
+            linerCorrectionFactor_CS: 1.1,
+            overburdenCorrectionFactor_CN: 1.7,
+            deltaN: 0,
+            N160: 4.67,
+            N160_CS: 4.67,
+            ESinKPA: 210.16,
+            ESinPSF: 4389.38,
+            constrainedModulus: 2195
+          },
+          override: {
+            elevation: null,
+            currentUnitWeight: null,
+            totalStress_SVo: null,
+            effectiveStress_ESVO: null,
+            energyCorrectionFactor_CE: null,
+            boreholeCorrectionFactor_CB: null,
+            rodLengthCorrectionFactor_CR: null,
+            linerCorrectionFactor_CS: null,
+            overburdenCorrectionFactor_CN: null,
+            deltaN: null,
+            N160: null,
+            N160_CS: null,
+            ESinKPA: null,
+            ESinPSF: null,
+            constrainedModulus: null
+          },
+          id: '3'
+        },
+        4: {
+          input: {
+            depth: '2',
+            soilType: '1',
+            percentFines: '5',
+            blowCount: '3',
+            MC: '5',
+            LL: '6',
+            const: '45'
+          },
+          calculated: {
+            depth_input: 2,
+            soilType_input: 'SM',
+            percentFines_input: 5,
+            blowCount_NF_input: 3,
+            elevation: -1,
+            currentUnitWeight: 139.23,
+            totalStress_SVo: 278.46,
+            effectiveStress_ESVO: 278.46,
+            energyCorrectionFactor_CE: 3.33,
+            boreholeCorrectionFactor_CB: 1,
+            rodLengthCorrectionFactor_CR: 0.75,
+            linerCorrectionFactor_CS: 1.1,
+            overburdenCorrectionFactor_CN: 1.7,
+            deltaN: 0,
+            N160: 4.67,
+            N160_CS: 4.67,
+            ESinKPA: 210.16,
+            ESinPSF: 4389.38,
+            constrainedModulus: 2195
+          },
+          override: {
+            elevation: null,
+            currentUnitWeight: null,
+            totalStress_SVo: null,
+            effectiveStress_ESVO: null,
+            energyCorrectionFactor_CE: null,
+            boreholeCorrectionFactor_CB: null,
+            rodLengthCorrectionFactor_CR: null,
+            linerCorrectionFactor_CS: null,
+            overburdenCorrectionFactor_CN: null,
+            deltaN: null,
+            N160: null,
+            N160_CS: null,
+            ESinKPA: null,
+            ESinPSF: null,
+            constrainedModulus: null
+          },
+          id: '4'
+        },
+        5: {
+          input: {
+            depth: '2',
+            soilType: '1',
+            percentFines: '5',
+            blowCount: '3',
+            MC: '5',
+            LL: '6',
+            const: '45'
+          },
+          calculated: {
+            depth_input: 2,
+            soilType_input: 'SM',
+            percentFines_input: 5,
+            blowCount_NF_input: 3,
+            elevation: -1,
+            currentUnitWeight: 139.23,
+            totalStress_SVo: 278.46,
+            effectiveStress_ESVO: 278.46,
+            energyCorrectionFactor_CE: 3.33,
+            boreholeCorrectionFactor_CB: 1,
+            rodLengthCorrectionFactor_CR: 0.75,
+            linerCorrectionFactor_CS: 1.1,
+            overburdenCorrectionFactor_CN: 1.7,
+            deltaN: 0,
+            N160: 4.67,
+            N160_CS: 4.67,
+            ESinKPA: 210.16,
+            ESinPSF: 4389.38,
+            constrainedModulus: 2195
+          },
+          override: {
+            elevation: null,
+            currentUnitWeight: null,
+            totalStress_SVo: null,
+            effectiveStress_ESVO: null,
+            energyCorrectionFactor_CE: null,
+            boreholeCorrectionFactor_CB: null,
+            rodLengthCorrectionFactor_CR: null,
+            linerCorrectionFactor_CS: null,
+            overburdenCorrectionFactor_CN: null,
+            deltaN: null,
+            N160: null,
+            N160_CS: null,
+            ESinKPA: null,
+            ESinPSF: null,
+            constrainedModulus: null
+          },
+          id: '5'
+        },
+        6: {
+          input: {
+            depth: '2',
+            soilType: '1',
+            percentFines: '5',
+            blowCount: '3',
+            MC: '5',
+            LL: '6',
+            const: '45'
+          },
+          calculated: {
+            depth_input: 2,
+            soilType_input: 'SM',
+            percentFines_input: 5,
+            blowCount_NF_input: 3,
+            elevation: -1,
+            currentUnitWeight: 139.23,
+            totalStress_SVo: 278.46,
+            effectiveStress_ESVO: 278.46,
+            energyCorrectionFactor_CE: 3.33,
+            boreholeCorrectionFactor_CB: 1,
+            rodLengthCorrectionFactor_CR: 0.75,
+            linerCorrectionFactor_CS: 1.1,
+            overburdenCorrectionFactor_CN: 1.7,
+            deltaN: 0,
+            N160: 4.67,
+            N160_CS: 4.67,
+            ESinKPA: 210.16,
+            ESinPSF: 4389.38,
+            constrainedModulus: 2195
+          },
+          override: {
+            elevation: null,
+            currentUnitWeight: null,
+            totalStress_SVo: null,
+            effectiveStress_ESVO: null,
+            energyCorrectionFactor_CE: null,
+            boreholeCorrectionFactor_CB: null,
+            rodLengthCorrectionFactor_CR: null,
+            linerCorrectionFactor_CS: null,
+            overburdenCorrectionFactor_CN: null,
+            deltaN: null,
+            N160: null,
+            N160_CS: null,
+            ESinKPA: null,
+            ESinPSF: null,
+            constrainedModulus: null
+          },
+          id: '6'
+        },
+        7: {
+          input: {
+            depth: '2',
+            soilType: '1',
+            percentFines: '5',
+            blowCount: '3',
+            MC: '5',
+            LL: '6',
+            const: '45'
+          },
+          calculated: {
+            depth_input: 2,
+            soilType_input: 'SM',
+            percentFines_input: 5,
+            blowCount_NF_input: 3,
+            elevation: -1,
+            currentUnitWeight: 139.23,
+            totalStress_SVo: 278.46,
+            effectiveStress_ESVO: 278.46,
+            energyCorrectionFactor_CE: 3.33,
+            boreholeCorrectionFactor_CB: 1,
+            rodLengthCorrectionFactor_CR: 0.75,
+            linerCorrectionFactor_CS: 1.1,
+            overburdenCorrectionFactor_CN: 1.7,
+            deltaN: 0,
+            N160: 4.67,
+            N160_CS: 4.67,
+            ESinKPA: 210.16,
+            ESinPSF: 4389.38,
+            constrainedModulus: 2195
+          },
+          override: {
+            elevation: null,
+            currentUnitWeight: null,
+            totalStress_SVo: null,
+            effectiveStress_ESVO: null,
+            energyCorrectionFactor_CE: null,
+            boreholeCorrectionFactor_CB: null,
+            rodLengthCorrectionFactor_CR: null,
+            linerCorrectionFactor_CS: null,
+            overburdenCorrectionFactor_CN: null,
+            deltaN: null,
+            N160: null,
+            N160_CS: null,
+            ESinKPA: null,
+            ESinPSF: null,
+            constrainedModulus: null
+          },
+          id: '7'
+        }
+      }
+    };
   }
 
-  render() {
-    return (
-      <Hagrid
-        data={[
-          {
-            input: {
-              depth: '1',
-              soilType: '1',
-              percentFines: '4',
-              blowCount: '2',
-              MC: '1',
-              LL: '2',
-              const: '3'
-            },
-            calculated: {
-              depth_input: 1,
-              soilType_input: 'SM',
-              percentFines_input: 4,
-              blowCount_NF_input: 2,
-              elevation: 0,
-              currentUnitWeight: 139.23,
-              totalStress_SVo: 278.46,
-              effectiveStress_ESVO: 278.46,
-              energyCorrectionFactor_CE: 3.33,
-              boreholeCorrectionFactor_CB: 1,
-              rodLengthCorrectionFactor_CR: 0.75,
-              linerCorrectionFactor_CS: 1.1,
-              overburdenCorrectionFactor_CN: 1.7,
-              deltaN: 0,
-              N160: 4.67,
-              N160_CS: 4.67,
-              ESinKPA: 14.01,
-              ESinPSF: 292.63,
-              constrainedModulus: 146
-            },
-            override: {
-              elevation: null,
-              currentUnitWeight: null,
-              totalStress_SVo: null,
-              effectiveStress_ESVO: null,
-              energyCorrectionFactor_CE: null,
-              boreholeCorrectionFactor_CB: null,
-              rodLengthCorrectionFactor_CR: null,
-              linerCorrectionFactor_CS: null,
-              overburdenCorrectionFactor_CN: null,
-              deltaN: null,
-              N160: null,
-              N160_CS: null,
-              ESinKPA: null,
-              ESinPSF: null,
-              constrainedModulus: null
-            },
-            id: '1'
-          },
-          {
-            input: {
-              depth: '2',
-              soilType: '1',
-              percentFines: '5',
-              blowCount: '3',
-              MC: '5',
-              LL: '6',
-              const: '45'
-            },
-            calculated: {
-              depth_input: 2,
-              soilType_input: 'SM',
-              percentFines_input: 5,
-              blowCount_NF_input: 3,
-              elevation: -1,
-              currentUnitWeight: 139.23,
-              totalStress_SVo: 278.46,
-              effectiveStress_ESVO: 278.46,
-              energyCorrectionFactor_CE: 3.33,
-              boreholeCorrectionFactor_CB: 1,
-              rodLengthCorrectionFactor_CR: 0.75,
-              linerCorrectionFactor_CS: 1.1,
-              overburdenCorrectionFactor_CN: 1.7,
-              deltaN: 0,
-              N160: 4.67,
-              N160_CS: 4.67,
-              ESinKPA: 210.16,
-              ESinPSF: 4389.38,
-              constrainedModulus: 2195
-            },
-            override: {
-              elevation: null,
-              currentUnitWeight: null,
-              totalStress_SVo: null,
-              effectiveStress_ESVO: null,
-              energyCorrectionFactor_CE: null,
-              boreholeCorrectionFactor_CB: null,
-              rodLengthCorrectionFactor_CR: null,
-              linerCorrectionFactor_CS: null,
-              overburdenCorrectionFactor_CN: null,
-              deltaN: null,
-              N160: null,
-              N160_CS: null,
-              ESinKPA: null,
-              ESinPSF: null,
-              constrainedModulus: null
-            },
-            id: '2'
+  handleChange = (id, name, value) => {
+    let { data } = this.state;
+    let input = Object.assign({}, data.input);
+
+    this.setState({
+      data: {
+        ...data,
+        [id]: {
+          ...data[id],
+          input: {
+            ...data[id].input,
+            [name]: value
           }
-        ]}
+        }
+      }
+    });
+  };
+
+  render() {
+    const { data } = this.state;
+    let rows = Object.keys(data)
+      .sort((a, b) => a - b)
+      .reduce(
+        (acc, next) =>
+          acc.concat({
+            ...data[next],
+            id: next
+          }),
+        []
+      );
+
+    return (
+      <KeyHagrid
+        data={rows}
         sortable={true}
         resizable={true}
-        pageSize={[]}
-        columns={this.columns}
         showPagination={true}
+        columns={this.columns}
         noDataText={'No data to display'}
       />
     );

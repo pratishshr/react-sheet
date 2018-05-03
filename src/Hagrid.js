@@ -9,13 +9,19 @@ import Select from './Select';
 
 class Hagrid extends Component {
   render() {
-    const { data, columns } = this.props;
+    const { data, columns, selection, setSelection, focusedCell } = this.props;
 
     return (
-      <div className="container">
+      <div ref={elem => (this.grid = elem)} className="container">
         <div className="data-table">
           <Header columns={columns} />
-          <Body data={data} columns={columns} />
+          <Body
+            data={data}
+            columns={columns}
+            selection={selection}
+            focusedCell={focusedCell}
+            setSelection={setSelection}
+          />
         </div>
       </div>
     );

@@ -13,6 +13,9 @@
       // white-space: nowrap;
       flex-wrap: wrap;
       flex-grow: 0;
+      &.selected {
+        border: 1px solid blue;
+      }
     }
     .t-columns,
     .t-head {
