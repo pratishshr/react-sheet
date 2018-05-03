@@ -22,7 +22,10 @@
     "classnames": "^2.2.5",
     "lodash": "^4.17.10",
     "react": "^16.3.2",
+    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.3.2",
+    "react-perfect-scrollbar": "^1.1.1",
+    "react-scrollbar": "^0.5.4",
     "react-select": "^1.2.1"
   },
   "peerDependencies": {
@@ -30,7 +33,7 @@
     "react-dom": "^16.3.2"
   },
   "devDependencies": {
-    "nwb": "0.21.x",
+    "nwb": "^0.21.5",
     "nwb-sass": "^0.8.4"
   },
   "author": "",

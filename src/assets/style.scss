@@ -1,36 +1,120 @@
+$font-segoe-normal: 'Segoe UI';
+$font-family-sans-fallback: 'Arial', sans-serif;
+$font-family-sans: $font-segoe-normal, 'Source Sans Pro', 'Helvetica Neue', 'Helvetica', $font-family-sans-fallback;
+$element-border: #E6E6E6;
+$light-blue: lighten(#BBE9FF, 8%);
+$para-text: #9FAAB7;
+$table-font: 12px;
+$blue: #1FB6FF;
+
+body{
+  margin:0;
+}
+
+.table-body-row{
+  height: 200px;
+}
 .data-table {
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
+  height: 245px;
+  *{
+    box-sizing: border-box;
+  }
+  font-family: $font-family-sans;
   border-collapse: collapse;
+  overflow: hidden;
   .table-row {
     display: flex;
-    flex: 1 0 auto;
     align-items: stretch;
+    .t-head{
+      font-weight: bold;
+      color: $para-text;
+      border-top: 1px solid $element-border;
+    }
     .t-columns {
-      // overflow: hidden;
-      // text-overflow: ellipsis;
-      // white-space: nowrap;
-      flex-wrap: wrap;
-      flex-grow: 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      &.editable{
+        padding:0px;
+        &:hover{
+          input{
+            box-shadow: inset 0 0 0px 1px darken($light-blue, 10%);
+          }
+        }
+        input{
+          &:focus{
+            box-shadow: inset 0 0 0px 1px $blue;
+          }
+        }
+      }
+      input{
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        padding: 0 5px;
+        box-sizing: border-box;
+        font-size: $table-font;
+        outline: none;
+        border: none;
+      }
     }
     .t-columns,
     .t-head {
-      // flex: 1;
-      border-right: 1px solid #ccc;
-      border-bottom: 1px solid #ccc;
-      padding: 5px;
-      width: 120px;
-      flex: 100 0 auto;
+      border-right: 1px solid $element-border;
+      border-bottom: 1px solid $element-border;
+      padding: 2px 5px;
       word-break: break-word;
+      flex: 100 0 auto;
+      width: 100px;
+      font-size: $table-font;
+      &.editable{
+        background-color: $light-blue;
+      }
       &:first-child {
-        border-left: 1px solid #ccc;
+        border-left: 1px solid $element-border;
       }
     }
   }
-}
-
-.container {
-  overflow-x: auto;
-  flex: 1;
+  .table-head-row, .table-body-row{
+      display: flex;
+      flex-direction: column;
+  }
+  .Select{
+    height: 100%;
+    &.is-focused:not(.is-open){
+      &> Select-control{
+        box-shadow: none !important;
+      }
+    }
+  }
+  .Select-control{
+        height: 100% !important;
+        border: none !important;
+        background-color: transparent !important;
+        &:hover{
+          box-shadow: none;
+        }
+        .Select-multi-value-wrapper{
+          height: 100%;
+          display: flex;
+          width: 100%;
+        }
+        .Select-value{
+            line-height: inherit !important;
+        }
+        .Select-value-label{
+          display: flex;
+          height: 100%;
+          align-items: center;
+        }
+        .Select-input{
+          height: 100% !important;
+          &:focus{
+            background-color: transparent !important;
+          }
+        }
+    }
 }
