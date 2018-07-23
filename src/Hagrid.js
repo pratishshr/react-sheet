@@ -1,4 +1,4 @@
-import './assets/style.scss';
+import '../css/style.scss';
 import React, { Component } from 'react';
 
 import Body from './Body';
