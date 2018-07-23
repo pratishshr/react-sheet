@@ -1,7 +1,7 @@
 {
   "name": "react-sheet",
-  "version": "1.0.0",
-  "description": "hagrid React component",
+  "version": "0.0.1",
+  "description": "Spreadsheet component for react",
   "main": "lib/index.js",
   "module": "es/index.js",
   "files": [
