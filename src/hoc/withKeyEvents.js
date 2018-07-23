@@ -60,12 +60,14 @@ function withKeyEvents(WrappedComponent) {
       if (keyCode === keys.ESCAPE) {
         e.preventDefault();
 
+        this.blur();
         this.addListeners();
         this.removeEscapeListener();
       }
       if (keyCode === keys.ENTER) {
         e.preventDefault();
 
+        this.blur();
         this.moveDown();
         this.addListeners();
         this.removeEscapeListener();
@@ -177,12 +179,40 @@ function withKeyEvents(WrappedComponent) {
       this.setSelection(row, column);
     };
 
-    focus = () => {
-      let { selection } = this.state;
+    isCellEditable = (row, column) => {
+      const cell = this.getCell(row, column);
 
-      this.removeListeners();
-      this.addEscapeListener();
-      this.setFocus(selection.row, selection.column);
+      return cell.className.split(' ').includes('editable');
+    };
+
+    focus = () => {
+      const { row, column } = this.state.selection;
+
+      const cell = this.getCell(row, column);
+      const input = cell.querySelector('input');
+
+      if (this.isCellEditable(row, column)) {
+        input && input.focus();
+
+        this.removeListeners();
+        this.addEscapeListener();
+        this.setFocus(row, column);
+      }
+    };
+
+    blur = () => {
+      const { row, column } = this.state.selection;
+
+      const cell = this.getCell(row, column);
+      const input = cell.querySelector('input');
+
+      if (input) {
+        input.blur();
+      }
+    };
+
+    getCell = (row, column) => {
+      return document.querySelector(`#cell-${row}-${column}`);
     };
 
     render() {

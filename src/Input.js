@@ -19,45 +19,10 @@ class Input extends Component {
     handleChange(id, name, value);
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.isFocused !== this.props.isFocused) {
-      if (nextProps.isFocused) {
-        this.focus();
-      } else {
-        this.blur();
-      }
-    }
-  }
-
-  focus = () => {
-    this.input.focus();
-  };
-
-  blur = () => {
-    this.input.blur();
-  };
-
   clear = () => {
     const { id, name, handleChange } = this.props;
 
     handleChange(id, name, '');
-  };
-
-  onKeyDown = e => {
-    const keyCode = e.keyCode;
-
-    if (!ALLOWED_KEYS.includes(keyCode)) {
-      return;
-    }
-
-    e.preventDefault();
-
-    let press = {
-      [keys.ENTER]: this.blur,
-      [keys.ESCAPE]: this.blur
-    };
-
-    press[e.keyCode]();
   };
 
   render() {

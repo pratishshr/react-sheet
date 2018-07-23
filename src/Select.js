@@ -126,6 +126,7 @@ class Select extends Component {
 
     return (
       <PortalSelect
+        openOnFocus={true}
         ref={elem => (this.select = elem)}
         name={name}
         value={value}
