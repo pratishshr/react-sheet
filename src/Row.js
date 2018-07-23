@@ -8,16 +8,19 @@ class Row extends Component {
   render() {
     const {
       row,
+      style,
       columns,
       rowIndex,
-      focusedRow,
-      focusedColumn,
-      selectedRow,
-      selectedColumn
+      selection,
+      focusedCell,
+      setSelection
     } = this.props;
 
+    const { row: focusedRow, column: focusedColumn } = focusedCell;
+    const { row: selectedRow, column: selectedColumn } = selection;
+
     return (
-      <div className="table-row">
+      <div className="table-row" style={style}>
         {columns.map((column, colIndex) => {
           const { Cell, width, className } = column;
 

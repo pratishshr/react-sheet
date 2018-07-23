@@ -1,8 +1,25 @@
 import React, { Component } from 'react';
+import { List } from 'react-virtualized';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import Row from './Row';
 
+function renderRow(data, columns, selection, focusedCell, setSelection) {
+  return ({ key, index, isScrolling, isVisible, style }) => {
+    return (
+      <Row
+        key={key}
+        style={style}
+        rowIndex={index}
+        row={data[index]}
+        columns={columns}
+        selection={selection}
+        focusedCell={focusedCell}
+        setSelection={setSelection}
+      />
+    );
+  };
+}
 class Body extends Component {
   render() {
     const {
@@ -12,25 +29,21 @@ class Body extends Component {
       setSelection,
       focusedCell
     } = this.props;
-    const { row: focusedRow, column: focusedColumn } = focusedCell;
-    const { row: selectedRow, column: selectedColumn } = selection;
-
     return (
       <div className="table-body-row" style={{ width: '1075px' }}>
-        <Scrollbars>
-          {data.map((row, rowIndex) => (
-            <Row
-              row={row}
-              key={rowIndex}
-              columns={columns}
-              rowIndex={rowIndex}
-              focusedRow={focusedRow}
-              selectedRow={selectedRow}
-              focusedColumn={focusedColumn}
-              selectedColumn={selectedColumn}
-            />
-          ))}
-        </Scrollbars>
+        <List
+          width={1075}
+          height={300}
+          rowCount={data.length}
+          rowHeight={20}
+          rowRenderer={renderRow(
+            data,
+            columns,
+            selection,
+            focusedCell,
+            setSelection
+          )}
+        />
       </div>
     );
   }
