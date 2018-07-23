@@ -9,10 +9,22 @@ class CustomCell extends Component {
     return false;
   }
   render() {
-    const { style, rowData, className, customCell, onMouseDown } = this.props;
+    const {
+      index,
+      style,
+      rowData,
+      className,
+      customCell,
+      onMouseDown
+    } = this.props;
 
     return (
-      <div style={style} className={className} onMouseDown={onMouseDown}>
+      <div
+        style={style}
+        className={className}
+        onMouseDown={onMouseDown}
+        id={index}
+      >
         {customCell || rowData.value}
       </div>
     );

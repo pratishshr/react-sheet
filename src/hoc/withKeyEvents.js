@@ -72,7 +72,19 @@ function withKeyEvents(WrappedComponent) {
       }
     };
 
+    scrollToCell = (row, column) => {
+      const cell = document.querySelector(`#cell-${row}-${column}`);
+
+      cell.scrollIntoView({
+        behavior: 'instant',
+        block: 'nearest',
+        inline: 'nearest'
+      });
+    };
+
     setSelection = (row, column) => {
+      this.scrollToCell(row, column);
+
       this.setState({
         focusedCell: {
           row: null,
@@ -112,8 +124,6 @@ function withKeyEvents(WrappedComponent) {
       }
 
       e.preventDefault();
-
-      // this.setFocus(null, null);
 
       let press = {
         [keys.UP]: this.moveUp,

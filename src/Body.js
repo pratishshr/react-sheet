@@ -46,6 +46,7 @@ class Body extends Component {
                       ref={elem =>
                         (this[`cell-${rowIndex}-${colIndex}`] = elem)
                       }
+                      index={`cell-${rowIndex}-${colIndex}`}
                       key={`${rowIndex}-${colIndex}`}
                       style={{ width }}
                       rowData={rowData}
