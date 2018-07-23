@@ -170,14 +170,6 @@ function withKeyEvents(WrappedComponent) {
     focus = () => {
       let { selection } = this.state;
 
-      let customCell = this.keyWrapper.body[
-        `cell-${selection.row}-${selection.column}`
-      ].props.customCell;
-
-      if (!customCell) {
-        return;
-      }
-
       this.removeListeners();
       this.addEscapeListener();
       this.setFocus(selection.row, selection.column);

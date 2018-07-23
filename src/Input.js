@@ -61,12 +61,12 @@ class Input extends Component {
   };
 
   render() {
-    const { name, value, inputProps } = this.props;
+    const { name, value, inputProps, type } = this.props;
 
     return (
       <input
         ref={elem => (this.cell = elem)}
-        type="text"
+        type={type}
         name={name}
         value={value}
         onChange={this.onChange}
