@@ -45,10 +45,13 @@ function withKeyEvents(WrappedComponent) {
       window.removeEventListener('keydown', this.onKeyDown, false);
     };
 
+    /**
+     * Focus while directly typing on selection.
+     */
     onKeyPress = e => {
-      const charCode = e.charCode;
-
-      this.focus();
+      if (!this.isFocused()) {
+        this.focus();
+      }
     };
 
     onEscapeKeyDown = e => {
@@ -57,7 +60,6 @@ function withKeyEvents(WrappedComponent) {
       if (keyCode === keys.ESCAPE) {
         e.preventDefault();
 
-        this.setFocus(null, null);
         this.addListeners();
         this.removeEscapeListener();
       }
@@ -72,11 +74,25 @@ function withKeyEvents(WrappedComponent) {
 
     setSelection = (row, column) => {
       this.setState({
+        focusedCell: {
+          row: null,
+          column: null
+        },
         selection: {
           row,
           column
         }
       });
+    };
+
+    isFocused = () => {
+      const { row, column } = this.state.focusedCell;
+
+      if (row && column) {
+        return true;
+      }
+
+      return false;
     };
 
     setFocus = (row, column) => {
@@ -97,7 +113,7 @@ function withKeyEvents(WrappedComponent) {
 
       e.preventDefault();
 
-      this.setFocus(null, null);
+      // this.setFocus(null, null);
 
       let press = {
         [keys.UP]: this.moveUp,
@@ -153,7 +169,6 @@ function withKeyEvents(WrappedComponent) {
 
     focus = () => {
       let { selection } = this.state;
-      console.log(selection.row, selection.column);
 
       let customCell = this.keyWrapper.body[
         `cell-${selection.row}-${selection.column}`

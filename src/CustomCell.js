@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 
 class CustomCell extends Component {
+  shouldComponentUpdate(nextProps) {
+    if (this.props.isSelected !== nextProps.isSelected || nextProps.isFocused) {
+      return true;
+    }
+
+    return false;
+  }
   render() {
     const { style, rowData, className, customCell, onMouseDown } = this.props;
 

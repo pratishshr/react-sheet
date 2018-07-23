@@ -88,6 +88,14 @@ class Select extends Component {
     this.select;
   }
 
+  shouldComponentUpdate(nextProps) {
+    if (this.props.value !== nextProps.value) {
+      return true;
+    }
+
+    return false;
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.isFocused !== this.props.isFocused) {
       if (nextProps.isFocused) {

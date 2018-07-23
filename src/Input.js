@@ -10,6 +10,7 @@ class Input extends Component {
     super();
     this.cell;
   }
+
   onChange = e => {
     e.preventDefault();
     const value = e.target.value;

@@ -18,17 +18,15 @@ class Hagrid extends Component {
     return (
       <div ref={elem => (this.grid = elem)} className="container">
         <div className="data-table">
-          <Scrollbars>
-            <Header columns={columns} />
-            <Body
-              ref={elem => (this.body = elem)}
-              data={data}
-              columns={columns}
-              selection={selection}
-              focusedCell={focusedCell}
-              setSelection={setSelection}
-            />
-          </Scrollbars>
+          <Header columns={columns} />
+          <Body
+            ref={elem => (this.body = elem)}
+            data={data}
+            columns={columns}
+            selection={selection}
+            focusedCell={focusedCell}
+            setSelection={setSelection}
+          />
         </div>
       </div>
     );
