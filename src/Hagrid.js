@@ -12,6 +12,7 @@ class Hagrid extends Component {
     super();
     this.body;
   }
+
   render() {
     const { data, columns, selection, setSelection, focusedCell } = this.props;
 

@@ -1,9 +1,8 @@
-import _get from 'lodash/get';
-import classNames from 'classnames';
 import React, { Component } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import CustomCell from './CustomCell';
+import Row from './Row';
+
 class Body extends Component {
   render() {
     const {
@@ -19,50 +18,18 @@ class Body extends Component {
     return (
       <div className="table-body-row" style={{ width: '1075px' }}>
         <Scrollbars>
-          {data.map((row, rowIndex) => {
-            return (
-              <div key={rowIndex} className="table-row">
-                {columns.map((column, colIndex) => {
-                  const { Cell, width, className } = column;
-
-                  let rowData = {
-                    index: rowIndex,
-                    original: row,
-                    value: _get(row, column.accessor, '')
-                  };
-
-                  const isFocused =
-                    rowIndex == focusedRow && colIndex == focusedColumn;
-                  const isSelected =
-                    selectedRow == rowIndex && selectedColumn == colIndex;
-                  let customCell =
-                    Cell &&
-                    Cell(rowData, {
-                      isFocused
-                    });
-
-                  return (
-                    <CustomCell
-                      ref={elem =>
-                        (this[`cell-${rowIndex}-${colIndex}`] = elem)
-                      }
-                      index={`cell-${rowIndex}-${colIndex}`}
-                      key={`${rowIndex}-${colIndex}`}
-                      style={{ width }}
-                      rowData={rowData}
-                      isFocused={isFocused}
-                      isSelected={isSelected}
-                      customCell={customCell}
-                      className={classNames('t-columns', className, {
-                        selected: isSelected
-                      })}
-                      onMouseDown={() => setSelection(rowIndex, colIndex)}
-                    />
-                  );
-                })}
-              </div>
-            );
-          })}
+          {data.map((row, rowIndex) => (
+            <Row
+              row={row}
+              key={rowIndex}
+              columns={columns}
+              rowIndex={rowIndex}
+              focusedRow={focusedRow}
+              selectedRow={selectedRow}
+              focusedColumn={focusedColumn}
+              selectedColumn={selectedColumn}
+            />
+          ))}
         </Scrollbars>
       </div>
     );
