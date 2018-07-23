@@ -18,47 +18,51 @@ class Body extends Component {
 
     return (
       <div className="table-body-row" style={{ width: '1075px' }}>
-        {data.map((row, rowIndex) => {
-          return (
-            <div key={rowIndex} className="table-row">
-              {columns.map((column, colIndex) => {
-                const { Cell, width, className } = column;
+        <Scrollbars>
+          {data.map((row, rowIndex) => {
+            return (
+              <div key={rowIndex} className="table-row">
+                {columns.map((column, colIndex) => {
+                  const { Cell, width, className } = column;
 
-                let rowData = {
-                  index: rowIndex,
-                  original: row,
-                  value: _get(row, column.accessor, '')
-                };
+                  let rowData = {
+                    index: rowIndex,
+                    original: row,
+                    value: _get(row, column.accessor, '')
+                  };
 
-                const isFocused =
-                  rowIndex == focusedRow && colIndex == focusedColumn;
-                const isSelected =
-                  selectedRow == rowIndex && selectedColumn == colIndex;
-                let customCell =
-                  Cell &&
-                  Cell(rowData, {
-                    isFocused
-                  });
+                  const isFocused =
+                    rowIndex == focusedRow && colIndex == focusedColumn;
+                  const isSelected =
+                    selectedRow == rowIndex && selectedColumn == colIndex;
+                  let customCell =
+                    Cell &&
+                    Cell(rowData, {
+                      isFocused
+                    });
 
-                return (
-                  <CustomCell
-                    ref={elem => (this[`cell-${rowIndex}-${colIndex}`] = elem)}
-                    key={`${rowIndex}-${colIndex}`}
-                    style={{ width }}
-                    rowData={rowData}
-                    isFocused={isFocused}
-                    isSelected={isSelected}
-                    customCell={customCell}
-                    className={classNames('t-columns', className, {
-                      selected: isSelected
-                    })}
-                    onMouseDown={() => setSelection(rowIndex, colIndex)}
-                  />
-                );
-              })}
-            </div>
-          );
-        })}
+                  return (
+                    <CustomCell
+                      ref={elem =>
+                        (this[`cell-${rowIndex}-${colIndex}`] = elem)
+                      }
+                      key={`${rowIndex}-${colIndex}`}
+                      style={{ width }}
+                      rowData={rowData}
+                      isFocused={isFocused}
+                      isSelected={isSelected}
+                      customCell={customCell}
+                      className={classNames('t-columns', className, {
+                        selected: isSelected
+                      })}
+                      onMouseDown={() => setSelection(rowIndex, colIndex)}
+                    />
+                  );
+                })}
+              </div>
+            );
+          })}
+        </Scrollbars>
       </div>
     );
   }
