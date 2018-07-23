@@ -17,10 +17,7 @@ class Body extends Component {
     const { row: selectedRow, column: selectedColumn } = selection;
 
     return (
-      <div
-        className="table-body-row"
-        style={{ width: '1075px', height: '2000px' }}
-      >
+      <div className="table-body-row" style={{ width: '1075px' }}>
         {data.map((row, rowIndex) => {
           return (
             <div key={rowIndex} className="table-row">
