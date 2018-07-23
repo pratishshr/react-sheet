@@ -6,6 +6,10 @@ import * as keys from './constants/keys';
 const ALLOWED_KEYS = [keys.ESCAPE, keys.ENTER];
 
 class Input extends Component {
+  constructor() {
+    super();
+    this.cell;
+  }
   onChange = e => {
     e.preventDefault();
     const value = e.target.value;
@@ -32,6 +36,12 @@ class Input extends Component {
     this.input.blur();
   };
 
+  clear = () => {
+    const { id, name, handleChange } = this.props;
+
+    handleChange(id, name, '');
+  };
+
   onKeyDown = e => {
     const keyCode = e.keyCode;
 
@@ -40,6 +50,7 @@ class Input extends Component {
     }
 
     e.preventDefault();
+
     let press = {
       [keys.ENTER]: this.blur,
       [keys.ESCAPE]: this.blur
@@ -53,6 +64,7 @@ class Input extends Component {
 
     return (
       <input
+        ref={elem => (this.cell = elem)}
         type="text"
         name={name}
         value={value}

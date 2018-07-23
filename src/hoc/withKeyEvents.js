@@ -30,6 +30,7 @@ function withKeyEvents(WrappedComponent) {
 
     addListeners = () => {
       window.addEventListener('keydown', this.onKeyDown, false);
+      window.addEventListener('keypress', this.onKeyPress, false);
     };
 
     addEscapeListener = () => {
@@ -44,14 +45,28 @@ function withKeyEvents(WrappedComponent) {
       window.removeEventListener('keydown', this.onKeyDown, false);
     };
 
+    onKeyPress = e => {
+      const charCode = e.charCode;
+
+      this.focus();
+    };
+
     onEscapeKeyDown = e => {
-      e.preventDefault();
       const keyCode = e.keyCode;
 
-      this.setFocus(null, null);
-
       if (keyCode === keys.ESCAPE) {
+        e.preventDefault();
+
+        this.setFocus(null, null);
         this.addListeners();
+        this.removeEscapeListener();
+      }
+      if (keyCode === keys.ENTER) {
+        e.preventDefault();
+
+        this.moveDown();
+        this.addListeners();
+        this.removeEscapeListener();
       }
     };
 
@@ -81,6 +96,7 @@ function withKeyEvents(WrappedComponent) {
       }
 
       e.preventDefault();
+
       this.setFocus(null, null);
 
       let press = {
@@ -137,6 +153,15 @@ function withKeyEvents(WrappedComponent) {
 
     focus = () => {
       let { selection } = this.state;
+      console.log(selection.row, selection.column);
+
+      let customCell = this.keyWrapper.body[
+        `cell-${selection.row}-${selection.column}`
+      ].props.customCell;
+
+      if (!customCell) {
+        return;
+      }
 
       this.removeListeners();
       this.addEscapeListener();

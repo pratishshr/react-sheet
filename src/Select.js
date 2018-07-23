@@ -82,6 +82,24 @@ class PortalSelect extends ReactSelect {
   }
 }
 class Select extends Component {
+  constructor() {
+    super();
+
+    this.select;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isFocused !== this.props.isFocused) {
+      if (nextProps.isFocused) {
+        this.focus();
+      }
+    }
+  }
+
+  focus = () => {
+    this.select.focus();
+  };
+
   onChange = selectedOption => {
     const { value } = selectedOption;
     const { id, name, handleChange } = this.props;
@@ -100,12 +118,14 @@ class Select extends Component {
 
     return (
       <PortalSelect
+        ref={elem => (this.select = elem)}
         name={name}
         value={value}
         options={options}
         clearable={clearable}
         searchable={searchable}
         onChange={this.onChange}
+        autoBlur
       />
     );
   }

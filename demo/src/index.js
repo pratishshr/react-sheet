@@ -559,16 +559,7 @@ class Demo extends Component {
         []
       );
 
-    return (
-      <KeyHagrid
-        data={rows}
-        sortable={true}
-        resizable={true}
-        showPagination={true}
-        columns={this.columns}
-        noDataText={'No data to display'}
-      />
-    );
+    return <KeyHagrid data={rows} columns={this.columns} />;
   }
 }
 
