@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import scrollIntoView from 'scroll-into-view-if-needed';
 
 import * as keys from '../constants/keys';
 
@@ -75,10 +76,10 @@ function withKeyEvents(WrappedComponent) {
     };
 
     scrollToCell = (row, column) => {
+      const table = document.querySelector('#react-sheet-body');
       const cell = document.querySelector(`#cell-${row}-${column}`);
 
-      cell.scrollIntoView({
-        behavior: 'instant',
+      scrollIntoView(cell, {
         block: 'nearest',
         inline: 'nearest'
       });

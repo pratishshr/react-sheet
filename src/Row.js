@@ -18,7 +18,7 @@ class Row extends Component {
 
     const { row: focusedRow, column: focusedColumn } = focusedCell;
     const { row: selectedRow, column: selectedColumn } = selection;
-    console.log('rendered', rowIndex);
+
     return (
       <div className="table-row" style={style}>
         {columns.map((column, colIndex) => {

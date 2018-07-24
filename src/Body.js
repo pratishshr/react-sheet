@@ -31,7 +31,11 @@ class Body extends Component {
       focusedCell
     } = this.props;
     return (
-      <div className="table-body-row" style={{ width: width || '1075px' }}>
+      <div
+        className="table-body-row"
+        style={{ width: width || '1075px' }}
+        id="react-sheet-body"
+      >
         <List
           width={width || 1075}
           height={300}

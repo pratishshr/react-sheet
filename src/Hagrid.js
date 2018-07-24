@@ -25,6 +25,7 @@ class Hagrid extends Component {
 
     return (
       <div ref={elem => (this.grid = elem)} className="container">
+        <h1>React Sheet</h1>
         <div className="data-table">
           <Header columns={columns} />
           <Body
