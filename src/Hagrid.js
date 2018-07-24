@@ -14,7 +14,14 @@ class Hagrid extends Component {
   }
 
   render() {
-    const { data, columns, selection, setSelection, focusedCell } = this.props;
+    const {
+      data,
+      columns,
+      width,
+      selection,
+      setSelection,
+      focusedCell
+    } = this.props;
 
     return (
       <div ref={elem => (this.grid = elem)} className="container">
@@ -23,6 +30,7 @@ class Hagrid extends Component {
           <Body
             ref={elem => (this.body = elem)}
             data={data}
+            width={width}
             columns={columns}
             selection={selection}
             focusedCell={focusedCell}

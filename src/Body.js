@@ -24,15 +24,16 @@ class Body extends Component {
   render() {
     const {
       data,
+      width,
       columns,
       selection = {},
       setSelection,
       focusedCell
     } = this.props;
     return (
-      <div className="table-body-row" style={{ width: '1075px' }}>
+      <div className="table-body-row" style={{ width: width || '1075px' }}>
         <List
-          width={1075}
+          width={width || 1075}
           height={300}
           rowCount={data.length}
           rowHeight={20}
