@@ -2,12 +2,17 @@ import React, { Component } from 'react';
 
 class CustomCell extends Component {
   shouldComponentUpdate(nextProps) {
-    if (this.props.isSelected !== nextProps.isSelected || nextProps.isFocused) {
+    if (
+      nextProps.isFocused ||
+      this.props.isSelected !== nextProps.isSelected ||
+      this.props.rowData.value !== nextProps.rowData.value
+    ) {
       return true;
     }
 
     return false;
   }
+
   render() {
     const {
       index,

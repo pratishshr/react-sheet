@@ -30,6 +30,7 @@ class Input extends Component {
 
     return (
       <input
+        tabIndex={-1}
         style={{ cursor: 'default' }}
         ref={elem => (this.cell = elem)}
         type={type}
