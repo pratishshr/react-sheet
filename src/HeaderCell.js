@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React, { Component } from 'react';
 
+const DEFAULT_WIDTH = 100;
 class HeaderCell extends Component {
   shouldComponentUpdate(nextProps) {
     const { column } = this.props;
@@ -18,7 +19,10 @@ class HeaderCell extends Component {
     return (
       <div
         key={Header}
-        style={{ width: width, maxWidth: width }}
+        style={{
+          width: width || DEFAULT_WIDTH,
+          maxWidth: width || DEFAULT_WIDTH
+        }}
         className={classNames('t-head', headerClassname)}
       >
         {Header}

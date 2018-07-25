@@ -38,20 +38,22 @@ class Body extends Component {
         style={{ width: width || '1075px' }}
         id="react-sheet-body"
       >
-        <List
-          width={width || 1075}
-          height={300}
-          rowCount={data.length}
-          rowHeight={20}
-          rowRenderer={renderRow(
-            data,
-            columns,
-            selection,
-            focusedCell,
-            setSelection,
-            focus
-          )}
-        />
+        {width && (
+          <List
+            width={width}
+            height={300}
+            rowCount={data.length}
+            rowHeight={20}
+            rowRenderer={renderRow(
+              data,
+              columns,
+              selection,
+              focusedCell,
+              setSelection,
+              focus
+            )}
+          />
+        )}
       </div>
     );
   }

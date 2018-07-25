@@ -2,14 +2,8 @@ import React, { Component } from 'react';
 
 import HeaderCell from './HeaderCell';
 
+const DEFAULT_WIDTH = 100;
 class Header extends Component {
-  constructor() {
-    super();
-    this.state = {
-      width: 0
-    };
-  }
-
   componentDidMount() {
     this.addWidth();
   }
@@ -18,14 +12,16 @@ class Header extends Component {
    * Used For scrollbars.
    */
   addWidth() {
-    const header = document.querySelector('#rs-header');
+    const { setWidth, columns } = this.props;
+    const width = columns.reduce((acc, nextColumn) => {
+      return acc + (nextColumn.width || DEFAULT_WIDTH);
+    }, 0);
 
-    // console.lot(header.)
+    setWidth(width);
   }
 
   render() {
-    const { width } = this.state;
-    const { columns } = this.props;
+    const { width, columns } = this.props;
 
     return (
       <div id="rs-header" className="table-head-row" style={{ width }}>
