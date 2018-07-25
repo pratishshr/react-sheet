@@ -4,12 +4,13 @@ import { Scrollbars } from 'react-custom-scrollbars';
 
 import Row from './Row';
 
-function renderRow(data, columns, selection, focusedCell, setSelection) {
+function renderRow(data, columns, selection, focusedCell, setSelection, focus) {
   return ({ key, index, isScrolling, isVisible, style }) => {
     return (
       <Row
         key={key}
         style={style}
+        focus={focus}
         rowIndex={index}
         row={data[index]}
         columns={columns}
@@ -28,7 +29,8 @@ class Body extends Component {
       columns,
       selection = {},
       setSelection,
-      focusedCell
+      focusedCell,
+      focus
     } = this.props;
     return (
       <div
@@ -46,7 +48,8 @@ class Body extends Component {
             columns,
             selection,
             focusedCell,
-            setSelection
+            setSelection,
+            focus
           )}
         />
       </div>

@@ -15,6 +15,7 @@ class CustomCell extends Component {
       rowData,
       className,
       customCell,
+      onDoubleClick,
       onMouseDown
     } = this.props;
 
@@ -23,6 +24,7 @@ class CustomCell extends Component {
         style={style}
         className={className}
         onMouseDown={onMouseDown}
+        onDoubleClick={onDoubleClick}
         id={index}
       >
         {customCell || rowData.value}

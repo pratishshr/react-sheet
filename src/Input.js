@@ -30,6 +30,7 @@ class Input extends Component {
 
     return (
       <input
+        style={{ cursor: 'default' }}
         ref={elem => (this.cell = elem)}
         type={type}
         name={name}
@@ -37,6 +38,7 @@ class Input extends Component {
         onChange={this.onChange}
         ref={elem => (this.input = elem)}
         onKeyDown={this.onKeyDown}
+        onMouseDown={e => e.preventDefault()}
         {...inputProps}
       />
     );

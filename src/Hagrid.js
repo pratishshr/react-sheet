@@ -20,18 +20,19 @@ class Hagrid extends Component {
       width,
       selection,
       setSelection,
+      focus,
       focusedCell
     } = this.props;
 
     return (
       <div ref={elem => (this.grid = elem)} className="container">
-        <h1>React Sheet</h1>
         <div className="data-table">
           <Header columns={columns} />
           <Body
             ref={elem => (this.body = elem)}
             data={data}
             width={width}
+            focus={focus}
             columns={columns}
             selection={selection}
             focusedCell={focusedCell}

@@ -3,7 +3,14 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 
 import * as keys from '../constants/keys';
 
-const ALLOWED_KEYS = [keys.UP, keys.LEFT, keys.DOWN, keys.RIGHT, keys.ENTER];
+const ALLOWED_KEYS = [
+  keys.UP,
+  keys.LEFT,
+  keys.DOWN,
+  keys.RIGHT,
+  keys.ENTER,
+  keys.TAB
+];
 
 function withKeyEvents(WrappedComponent) {
   return class KeyWrapper extends Component {
@@ -86,6 +93,7 @@ function withKeyEvents(WrappedComponent) {
     };
 
     setSelection = (row, column) => {
+      this.blur();
       this.scrollToCell(row, column);
 
       this.setState({
@@ -133,6 +141,7 @@ function withKeyEvents(WrappedComponent) {
         [keys.DOWN]: this.moveDown,
         [keys.LEFT]: this.moveLeft,
         [keys.RIGHT]: this.moveRight,
+        [keys.TAB]: e.shiftKey ? this.moveLeft : this.moveRight,
         [keys.ENTER]: this.focus
       };
 
@@ -205,10 +214,10 @@ function withKeyEvents(WrappedComponent) {
       const { row, column } = this.state.selection;
 
       const cell = this.getCell(row, column);
-      const input = cell.querySelector('input');
 
-      if (input) {
-        input.blur();
+      if (cell) {
+        const input = cell.querySelector('input');
+        input && input.blur();
       }
     };
 
@@ -224,6 +233,7 @@ function withKeyEvents(WrappedComponent) {
           ref={elem => {
             this.keyWrapper = elem;
           }}
+          focus={this.focus}
           selection={selection}
           focusedCell={focusedCell}
           setSelection={this.setSelection}

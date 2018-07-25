@@ -2822,7 +2822,12 @@ class Demo extends Component {
         []
       );
 
-      return <KeyHagrid data={rows} columns={this.columns} />;
+    return (
+      <div>
+        <h1>React Sheet</h1>
+        <KeyHagrid data={rows} columns={this.columns} />
+      </div>
+    );
   }
 }
 

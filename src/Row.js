@@ -13,12 +13,12 @@ class Row extends Component {
       rowIndex,
       selection,
       focusedCell,
+      focus,
       setSelection
     } = this.props;
 
     const { row: focusedRow, column: focusedColumn } = focusedCell;
     const { row: selectedRow, column: selectedColumn } = selection;
-
     return (
       <div className="table-row" style={style}>
         {columns.map((column, colIndex) => {
@@ -53,6 +53,10 @@ class Row extends Component {
                 selected: isSelected
               })}
               onMouseDown={() => setSelection(rowIndex, colIndex)}
+              onDoubleClick={() => {
+                console.log('here');
+                focus(selectedRow, selectedColumn);
+              }}
             />
           );
         })}
