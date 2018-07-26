@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import Hagrid, { Input, Select, withKeyEvents } from '../../src';
 
 const KeyHagrid = withKeyEvents(Hagrid);
+// const KeyHagrid = Hagrid;
 class Demo extends Component {
   constructor() {
     super();
@@ -36,13 +37,14 @@ class Demo extends Component {
         headerClassName: 'editable',
         className: 'editable selectable',
         width: 100,
-        Cell: (row, { isFocused }) => (
+        Cell: (row, { isFocused, onEnter }) => (
           <Select
             id={row.original.id}
             isFocused={isFocused}
             name="soilType"
             value={row.value}
             handleChange={this.handleChange}
+            onEnter={onEnter}
             options={[
               {
                 label: '1',

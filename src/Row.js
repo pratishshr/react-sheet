@@ -5,6 +5,21 @@ import React, { Component } from 'react';
 import CustomCell from './CustomCell';
 
 class Row extends Component {
+  onMouseDown = (rowIndex, colIndex) => {
+    const { setSelection } = this.props;
+    if (setSelection) {
+      setSelection(rowIndex, colIndex);
+    }
+  };
+
+  onDoubleClick = (selectedRow, selectedColumn) => {
+    const { focus } = this.props;
+
+    if (focus) {
+      focus(selectedRow, selectedColumn);
+    }
+  };
+
   render() {
     const {
       row,
@@ -14,11 +29,14 @@ class Row extends Component {
       selection,
       focusedCell,
       focus,
-      setSelection
+      setSelection,
+      onEnter
     } = this.props;
 
-    const { row: focusedRow, column: focusedColumn } = focusedCell;
-    const { row: selectedRow, column: selectedColumn } = selection;
+    const { row: focusedRow = null, column: focusedColumn = null } =
+      focusedCell || {};
+    const { row: selectedRow = null, column: selectedColumn = null } =
+      selection || {};
 
     return (
       <div className="table-row" style={style}>
@@ -37,7 +55,8 @@ class Row extends Component {
           let customCell =
             Cell &&
             Cell(rowData, {
-              isFocused
+              isFocused,
+              onEnter
             });
 
           return (
@@ -53,10 +72,8 @@ class Row extends Component {
               className={classNames('t-columns', className, {
                 selected: isSelected
               })}
-              onMouseDown={() => setSelection(rowIndex, colIndex)}
-              onDoubleClick={() => {
-                focus(selectedRow, selectedColumn);
-              }}
+              onMouseDown={this.onMouseDown}
+              onDoubleClick={this.onDoubleClick}
             />
           );
         })}

@@ -2,6 +2,7 @@ import 'react-select/dist/react-select.css';
 
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import _debounce from 'lodash/debounce';
 import React, { Component } from 'react';
 
 import ReactSelect from 'react-select';
@@ -115,6 +116,14 @@ class Select extends Component {
     handleChange(id, name, value);
   };
 
+  onInputChange = _debounce(() => {
+    const { onEnter } = this.props;
+
+    if (onEnter) {
+      onEnter();
+    }
+  });
+
   render() {
     const {
       name,
@@ -136,6 +145,7 @@ class Select extends Component {
         searchable={searchable}
         onChange={this.onChange}
         autoBlur
+        onInputChange={this.onInputChange}
       />
     );
   }

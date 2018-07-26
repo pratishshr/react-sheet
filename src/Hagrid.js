@@ -27,6 +27,7 @@ class Hagrid extends Component {
       selection,
       setSelection,
       focus,
+      onEnter,
       focusedCell
     } = this.props;
     const { width } = this.state;
@@ -41,6 +42,7 @@ class Hagrid extends Component {
               data={data}
               width={width}
               focus={focus}
+              onEnter={onEnter}
               columns={columns}
               selection={selection}
               focusedCell={focusedCell}

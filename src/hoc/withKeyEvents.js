@@ -75,11 +75,15 @@ function withKeyEvents(WrappedComponent) {
       if (keyCode === keys.ENTER) {
         e.preventDefault();
 
-        this.blur();
-        this.moveDown();
-        this.addListeners();
-        this.removeEscapeListener();
+        this.onEnter();
       }
+    };
+
+    onEnter = () => {
+      this.blur();
+      this.moveDown();
+      this.addListeners();
+      this.removeEscapeListener();
     };
 
     scrollToCell = (row, column) => {
@@ -235,6 +239,7 @@ function withKeyEvents(WrappedComponent) {
           }}
           focus={this.focus}
           selection={selection}
+          onEnter={this.onEnter}
           focusedCell={focusedCell}
           setSelection={this.setSelection}
           {...this.props}
