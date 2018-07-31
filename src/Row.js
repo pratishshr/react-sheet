@@ -6,18 +6,23 @@ import CustomCell from './CustomCell';
 
 class Row extends Component {
   onMouseDown = (rowIndex, colIndex) => {
-    const { setSelection } = this.props;
-    if (setSelection) {
-      setSelection(rowIndex, colIndex);
-    }
+    return () => {
+      const { setSelection } = this.props;
+
+      if (setSelection) {
+        setSelection(rowIndex, colIndex);
+      }
+    };
   };
 
   onDoubleClick = (selectedRow, selectedColumn) => {
-    const { focus } = this.props;
+    return () => {
+      const { focus } = this.props;
 
-    if (focus) {
-      focus(selectedRow, selectedColumn);
-    }
+      if (focus) {
+        focus(selectedRow, selectedColumn);
+      }
+    };
   };
 
   render() {
@@ -72,8 +77,8 @@ class Row extends Component {
               className={classNames('t-columns', className, {
                 selected: isSelected
               })}
-              onMouseDown={this.onMouseDown}
-              onDoubleClick={this.onDoubleClick}
+              onMouseDown={this.onMouseDown(rowIndex, colIndex)}
+              onDoubleClick={this.onDoubleClick(selectedRow, selectedColumn)}
             />
           );
         })}
