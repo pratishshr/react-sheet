@@ -30,6 +30,7 @@ body {
       font-weight: bold;
       color: $para-text;
       border-top: 1px solid $element-border;
+      line-height: 150%;
     }
     .t-columns {
       white-space: nowrap;
@@ -108,7 +109,7 @@ body {
       width: 100%;
     }
     .Select-value {
-      line-height: inherit !important;
+      line-height: 20px !important;
     }
     .Select-value-label {
       display: flex;
@@ -122,4 +123,10 @@ body {
       }
     }
   }
+}
+
+
+
+.ReactVirtualized__Grid:focus{
+  outline: none;
 }

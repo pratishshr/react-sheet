@@ -30,7 +30,20 @@ function renderRow(
     );
   };
 }
+const listStyle = {
+  overflowX: false,
+  overflowY: false,
+};
 class Body extends Component {
+   handleScroll = ({ target }) => {
+    const { scrollTop, scrollLeft } = target;
+
+    const { Grid: grid } = this.List;
+
+    grid.handleScrollEvent({ scrollTop, scrollLeft });
+  }
+
+  List = null;
   render() {
     const {
       data,
@@ -48,6 +61,9 @@ class Body extends Component {
         style={{ width: width || '1075px' }}
         id="react-sheet-body"
       >
+      <Scrollbars
+        onScroll={this.handleScroll}
+      >
         {width && (
           <List
             width={width}
@@ -63,8 +79,11 @@ class Body extends Component {
               focus,
               onEnter
             )}
+            ref={instance => (this.List = instance)}
+            style={listStyle}
           />
         )}
+        </Scrollbars>
       </div>
     );
   }
