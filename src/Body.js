@@ -32,22 +32,24 @@ function renderRow(
 }
 const listStyle = {
   overflowX: false,
-  overflowY: false,
+  overflowY: false
 };
 class Body extends Component {
-   handleScroll = ({ target }) => {
+  handleScroll = ({ target }) => {
     const { scrollTop, scrollLeft } = target;
 
     const { Grid: grid } = this.List;
 
     grid.handleScrollEvent({ scrollTop, scrollLeft });
-  }
+  };
 
   List = null;
   render() {
     const {
       data,
       width,
+      bodyHeight,
+      rowHeight,
       columns,
       selection = {},
       setSelection,
@@ -61,28 +63,26 @@ class Body extends Component {
         style={{ width: width || '1075px' }}
         id="react-sheet-body"
       >
-      <Scrollbars
-        onScroll={this.handleScroll}
-      >
-        {width && (
-          <List
-            width={width}
-            height={300}
-            rowCount={data.length}
-            rowHeight={20}
-            rowRenderer={renderRow(
-              data,
-              columns,
-              selection,
-              focusedCell,
-              setSelection,
-              focus,
-              onEnter
-            )}
-            ref={instance => (this.List = instance)}
-            style={listStyle}
-          />
-        )}
+        <Scrollbars onScroll={this.handleScroll}>
+          {width && (
+            <List
+              width={width}
+              height={bodyHeight || 300}
+              rowCount={data.length}
+              rowHeight={rowHeight || 28}
+              rowRenderer={renderRow(
+                data,
+                columns,
+                selection,
+                focusedCell,
+                setSelection,
+                focus,
+                onEnter
+              )}
+              ref={instance => (this.List = instance)}
+              style={listStyle}
+            />
+          )}
         </Scrollbars>
       </div>
     );

@@ -23,6 +23,8 @@ class Hagrid extends Component {
   render() {
     const {
       data,
+      bodyHeight,
+      rowHeight,
       columns,
       selection,
       setSelection,
@@ -44,7 +46,9 @@ class Hagrid extends Component {
               focus={focus}
               onEnter={onEnter}
               columns={columns}
+              rowHeight={rowHeight}
               selection={selection}
+              bodyHeight={bodyHeight}
               focusedCell={focusedCell}
               setSelection={setSelection}
             />
