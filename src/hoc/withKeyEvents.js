@@ -26,6 +26,7 @@ function withKeyEvents(WrappedComponent) {
           column: 0
         }
       };
+      this.elem;
     }
 
     componentDidMount() {

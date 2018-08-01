@@ -15,6 +15,7 @@ class Hagrid extends Component {
       headerHeight: null
     };
     this.body;
+    this.dataTable;
   }
 
   componentDidMount() {
