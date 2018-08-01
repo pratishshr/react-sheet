@@ -1,23 +1,38 @@
 import '../css/style.scss';
 import React, { Component } from 'react';
+import classnames from 'classnames';
 
 import Body from './Body';
-import Input from './Input';
 import Header from './Header';
-import Select from './Select';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 class Hagrid extends Component {
   constructor() {
     super();
     this.state = {
-      width: null
+      tableHeight: null,
+      headerWidth: null,
+      headerHeight: null
     };
     this.body;
   }
 
+  componentDidMount() {
+    this.setTableHeight();
+  }
+
   setWidth = width => {
-    this.setState({ width });
+    this.setState({ headerWidth: width });
+  };
+
+  setHeight = height => {
+    this.setState({ headerHeight: height });
+  };
+
+  setTableHeight = height => {
+    this.setState({
+      tableHeight: this.props.height || this.dataTable.offsetHeight
+    });
   };
 
   render() {
@@ -27,33 +42,44 @@ class Hagrid extends Component {
       rowHeight,
       columns,
       selection,
+      height,
+      className,
       setSelection,
       focus,
       onEnter,
       focusedCell
     } = this.props;
-    const { width } = this.state;
+    const { headerWidth, headerHeight } = this.state;
+
+    const { tableHeight } = this.state;
 
     return (
-      <div ref={elem => (this.grid = elem)} className="container">
-        <div className="data-table">
-          <Scrollbars>
-            <Header width={width} columns={columns} setWidth={this.setWidth} />
-            <Body
-              ref={elem => (this.body = elem)}
-              data={data}
-              width={width}
-              focus={focus}
-              onEnter={onEnter}
-              columns={columns}
-              rowHeight={rowHeight}
-              selection={selection}
-              bodyHeight={bodyHeight}
-              focusedCell={focusedCell}
-              setSelection={setSelection}
-            />
-          </Scrollbars>
-        </div>
+      <div
+        ref={elem => (this.dataTable = elem)}
+        className={classnames('data-table', className)}
+        style={{ height: tableHeight || '' }}
+      >
+        <Scrollbars>
+          <Header
+            width={headerWidth}
+            columns={columns}
+            setWidth={this.setWidth}
+            setHeight={this.setHeight}
+          />
+          <Body
+            ref={elem => (this.body = elem)}
+            data={data}
+            width={headerWidth}
+            focus={focus}
+            onEnter={onEnter}
+            columns={columns}
+            rowHeight={rowHeight}
+            selection={selection}
+            bodyHeight={tableHeight - headerHeight}
+            focusedCell={focusedCell}
+            setSelection={setSelection}
+          />
+        </Scrollbars>
       </div>
     );
   }

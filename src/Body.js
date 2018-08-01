@@ -60,7 +60,7 @@ class Body extends Component {
     return (
       <div
         className="table-body-row"
-        style={{ width: width || '1075px' }}
+        style={{ width: width || '1075px', height: bodyHeight || '' }}
         id="react-sheet-body"
       >
         <Scrollbars onScroll={this.handleScroll}>

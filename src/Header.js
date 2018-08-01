@@ -6,6 +6,7 @@ const DEFAULT_WIDTH = 100;
 class Header extends Component {
   componentDidMount() {
     this.addWidth();
+    this.addHeight();
   }
 
   /**
@@ -18,6 +19,13 @@ class Header extends Component {
     }, 0);
 
     setWidth(width);
+  }
+
+  addHeight() {
+    const { setHeight } = this.props;
+    const height = document.querySelector('#rs-header').offsetHeight;
+
+    setHeight(height);
   }
 
   render() {

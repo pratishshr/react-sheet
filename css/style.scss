@@ -12,9 +12,6 @@ body {
   margin: 0;
 }
 
-.table-body-row {
-  height: 200px;
-}
 .data-table {
   height: 245px;
   * {
@@ -125,8 +122,6 @@ body {
   }
 }
 
-
-
-.ReactVirtualized__Grid:focus{
+.ReactVirtualized__Grid:focus {
   outline: none;
 }
