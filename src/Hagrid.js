@@ -38,11 +38,9 @@ class Hagrid extends Component {
   render() {
     const {
       data,
-      bodyHeight,
       rowHeight,
       columns,
       selection,
-      height,
       className,
       setSelection,
       focus,

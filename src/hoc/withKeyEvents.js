@@ -30,6 +30,7 @@ function withKeyEvents(WrappedComponent) {
 
     componentDidMount() {
       this.addListeners();
+      this.hideOnClickOutside(this.keyWrapper);
     }
 
     componentWillUnmount() {
@@ -199,6 +200,10 @@ function withKeyEvents(WrappedComponent) {
       return cell.className.split(' ').includes('editable');
     };
 
+    onBlur = () => {
+      this.removeListeners();
+    };
+
     focus = () => {
       const { row, column } = this.state.selection;
 
@@ -229,21 +234,48 @@ function withKeyEvents(WrappedComponent) {
       return document.querySelector(`#cell-${row}-${column}`);
     };
 
+    isVisible = elem =>
+      !!elem &&
+      !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
+
+    hideOnClickOutside = element => {
+      const outsideClickListener = event => {
+        if (!element.contains(event.target)) {
+          if (this.isVisible(element)) {
+            this.removeListeners();
+          }
+        }
+      };
+
+      const removeClickListener = () => {
+        document.removeEventListener('click', outsideClickListener);
+      };
+
+      document.addEventListener('click', outsideClickListener);
+    };
+
     render() {
       const { selection, focusedCell } = this.state;
 
       return (
-        <WrappedComponent
-          ref={elem => {
-            this.keyWrapper = elem;
-          }}
-          focus={this.focus}
-          selection={selection}
-          onEnter={this.onEnter}
-          focusedCell={focusedCell}
-          setSelection={this.setSelection}
-          {...this.props}
-        />
+        <div
+          ref={elem => (this.keyWrapper = elem)}
+          className="key-events"
+          onClick={this.addListeners}
+          onBlur={this.removeListeners}
+        >
+          <WrappedComponent
+            ref={elem => {
+              this.keyWrapper = elem;
+            }}
+            focus={this.focus}
+            selection={selection}
+            onEnter={this.onEnter}
+            focusedCell={focusedCell}
+            setSelection={this.setSelection}
+            {...this.props}
+          />
+        </div>
       );
     }
   };
