@@ -30,7 +30,6 @@ function withKeyEvents(WrappedComponent) {
 
     componentDidMount() {
       this.addListeners();
-      this.hideOnClickOutside(this.keyWrapper);
     }
 
     componentWillUnmount() {
@@ -40,6 +39,7 @@ function withKeyEvents(WrappedComponent) {
     addListeners = () => {
       window.addEventListener('keydown', this.onKeyDown, false);
       window.addEventListener('keypress', this.onKeyPress, false);
+      document.addEventListener('click', this.onOutsideClick);
     };
 
     addEscapeListener = () => {
@@ -52,6 +52,13 @@ function withKeyEvents(WrappedComponent) {
 
     removeListeners = () => {
       window.removeEventListener('keydown', this.onKeyDown, false);
+    };
+
+    removeAllListeners = () => {
+      window.removeEventListener('keydown', this.onKeyDown, false);
+      window.removeEventListener('keydown', this.onEscapeKeyDown, false);
+      window.removeEventListener('keypress', this.onKeyPress, false);
+      document.removeEventListener('click', this.onOutsideClick);
     };
 
     /**
@@ -238,20 +245,12 @@ function withKeyEvents(WrappedComponent) {
       !!elem &&
       !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
 
-    hideOnClickOutside = element => {
-      const outsideClickListener = event => {
-        if (!element.contains(event.target)) {
-          if (this.isVisible(element)) {
-            this.removeListeners();
-          }
+    onOutsideClick = event => {
+      if (!this.keyWrapper.contains(event.target)) {
+        if (this.isVisible(this.keyWrapper)) {
+          this.removeAllListeners();
         }
-      };
-
-      const removeClickListener = () => {
-        document.removeEventListener('click', outsideClickListener);
-      };
-
-      document.addEventListener('click', outsideClickListener);
+      }
     };
 
     render() {
