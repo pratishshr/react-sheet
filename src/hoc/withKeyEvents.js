@@ -40,7 +40,6 @@ function withKeyEvents(WrappedComponent) {
     addListeners = () => {
       window.addEventListener('keydown', this.onKeyDown, false);
       window.addEventListener('keypress', this.onKeyPress, false);
-      document.addEventListener('click', this.onOutsideClick);
     };
 
     addEscapeListener = () => {
@@ -59,7 +58,6 @@ function withKeyEvents(WrappedComponent) {
       window.removeEventListener('keydown', this.onKeyDown, false);
       window.removeEventListener('keydown', this.onEscapeKeyDown, false);
       window.removeEventListener('keypress', this.onKeyPress, false);
-      document.removeEventListener('click', this.onOutsideClick);
     };
 
     /**
@@ -242,24 +240,12 @@ function withKeyEvents(WrappedComponent) {
       return document.querySelector(`#cell-${row}-${column}`);
     };
 
-    isVisible = elem =>
-      !!elem &&
-      !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
-
-    onOutsideClick = event => {
-      if (!this.elem.dataTable.contains(event.target)) {
-        if (this.isVisible(this.elem.dataTable)) {
-          this.removeAllListeners();
-        }
-      }
-    };
-
     render() {
       const { selection, focusedCell } = this.state;
 
       return (
         <WrappedComponent
-          ref={elem => (this.elem = elem)}
+          removeAllListeners={this.removeAllListeners}
           focus={this.focus}
           onClick={this.addListeners}
           selection={selection}

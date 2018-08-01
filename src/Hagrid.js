@@ -20,6 +20,12 @@ class Hagrid extends Component {
 
   componentDidMount() {
     this.setTableHeight();
+
+    document.addEventListener('click', this.onOutsideClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.onOutsideClick);
   }
 
   setWidth = width => {
@@ -40,6 +46,18 @@ class Hagrid extends Component {
     const { onClick } = this.props;
 
     onClick && onClick();
+  };
+
+  isVisible = elem =>
+    !!elem &&
+    !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
+
+  onOutsideClick = event => {
+    if (!this.dataTable.contains(event.target)) {
+      if (this.isVisible(this.dataTable)) {
+        this.props.removeAllListeners();
+      }
+    }
   };
 
   render() {
