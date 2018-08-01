@@ -246,8 +246,8 @@ function withKeyEvents(WrappedComponent) {
       !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
 
     onOutsideClick = event => {
-      if (!this.keyWrapper.contains(event.target)) {
-        if (this.isVisible(this.keyWrapper)) {
+      if (!this.elem.dataTable.contains(event.target)) {
+        if (this.isVisible(this.elem.dataTable)) {
           this.removeAllListeners();
         }
       }
@@ -257,24 +257,16 @@ function withKeyEvents(WrappedComponent) {
       const { selection, focusedCell } = this.state;
 
       return (
-        <div
-          ref={elem => (this.keyWrapper = elem)}
-          className="key-events"
+        <WrappedComponent
+          ref={elem => (this.elem = elem)}
+          focus={this.focus}
           onClick={this.addListeners}
-          onBlur={this.removeListeners}
-        >
-          <WrappedComponent
-            ref={elem => {
-              this.keyWrapper = elem;
-            }}
-            focus={this.focus}
-            selection={selection}
-            onEnter={this.onEnter}
-            focusedCell={focusedCell}
-            setSelection={this.setSelection}
-            {...this.props}
-          />
-        </div>
+          selection={selection}
+          onEnter={this.onEnter}
+          focusedCell={focusedCell}
+          setSelection={this.setSelection}
+          {...this.props}
+        />
       );
     }
   };

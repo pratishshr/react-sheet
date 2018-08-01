@@ -35,6 +35,12 @@ class Hagrid extends Component {
     });
   };
 
+  onClick = () => {
+    const { onClick } = this.props;
+
+    onClick && onClick();
+  };
+
   render() {
     const {
       data,
@@ -53,6 +59,7 @@ class Hagrid extends Component {
 
     return (
       <div
+        onClick={this.onClick}
         ref={elem => (this.dataTable = elem)}
         className={classnames('data-table', className)}
         style={{ height: tableHeight || '' }}
