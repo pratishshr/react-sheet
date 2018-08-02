@@ -6,7 +6,7 @@ class CustomCell extends Component {
       nextProps.isFocused ||
       this.props.className !== nextProps.className ||
       this.props.isSelected !== nextProps.isSelected ||
-      this.props.rowData.value !== nextProps.rowData.value ||
+      this.props.rowData.value !== nextProps.rowData.value
     ) {
       return true;
     }
