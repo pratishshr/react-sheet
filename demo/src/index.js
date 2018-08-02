@@ -23,6 +23,7 @@ class Demo extends Component {
         width: 90,
         Cell: (row, { isFocused }) => (
           <Input
+            type="number"
             isFocused={isFocused}
             id={row.original.id}
             name="depth"
@@ -48,7 +49,7 @@ class Demo extends Component {
             handleChange={this.handleChange}
             onEnter={() => {
               console.log('here');
-              onEnter()
+              onEnter();
             }}
             options={[
               {
@@ -2832,11 +2833,7 @@ class Demo extends Component {
     return (
       <div>
         <h1>React Sheet</h1>
-        <KeyHagrid
-          data={rows}
-          columns={this.columns}
-          height={500}
-        />
+        <KeyHagrid data={rows} columns={this.columns} height={500} />
       </div>
     );
   }

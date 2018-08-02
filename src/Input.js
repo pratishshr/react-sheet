@@ -25,6 +25,12 @@ class Input extends Component {
     handleChange(id, name, '');
   };
 
+  onKeyDown = e => {
+    if (e.which === 38 || e.which == 40) {
+      e.preventDefault();
+    }
+  };
+
   render() {
     const { name, value, inputProps, type } = this.props;
 
