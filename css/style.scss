@@ -125,3 +125,13 @@ body {
 .ReactVirtualized__Grid:focus {
   outline: none;
 }
+
+.data-table .table-row .t-columns.editable input:focus,
+.data-table .table-row .t-columns.editable:hover input {
+  box-shadow: none !important;
+}
+.Select-input > input {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  max-width: 50px;
+}

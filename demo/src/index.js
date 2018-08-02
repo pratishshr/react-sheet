@@ -39,12 +39,17 @@ class Demo extends Component {
         width: 100,
         Cell: (row, { isFocused, onEnter }) => (
           <Select
+            searchable
             id={row.original.id}
             isFocused={isFocused}
             name="soilType"
             value={row.value}
+            noResultsText="aksdjhfasdf"
             handleChange={this.handleChange}
-            onEnter={onEnter}
+            onEnter={() => {
+              console.log('here');
+              onEnter()
+            }}
             options={[
               {
                 label: '1',

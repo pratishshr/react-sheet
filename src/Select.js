@@ -110,13 +110,17 @@ class Select extends Component {
   };
 
   onChange = selectedOption => {
+    if (!selectedOption) {
+      return;
+    }
+
     const { value } = selectedOption;
     const { id, name, handleChange } = this.props;
 
     handleChange(id, name, value);
   };
 
-  onInputChange = _debounce(() => {
+  onClose = _debounce(() => {
     const { onEnter } = this.props;
 
     if (onEnter) {
@@ -130,22 +134,24 @@ class Select extends Component {
       value,
       options,
       clearable = false,
-      searchable = false
+      searchable = false,
+      noResultsText = 'Not Found'
     } = this.props;
 
     return (
       <PortalSelect
-        tabIndex={-1}
-        openOnFocus={true}
-        ref={elem => (this.select = elem)}
+        autoBlur
         name={name}
+        tabIndex={-1}
         value={value}
         options={options}
+        openOnFocus={true}
         clearable={clearable}
+        onClose={this.onClose}
         searchable={searchable}
         onChange={this.onChange}
-        autoBlur
-        onInputChange={this.onInputChange}
+        noResultsText={noResultsText}
+        ref={elem => (this.select = elem)}
       />
     );
   }
