@@ -32,22 +32,24 @@ class Input extends Component {
   };
 
   render() {
-    const { name, value, inputProps, type } = this.props;
+    const { name, value, inputProps, type, className } = this.props;
 
     return (
-      <input
-        tabIndex={-1}
-        style={{ cursor: 'default' }}
-        ref={elem => (this.cell = elem)}
-        type={type}
-        name={name}
-        value={value}
-        onChange={this.onChange}
-        ref={elem => (this.input = elem)}
-        onKeyDown={this.onKeyDown}
-        onMouseDown={e => e.preventDefault()}
-        {...inputProps}
-      />
+      <div className={className}>
+        <input
+          tabIndex={-1}
+          style={{ cursor: 'default' }}
+          ref={elem => (this.cell = elem)}
+          type={type}
+          name={name}
+          value={value}
+          onChange={this.onChange}
+          ref={elem => (this.input = elem)}
+          onKeyDown={this.onKeyDown}
+          onMouseDown={e => e.preventDefault()}
+          {...inputProps}
+        />
+      </div>
     );
   }
 }
