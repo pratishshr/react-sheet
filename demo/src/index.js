@@ -45,7 +45,7 @@ class Demo extends Component {
             isFocused={isFocused}
             name="soilType"
             value={row.value}
-            noResultsText="aksdjhfasdf"
+            noResultsText="No data found"
             handleChange={this.handleChange}
             onEnter={onEnter}
             options={[

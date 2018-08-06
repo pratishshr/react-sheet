@@ -18,12 +18,12 @@ function withKeyEvents(WrappedComponent) {
       super();
       this.state = {
         selection: {
-          row: 1,
-          column: 1
+          row: null,
+          column: null
         },
         focusedCell: {
-          row: 0,
-          column: 0
+          row: null,
+          column: null
         }
       };
       this.elem;
@@ -51,6 +51,16 @@ function withKeyEvents(WrappedComponent) {
     };
 
     removeAllListeners = () => {
+      this.setState({
+        focusedCell: {
+          row: null,
+          column: null
+        },
+        selection: {
+          row: null,
+          column: null
+        }
+      });
       window.removeEventListener('keydown', this.onKeyDown, false);
       window.removeEventListener('keydown', this.onEscapeKeyDown, false);
       window.removeEventListener('keypress', this.onKeyPress, false);
