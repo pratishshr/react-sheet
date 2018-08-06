@@ -47,10 +47,7 @@ class Demo extends Component {
             value={row.value}
             noResultsText="aksdjhfasdf"
             handleChange={this.handleChange}
-            onEnter={() => {
-              console.log('here');
-              onEnter();
-            }}
+            onEnter={onEnter}
             options={[
               {
                 label: '1',
