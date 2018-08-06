@@ -29,10 +29,6 @@ function withKeyEvents(WrappedComponent) {
       this.elem;
     }
 
-    componentDidMount() {
-      this.addListeners();
-    }
-
     componentWillUnmount() {
       this.removeListeners();
     }
@@ -83,6 +79,14 @@ function withKeyEvents(WrappedComponent) {
         e.preventDefault();
 
         this.onEnter();
+      }
+      if (keyCode === keys.TAB) {
+        e.preventDefault();
+
+        this.blur();
+        this.addListeners();
+        this.removeEscapeListener();
+        this.moveRight();
       }
     };
 
