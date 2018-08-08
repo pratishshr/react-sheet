@@ -73,9 +73,10 @@ function withKeyEvents(WrappedComponent) {
      * Focus while directly typing on selection.
      */
     onKeyPress = e => {
+      console.log(this.isFocused());
       if (!this.isFocused()) {
-        this.clearCell();
         this.focus();
+        this.clearCell();
       }
     };
 
@@ -139,8 +140,8 @@ function withKeyEvents(WrappedComponent) {
 
     isFocused = () => {
       const { row, column } = this.state.focusedCell;
-
-      if (row && column) {
+      console.log(row, column);
+      if (row !== null && column !== null) {
         return true;
       }
 
