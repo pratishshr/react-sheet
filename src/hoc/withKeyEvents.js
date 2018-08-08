@@ -1,3 +1,4 @@
+import _get from 'lodash/get';
 import React, { Component } from 'react';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
@@ -73,6 +74,7 @@ function withKeyEvents(WrappedComponent) {
      */
     onKeyPress = e => {
       if (!this.isFocused()) {
+        this.clearCell();
         this.focus();
       }
     };
@@ -254,10 +256,26 @@ function withKeyEvents(WrappedComponent) {
       }
     };
 
+    getCellData = (row, column) => {
+      const { data, columns } = this.props;
+      const rowData = data[row];
+      const columnData = columns[column];
+
+      return _get(rowData, columnData.accessor);
+    };
+
     clearCell = () => {
       const { row, column } = this.state.selection;
 
-      console.log(this.props);
+      if (!this.isCellEditable(row, column)) {
+        return;
+      }
+
+      const { data, columns, handleChange } = this.props;
+      const rowData = data[row];
+      const columnData = columns[column];
+
+      handleChange(rowData.id, columnData.accessor, '');
     };
 
     getCell = (row, column) => {

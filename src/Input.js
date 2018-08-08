@@ -12,7 +12,6 @@ class Input extends Component {
   }
 
   onChange = e => {
-    console.log(e);
     e.preventDefault();
     const value = e.target.value;
     const { id, name, handleChange } = this.props;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import _set from 'lodash/fp/set';
 
 import Hagrid, {
   Input,
@@ -30,7 +31,7 @@ class Demo extends Component {
             type="number"
             isFocused={isFocused}
             id={row.original.id}
-            name="depth"
+            name="input.depth"
             value={row.value}
             handleChange={this.handleChange}
           />
@@ -47,7 +48,7 @@ class Demo extends Component {
             searchable
             id={row.original.id}
             isFocused={isFocused}
-            name="soilType"
+            name="input.soilType"
             value={row.value}
             noResultsText="No data found"
             handleChange={this.handleChange}
@@ -75,7 +76,7 @@ class Demo extends Component {
           <Input
             isFocused={isFocused}
             id={row.original.id}
-            name="blowCount"
+            name="input.blowCount"
             value={row.value}
             handleChange={this.handleChange}
           />
@@ -91,7 +92,7 @@ class Demo extends Component {
           <Input
             isFocused={isFocused}
             id={row.original.id}
-            name="const"
+            name="input.const"
             value={row.value}
             handleChange={this.handleChange}
           />
@@ -107,7 +108,7 @@ class Demo extends Component {
           <Input
             isFocused={isFocused}
             id={row.original.id}
-            name="percentFines"
+            name="input.percentFines"
             value={row.value}
             handleChange={this.handleChange}
           />
@@ -123,7 +124,7 @@ class Demo extends Component {
           <Input
             isFocused={isFocused}
             id={row.original.id}
-            name="MC"
+            name="input.MC"
             value={row.value}
             handleChange={this.handleChange}
           />
@@ -137,9 +138,9 @@ class Demo extends Component {
         width: 40,
         Cell: (row, { isFocused }) => (
           <Input
+            name="input.LL"
             isFocused={isFocused}
             id={row.original.id}
-            name="LL"
             value={row.value}
             handleChange={this.handleChange}
           />
@@ -2801,26 +2802,19 @@ class Demo extends Component {
     };
   }
 
-  setSelections = (selections) => {
+  setSelections = selections => {
     this.setState({
       selections
-    })
-  }
+    });
+  };
 
   handleChange = (id, name, value) => {
     let { data } = this.state;
-    let input = Object.assign({}, data.input);
 
     this.setState({
       data: {
         ...data,
-        [id]: {
-          ...data[id],
-          input: {
-            ...data[id].input,
-            [name]: value
-          }
-        }
+        [id]: _set(name)(value)(data[id])
       }
     });
   };
@@ -2841,7 +2835,14 @@ class Demo extends Component {
     return (
       <div>
         <h1>React Sheet</h1>
-        <KeyHagrid setSelections={this.setSelections} selections={this.state.selections} data={rows} columns={this.columns} height={500} />
+        <KeyHagrid
+          data={rows}
+          height={500}
+          columns={this.columns}
+          handleChange={this.handleChange}
+          setSelections={this.setSelections}
+          selections={this.state.selections}
+        />
       </div>
     );
   }
