@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 
-import Hagrid, { Input, Select, withKeyEvents } from '../../src';
+import Hagrid, {
+  Input,
+  Select,
+  withKeyEvents,
+  withCheckboxColumn
+} from '../../src';
 
-const KeyHagrid = withKeyEvents(Hagrid);
+const KeyHagrid = withKeyEvents(withCheckboxColumn(Hagrid));
 // const KeyHagrid = Hagrid;
 class Demo extends Component {
   constructor() {
@@ -178,6 +183,7 @@ class Demo extends Component {
       }
     ];
     this.state = {
+      selections: [],
       data: {
         '1': {
           input: {
@@ -2796,6 +2802,12 @@ class Demo extends Component {
     };
   }
 
+  setSelections = (selections) => {
+    this.setState({
+      selections
+    })
+  }
+
   handleChange = (id, name, value) => {
     let { data } = this.state;
     let input = Object.assign({}, data.input);
@@ -2830,7 +2842,7 @@ class Demo extends Component {
     return (
       <div>
         <h1>React Sheet</h1>
-        <KeyHagrid data={rows} columns={this.columns} height={500} />
+        <KeyHagrid setSelections={this.setSelections} selections={this.state.selections} data={rows} columns={this.columns} height={500} />
       </div>
     );
   }

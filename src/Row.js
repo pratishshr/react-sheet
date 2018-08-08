@@ -60,8 +60,9 @@ class Row extends Component {
           let customCell =
             Cell &&
             Cell(rowData, {
+              onEnter,
               isFocused,
-              onEnter
+              index: rowIndex
             });
 
           return (
