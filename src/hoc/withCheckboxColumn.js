@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 
 import Checkbox from '../Checkbox';
 
-import * as array from '../utils/array';
-
 function withCheckboxColumn(WrappedComponent) {
   return class CheckboxWrapper extends Component {
     constructor() {
@@ -16,7 +14,7 @@ function withCheckboxColumn(WrappedComponent) {
     selectAll = () => {
       const { data } = this.props;
 
-      this.props.setSelections(array.fill(Object.keys(data).length));
+      this.props.setSelections(Object.keys(data));
     };
 
     clearAll = () => {
@@ -74,11 +72,12 @@ function withCheckboxColumn(WrappedComponent) {
         resizable: false,
         width: 36,
         className: 'd-flex align-items-center justify-content-center fixed',
-        Cell: (row, { index }) => (
+        Cell: (row, { id }) => (
           <div className="checkbox-wrap d-flex">
+            {console.log(this.props.selections)}
             <Checkbox
-              isSelected={this.props.selections.includes(index)}
-              onClick={() => this.toggleSelection(index)}
+              isSelected={this.props.selections.includes(id)}
+              onClick={() => this.toggleSelection(id)}
             />
           </div>
         )

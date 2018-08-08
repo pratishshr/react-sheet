@@ -49,6 +49,7 @@ class Row extends Component {
           const { Cell, width, className } = column;
 
           let rowData = {
+            id: row.id,
             index: rowIndex,
             original: row,
             value: _get(row, column.accessor, '')
@@ -60,6 +61,7 @@ class Row extends Component {
           let customCell =
             Cell &&
             Cell(rowData, {
+              id: row.id,
               onEnter,
               isFocused,
               index: rowIndex

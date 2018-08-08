@@ -256,9 +256,8 @@ function withKeyEvents(WrappedComponent) {
 
     clearCell = () => {
       const { row, column } = this.state.selection;
-      const input = this.getInputFromCell(row, column);
 
-      // Code to clear the input
+      console.log(this.props);
     };
 
     getCell = (row, column) => {
