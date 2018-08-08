@@ -44,6 +44,7 @@ class Body extends Component {
   };
 
   List = null;
+
   render() {
     const {
       data,

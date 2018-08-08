@@ -5,3 +5,5 @@ export const DOWN = 40;
 export const RIGHT = 39;
 export const ENTER = 13;
 export const ESCAPE = 27;
+export const DELETE = 46;
+export const BACKSPACE = 8;

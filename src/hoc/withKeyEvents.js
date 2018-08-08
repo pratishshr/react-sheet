@@ -9,7 +9,9 @@ const ALLOWED_KEYS = [
   keys.DOWN,
   keys.RIGHT,
   keys.ENTER,
-  keys.TAB
+  keys.TAB,
+  keys.DELETE,
+  keys.BACKSPACE
 ];
 
 function withKeyEvents(WrappedComponent) {
@@ -167,7 +169,9 @@ function withKeyEvents(WrappedComponent) {
         [keys.LEFT]: this.moveLeft,
         [keys.RIGHT]: this.moveRight,
         [keys.TAB]: e.shiftKey ? this.moveLeft : this.moveRight,
-        [keys.ENTER]: this.focus
+        [keys.ENTER]: this.focus,
+        [keys.BACKSPACE]: this.clearCell,
+        [keys.DELETE]: this.clearCell
       };
 
       press[keyCode]();
@@ -250,8 +254,27 @@ function withKeyEvents(WrappedComponent) {
       }
     };
 
+    clearCell = () => {
+      const { row, column } = this.state.selection;
+      const input = this.getInputFromCell(row, column);
+
+      // Code to clear the input
+    };
+
     getCell = (row, column) => {
       return document.querySelector(`#cell-${row}-${column}`);
+    };
+
+    getInputFromCell = (row, column) => {
+      const cell = this.getCell(row, column);
+
+      if (cell) {
+        const input = cell.querySelector('input');
+
+        return input;
+      }
+
+      return null;
     };
 
     render() {

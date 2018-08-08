@@ -1,3 +1,4 @@
+import _get from 'lodash/get';
 import React, { Component } from 'react';
 class CustomCell extends Component {
   shouldComponentUpdate(nextProps) {
@@ -6,10 +7,8 @@ class CustomCell extends Component {
       this.props.className !== nextProps.className ||
       this.props.isSelected !== nextProps.isSelected ||
       this.props.rowData.value !== nextProps.rowData.value ||
-      (this.props.customCell &&
-        nextProps.customCell &&
-        this.props.customCell.props.className !==
-          nextProps.customCell.props.className)
+      _get(this.props, 'customCell.props.className') !==
+        _get(nextProps, 'nextProps.customCell.props.className')
     ) {
       return true;
     }
