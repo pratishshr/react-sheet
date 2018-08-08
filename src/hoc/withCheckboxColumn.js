@@ -11,10 +11,16 @@ function withCheckboxColumn(WrappedComponent) {
       };
     }
 
+    componentDidUpdate(prevProps) {
+      if (this.props.data.length !== prevProps.data.length) {
+        this.setSelectAllActive(false);
+      }
+    }
+
     selectAll = () => {
       const { data } = this.props;
 
-      this.props.setSelections(Object.keys(data));
+      this.props.setSelections(data.map(row => row.id));
     };
 
     clearAll = () => {
@@ -74,7 +80,6 @@ function withCheckboxColumn(WrappedComponent) {
         className: 'd-flex align-items-center justify-content-center fixed',
         Cell: (row, { id }) => (
           <div className="checkbox-wrap d-flex">
-            {console.log(this.props.selections)}
             <Checkbox
               isSelected={this.props.selections.includes(id)}
               onClick={() => this.toggleSelection(id)}

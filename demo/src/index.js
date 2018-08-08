@@ -8,7 +8,7 @@ import Hagrid, {
   withCheckboxColumn
 } from '../../src';
 
-const KeyHagrid = withKeyEvents(withCheckboxColumn(Hagrid));
+const KeyHagrid = withCheckboxColumn(withKeyEvents(Hagrid));
 class Demo extends Component {
   constructor() {
     super();
