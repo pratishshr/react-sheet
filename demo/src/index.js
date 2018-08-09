@@ -2819,6 +2819,12 @@ class Demo extends Component {
     });
   };
 
+  changeStateInBulk = state => {
+    this.setState({
+      data: state
+    });
+  };
+
   render() {
     const { data } = this.state;
     let rows = Object.keys(data)
@@ -2836,12 +2842,14 @@ class Demo extends Component {
       <div>
         <h1>React Sheet</h1>
         <KeyHagrid
+          state={data}
           data={rows}
           height={500}
           columns={this.columns}
           handleChange={this.handleChange}
           setSelections={this.setSelections}
           selections={this.state.selections}
+          changeStateInBulk={this.changeStateInBulk}
         />
       </div>
     );

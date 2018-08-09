@@ -1,7 +1,9 @@
 import _get from 'lodash/get';
+import _set from 'lodash/fp/set';
 import React, { Component } from 'react';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
+import { getRange } from '../utils/calculations';
 import * as clipboard from '../utils/clipboard';
 
 import * as keys from '../constants/keys';
@@ -36,11 +38,17 @@ function withKeyEvents(WrappedComponent) {
           row: null,
           column: null
         },
+        selectionEnd: {
+          row: null,
+          column: null
+        },
         focusedCell: {
           row: null,
           column: null
         },
-        isFocusedDirectly: false
+        isSelecting: false,
+        isFocusedDirectly: false,
+        dragCopyValue: null
       };
       this.elem;
     }
@@ -53,13 +61,21 @@ function withKeyEvents(WrappedComponent) {
       window.addEventListener('keydown', this.onKeyDown, false);
       window.addEventListener('keypress', this.onKeyPress, false);
       window.addEventListener('copy', this.copySelection, false);
+      window.addEventListener('cut', this.cutSelection, false);
       window.addEventListener('paste', this.pasteSelection, false);
+      window.addEventListener('selectstart', this.preventDefault, false);
+      window.addEventListener('mouseup', this.onMouseUpOutside, false);
+    };
+
+    onMouseUpOutside = () => {
+      this.setIsSelecting(false);
     };
 
     removeListeners = () => {
       window.removeEventListener('keydown', this.onKeyDown, false);
       window.removeEventListener('copy', this.copySelection, false);
       window.removeEventListener('paste', this.pasteSelection, false);
+      window.removeEventListener('cut', this.cutSelection, false);
     };
 
     addListenersWhenFocused = () => {
@@ -68,6 +84,10 @@ function withKeyEvents(WrappedComponent) {
 
     removeEscapeListener = () => {
       window.removeEventListener('keydown', this.onKeyDownWhenFocused, false);
+    };
+
+    preventDefault = e => {
+      e.preventDefault();
     };
 
     removeAllListeners = () => {
@@ -79,14 +99,21 @@ function withKeyEvents(WrappedComponent) {
         selection: {
           row: null,
           column: null
+        },
+        selectionEnd: {
+          row: null,
+          column: null
         }
       });
 
       window.removeEventListener('keydown', this.onKeyDown, false);
       window.removeEventListener('keydown', this.onKeyDownWhenFocused, false);
       window.removeEventListener('keypress', this.onKeyPress, false);
+      window.addEventListener('cut', this.cutSelection, false);
       window.removeEventListener('copy', this.copySelection, false);
       window.removeEventListener('paste', this.pasteSelection, false);
+      window.removeEventListener('selectstart', this.preventDefault, false);
+      window.removeEventListener('mouseup', this.onMouseUpOutside, false);
     };
 
     /**
@@ -167,15 +194,21 @@ function withKeyEvents(WrappedComponent) {
 
     copySelection = e => {
       e.preventDefault();
-      let { row, column } = this.state.selection;
-      let data = this.getCellData(row, column) || '';
+      let values = this.getSelectedCellValues();
+      let data = clipboard.stringify(values);
 
       e.clipboardData.setData('text/plain', data);
+    };
+
+    cutSelection = e => {
+      this.copySelection(e);
+      this.clearCell();
     };
 
     pasteSelection = e => {
       e.preventDefault();
       let data = clipboard.parse(e.clipboardData.getData('text/plain'));
+      let state = {};
 
       data.forEach((lines, rowIndex) => {
         lines.forEach((cellData, colIndex) => {
@@ -193,7 +226,6 @@ function withKeyEvents(WrappedComponent) {
     };
 
     scrollToCell = (row, column) => {
-      const table = document.querySelector('#react-sheet-body');
       const cell = document.querySelector(`#cell-${row}-${column}`);
 
       scrollIntoView(cell, {
@@ -204,6 +236,7 @@ function withKeyEvents(WrappedComponent) {
 
     setSelection = (row, column) => {
       this.blur();
+
       this.scrollToCell(row, column);
 
       this.setState({
@@ -214,6 +247,19 @@ function withKeyEvents(WrappedComponent) {
         selection: {
           row,
           column
+        },
+        selectionEnd: {
+          row,
+          column
+        }
+      });
+    };
+
+    setSelectionEnd = (row, column) => {
+      this.setState({
+        selectionEnd: {
+          row: row,
+          column: column
         }
       });
     };
@@ -279,13 +325,15 @@ function withKeyEvents(WrappedComponent) {
     };
 
     isCellEditable = (row, column) => {
-      const cell = this.getCell(row, column);
+      let { columns } = this.props;
+      let columnData = columns[column];
+      let className = columnData.className;
 
-      if (!cell) {
+      if (!className) {
         return false;
       }
 
-      return cell.className.split(' ').includes('editable');
+      return className.split(' ').includes('editable');
     };
 
     onBlur = () => {
@@ -304,6 +352,7 @@ function withKeyEvents(WrappedComponent) {
         this.removeListeners();
         this.addListenersWhenFocused();
         this.setFocus(row, column);
+        this.setSelectionEnd(row, column);
       }
     };
 
@@ -318,8 +367,47 @@ function withKeyEvents(WrappedComponent) {
       }
     };
 
+    getSelectedCellValues = () => {
+      let cells = this.getSelectedCells();
+
+      return cells.map(row => {
+        return row.map(({ row, column }) => {
+          let data = this.getCellData(row, column);
+
+          if (data === undefined || data === null) {
+            return '';
+          }
+
+          return data;
+        });
+      });
+    };
+
+    getSelectedCells = () => {
+      const { selection, selectionEnd } = this.state;
+      const { row, column } = selection;
+      const { row: rowEnd, column: columnEnd } = selectionEnd;
+      let selectedCells = [];
+
+      getRange(row, rowEnd).forEach(i => {
+        let rows = [];
+
+        getRange(column, columnEnd).forEach(j => {
+          rows.push({
+            row: i,
+            column: j
+          });
+        });
+
+        selectedCells.push(rows);
+      });
+
+      return selectedCells;
+    };
+
     getCellData = (row, column) => {
       const { data, columns } = this.props;
+
       const rowData = data[row];
       const columnData = columns[column];
 
@@ -327,7 +415,17 @@ function withKeyEvents(WrappedComponent) {
     };
 
     clearCell = () => {
-      this.writeToCell(this.state.selection, '');
+      let cells = this.getSelectedCells();
+
+      cells.forEach(row => {
+        row.forEach(selection => {
+          this.writeToCell(selection, '');
+        });
+      });
+    };
+
+    changeState = state => {
+      this.props.changeStateInBulk(state);
     };
 
     writeToCell = (selection, value) => {
@@ -336,12 +434,34 @@ function withKeyEvents(WrappedComponent) {
       if (!this.isCellEditable(row, column)) {
         return;
       }
-
-      const { data, columns, handleChange } = this.props;
+      const { state, data, columns, changeStateInBulk } = this.props;
       const rowData = data[row];
       const columnData = columns[column];
 
-      handleChange(rowData.id, columnData.accessor, value);
+      let newState = {
+        ...state,
+        [rowData.id]: _set(columnData.accessor)(value)(state[rowData.id])
+      };
+
+      changeStateInBulk(newState);
+    };
+
+    prepareState = (selection, value) => {
+      const { row, column } = selection;
+
+      if (!this.isCellEditable(row, column)) {
+        return;
+      }
+      const { state, data, columns, changeStateInBulk } = this.props;
+      const rowData = data[row];
+      const columnData = columns[column];
+
+      let newState = {
+        ...state,
+        [rowData.id]: _set(columnData.accessor)(value)(state[rowData.id])
+      };
+
+      changeStateInBulk(newState);
     };
 
     getCell = (row, column) => {
@@ -368,8 +488,58 @@ function withKeyEvents(WrappedComponent) {
       this.moveDown();
     };
 
+    setIsSelecting = isSelecting => {
+      this.setState({ isSelecting });
+    };
+
+    onMouseDown = (rowIndex, colIndex) => {
+      return () => {
+        this.setIsSelecting(true);
+        this.setSelection(rowIndex, colIndex);
+      };
+    };
+
+    onMouseUp = (rowIndex, colIndex) => {
+      return () => {
+        this.setIsSelecting(false);
+        this.setSelectionEnd(rowIndex, colIndex);
+
+        let { dragCopyValue } = this.state;
+
+        setTimeout(() => {
+          if (dragCopyValue) {
+            let cells = this.getSelectedCells();
+
+            cells.forEach(row => {
+              row.forEach(selection => {
+                this.writeToCell(selection, dragCopyValue);
+              });
+            });
+
+            this.setDragCopyValue(null);
+          }
+        }, 1);
+      };
+    };
+
+    onMouseOver = (rowIndex, colIndex) => {
+      return () => {
+        const { isSelecting } = this.state;
+
+        if (isSelecting) {
+          this.setSelectionEnd(rowIndex, colIndex);
+        }
+      };
+    };
+
+    setDragCopyValue = value => {
+      this.setState({
+        dragCopyValue: value
+      });
+    };
+
     render() {
-      const { selection, focusedCell } = this.state;
+      const { selection, selectionEnd, focusedCell } = this.state;
 
       return (
         <WrappedComponent
@@ -377,9 +547,15 @@ function withKeyEvents(WrappedComponent) {
           focus={this.focus}
           onClick={this.addListeners}
           selection={selection}
+          selectionEnd={selectionEnd}
           onEnter={this.onSelectEnter}
           focusedCell={focusedCell}
+          onMouseUp={this.onMouseUp}
+          onMouseDown={this.onMouseDown}
+          onMouseOver={this.onMouseOver}
           setSelection={this.setSelection}
+          setSelectionEnd={this.setSelectionEnd}
+          setDragCopyValue={this.setDragCopyValue}
           {...this.props}
         />
       );

@@ -4,6 +4,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 
 import Row from './Row';
 
+// TODO: REFACTOR THIS!
 function renderRow(
   data,
   columns,
@@ -11,7 +12,13 @@ function renderRow(
   focusedCell,
   setSelection,
   focus,
-  onEnter
+  onEnter,
+  setSelectionEnd,
+  selectionEnd,
+  onMouseUp,
+  onMouseDown,
+  onMouseOver,
+  setDragCopyValue
 ) {
   return ({ key, index, isScrolling, isVisible, style }) => {
     return (
@@ -24,8 +31,14 @@ function renderRow(
         row={data[index]}
         columns={columns}
         selection={selection}
+        selectionEnd={selectionEnd}
         focusedCell={focusedCell}
         setSelection={setSelection}
+        setSelectionEnd={setSelectionEnd}
+        onMouseUp={onMouseUp}
+        onMouseDown={onMouseDown}
+        onMouseOver={onMouseOver}
+        setDragCopyValue={setDragCopyValue}
       />
     );
   };
@@ -54,9 +67,15 @@ class Body extends Component {
       columns,
       selection = {},
       setSelection,
+      setSelectionEnd,
       focusedCell,
       focus,
-      onEnter
+      onEnter,
+      selectionEnd = {},
+      onMouseUp,
+      onMouseDown,
+      onMouseOver,
+      setDragCopyValue
     } = this.props;
     return (
       <div
@@ -78,7 +97,13 @@ class Body extends Component {
                 focusedCell,
                 setSelection,
                 focus,
-                onEnter
+                onEnter,
+                setSelectionEnd,
+                selectionEnd,
+                onMouseUp,
+                onMouseDown,
+                onMouseOver,
+                setDragCopyValue
               )}
               ref={instance => (this.List = instance)}
               style={listStyle}

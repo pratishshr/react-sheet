@@ -5,16 +5,6 @@ import React, { Component } from 'react';
 import CustomCell from './CustomCell';
 
 class Row extends Component {
-  onMouseDown = (rowIndex, colIndex) => {
-    return () => {
-      const { setSelection } = this.props;
-
-      if (setSelection) {
-        setSelection(rowIndex, colIndex);
-      }
-    };
-  };
-
   onDoubleClick = (selectedRow, selectedColumn) => {
     return () => {
       const { focus } = this.props;
@@ -25,6 +15,30 @@ class Row extends Component {
     };
   };
 
+  isSelected = (rowIndex, colIndex) => {
+    const { selection = {}, selectionEnd = {} } = this.props;
+    const { row, column } = selection;
+    const { row: rowEnd, column: columnEnd } = selectionEnd;
+
+    const posX = rowIndex >= row && rowIndex <= rowEnd;
+    const posY = colIndex >= column && colIndex <= columnEnd;
+    const negX = rowIndex <= row && rowIndex >= rowEnd;
+    const negY = colIndex <= column && colIndex >= columnEnd;
+
+    if (!row && !column) {
+      return false;
+    }
+
+    return (posX && posY) || (negX && negY) || (posX && negY) || (negX && posY);
+  };
+
+  isSelectedFirst = (rowIndex, colIndex) => {
+    const { selection = {} } = this.props;
+    const { row, column } = selection;
+
+    return row === rowIndex && column === colIndex;
+  };
+
   render() {
     const {
       row,
@@ -33,9 +47,11 @@ class Row extends Component {
       rowIndex,
       selection,
       focusedCell,
-      focus,
-      setSelection,
-      onEnter
+      onEnter,
+      onMouseUp,
+      onMouseDown,
+      onMouseOver,
+      setDragCopyValue
     } = this.props;
 
     const { row: focusedRow = null, column: focusedColumn = null } =
@@ -55,9 +71,9 @@ class Row extends Component {
             value: _get(row, column.accessor, '')
           };
 
+          const isSelected = this.isSelected(rowIndex, colIndex);
+          const isSelectedFirst = this.isSelectedFirst(rowIndex, colIndex);
           const isFocused = rowIndex == focusedRow && colIndex == focusedColumn;
-          const isSelected =
-            selectedRow == rowIndex && selectedColumn == colIndex;
           let customCell =
             Cell &&
             Cell(rowData, {
@@ -76,11 +92,15 @@ class Row extends Component {
               rowData={rowData}
               isFocused={isFocused}
               isSelected={isSelected}
+              isSelectedFirst={isSelectedFirst}
               customCell={customCell}
+              setDragCopyValue={setDragCopyValue}
               className={classNames('t-columns', className, {
                 selected: isSelected
               })}
-              onMouseDown={this.onMouseDown(rowIndex, colIndex)}
+              onMouseDown={onMouseDown(rowIndex, colIndex)}
+              onMouseUp={onMouseUp(rowIndex, colIndex)}
+              onMouseOver={onMouseOver(rowIndex, colIndex)}
               onDoubleClick={this.onDoubleClick(selectedRow, selectedColumn)}
             />
           );

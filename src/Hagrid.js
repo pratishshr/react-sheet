@@ -66,11 +66,17 @@ class Hagrid extends Component {
       rowHeight,
       columns,
       selection,
+      selectionEnd,
       className,
       setSelection,
+      setSelectionEnd,
       focus,
       onEnter,
-      focusedCell
+      focusedCell,
+      onMouseUp,
+      onMouseDown,
+      onMouseOver,
+      setDragCopyValue
     } = this.props;
     const { headerWidth, headerHeight } = this.state;
 
@@ -78,7 +84,7 @@ class Hagrid extends Component {
 
     return (
       <div
-        onClick={this.onClick}
+        onMouseDown={this.onClick}
         ref={elem => (this.dataTable = elem)}
         className={classnames('data-table', className)}
         style={{ height: tableHeight || '' }}
@@ -99,9 +105,15 @@ class Hagrid extends Component {
             columns={columns}
             rowHeight={rowHeight}
             selection={selection}
+            selectionEnd={selectionEnd}
             bodyHeight={tableHeight - headerHeight}
             focusedCell={focusedCell}
             setSelection={setSelection}
+            setSelectionEnd={setSelectionEnd}
+            onMouseUp={onMouseUp}
+            onMouseDown={onMouseDown}
+            onMouseOver={onMouseOver}
+            setDragCopyValue={setDragCopyValue}
           />
         </Scrollbars>
       </div>
