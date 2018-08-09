@@ -1,3 +1,5 @@
+export const C = 67;
+export const V = 86;
 export const TAB = 9;
 export const UP = 38;
 export const LEFT = 37;

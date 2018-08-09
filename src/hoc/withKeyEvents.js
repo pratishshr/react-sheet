@@ -4,6 +4,8 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 
 import * as keys from '../constants/keys';
 
+import * as clipboard from '../utils/clipboard';
+
 const ALLOWED_KEYS = [
   keys.UP,
   keys.LEFT,
@@ -12,8 +14,12 @@ const ALLOWED_KEYS = [
   keys.ENTER,
   keys.TAB,
   keys.DELETE,
-  keys.BACKSPACE
+  keys.BACKSPACE,
+  keys.C,
+  keys.V
 ];
+
+const SPECIAL_KEYS = [keys.C, keys.V];
 
 const ALLOWED_KEYS_WHILE_FOCUSED = [
   keys.TAB,
@@ -23,7 +29,7 @@ const ALLOWED_KEYS_WHILE_FOCUSED = [
   keys.LEFT
 ];
 
-const SPECIAL_KEY_WHILE_FOCUSED = [keys.RIGHT, keys.LEFT];
+const SPECIAL_KEYS_WHILE_FOCUSED = [keys.RIGHT, keys.LEFT];
 
 function withKeyEvents(WrappedComponent) {
   return class KeyWrapper extends Component {
@@ -45,10 +51,6 @@ function withKeyEvents(WrappedComponent) {
 
     componentWillUnmount() {
       this.removeListeners();
-    }
-
-    componentDidUpdate() {
-      console.log(this.state);
     }
 
     addListeners = () => {
@@ -110,7 +112,9 @@ function withKeyEvents(WrappedComponent) {
         return;
       }
 
-      e.preventDefault();
+      if (!SPECIAL_KEYS.includes(keyCode)) {
+        e.preventDefault();
+      }
 
       let press = {
         [keys.UP]: this.moveUp,
@@ -120,10 +124,12 @@ function withKeyEvents(WrappedComponent) {
         [keys.TAB]: e.shiftKey ? this.moveLeft : this.moveRight,
         [keys.ENTER]: this.focus,
         [keys.BACKSPACE]: this.clearCell,
-        [keys.DELETE]: this.clearCell
+        [keys.DELETE]: this.clearCell,
+        [keys.C]: (e.ctrlKey || e.metaKey) && this.copySelection,
+        [keys.V]: (e.ctrlKey || e.metaKey) && this.pasteSelection
       };
 
-      press[keyCode]();
+      press[keyCode] && press[keyCode]();
     };
 
     /**
@@ -145,7 +151,7 @@ function withKeyEvents(WrappedComponent) {
         [keys.LEFT]: isFocusedDirectly && this.moveLeft
       };
 
-      if (!SPECIAL_KEY_WHILE_FOCUSED.includes(keyCode) || isFocusedDirectly) {
+      if (!SPECIAL_KEYS_WHILE_FOCUSED.includes(keyCode) || isFocusedDirectly) {
         e.preventDefault();
 
         this.defocus();
@@ -159,6 +165,19 @@ function withKeyEvents(WrappedComponent) {
       this.addListeners();
       this.removeEscapeListener();
       this.setFocusedDirectly(false);
+    };
+
+    copySelection = () => {
+      let { row, column } = this.state.selection;
+      let data = this.getCellData(row, column);
+
+      clipboard.copy(data);
+    };
+
+    pasteSelection = async () => {
+      let data = await clipboard.read();
+
+      this.writeToCell(data);
     };
 
     scrollToCell = (row, column) => {
@@ -292,6 +311,10 @@ function withKeyEvents(WrappedComponent) {
     };
 
     clearCell = () => {
+      this.writeToCell('');
+    };
+
+    writeToCell = value => {
       const { row, column } = this.state.selection;
 
       if (!this.isCellEditable(row, column)) {
@@ -302,7 +325,7 @@ function withKeyEvents(WrappedComponent) {
       const rowData = data[row];
       const columnData = columns[column];
 
-      handleChange(rowData.id, columnData.accessor, '');
+      handleChange(rowData.id, columnData.accessor, value);
     };
 
     getCell = (row, column) => {
