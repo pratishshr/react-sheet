@@ -98,9 +98,9 @@ class Row extends Component {
               className={classNames('t-columns', className, {
                 selected: isSelected
               })}
-              onMouseDown={onMouseDown(rowIndex, colIndex)}
-              onMouseUp={onMouseUp(rowIndex, colIndex)}
-              onMouseOver={onMouseOver(rowIndex, colIndex)}
+              onMouseUp={onMouseUp && onMouseUp(rowIndex, colIndex)}
+              onMouseDown={onMouseDown && onMouseDown(rowIndex, colIndex)}
+              onMouseOver={onMouseOver && onMouseOver(rowIndex, colIndex)}
               onDoubleClick={this.onDoubleClick(selectedRow, selectedColumn)}
             />
           );

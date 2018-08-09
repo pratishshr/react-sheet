@@ -46,7 +46,6 @@ class CustomCell extends Component {
         {isSelectedFirst && (
           <button
             onMouseDown={() => {
-              console.log(rowData.value);
               setDragCopyValue(rowData.value);
             }}
           />

@@ -55,7 +55,7 @@ class Hagrid extends Component {
   onOutsideClick = event => {
     if (!this.dataTable.contains(event.target)) {
       if (this.isVisible(this.dataTable)) {
-        this.props.removeAllListeners();
+        this.props.removeAllListeners && this.props.removeAllListeners();
       }
     }
   };
