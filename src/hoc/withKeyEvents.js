@@ -2,9 +2,9 @@ import _get from 'lodash/get';
 import React, { Component } from 'react';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
-import * as keys from '../constants/keys';
-
 import * as clipboard from '../utils/clipboard';
+
+import * as keys from '../constants/keys';
 
 const ALLOWED_KEYS = [
   keys.UP,
@@ -14,12 +14,8 @@ const ALLOWED_KEYS = [
   keys.ENTER,
   keys.TAB,
   keys.DELETE,
-  keys.BACKSPACE,
-  keys.C,
-  keys.V
+  keys.BACKSPACE
 ];
-
-const SPECIAL_KEYS = [keys.C, keys.V];
 
 const ALLOWED_KEYS_WHILE_FOCUSED = [
   keys.TAB,
@@ -50,12 +46,20 @@ function withKeyEvents(WrappedComponent) {
     }
 
     componentWillUnmount() {
-      this.removeListeners();
+      this.removeAllListeners();
     }
 
     addListeners = () => {
       window.addEventListener('keydown', this.onKeyDown, false);
       window.addEventListener('keypress', this.onKeyPress, false);
+      window.addEventListener('copy', this.copySelection, false);
+      window.addEventListener('paste', this.pasteSelection, false);
+    };
+
+    removeListeners = () => {
+      window.removeEventListener('keydown', this.onKeyDown, false);
+      window.removeEventListener('copy', this.copySelection, false);
+      window.removeEventListener('paste', this.pasteSelection, false);
     };
 
     addListenersWhenFocused = () => {
@@ -64,10 +68,6 @@ function withKeyEvents(WrappedComponent) {
 
     removeEscapeListener = () => {
       window.removeEventListener('keydown', this.onKeyDownWhenFocused, false);
-    };
-
-    removeListeners = () => {
-      window.removeEventListener('keydown', this.onKeyDown, false);
     };
 
     removeAllListeners = () => {
@@ -85,6 +85,8 @@ function withKeyEvents(WrappedComponent) {
       window.removeEventListener('keydown', this.onKeyDown, false);
       window.removeEventListener('keydown', this.onKeyDownWhenFocused, false);
       window.removeEventListener('keypress', this.onKeyPress, false);
+      window.removeEventListener('copy', this.copySelection, false);
+      window.removeEventListener('paste', this.pasteSelection, false);
     };
 
     /**
@@ -112,9 +114,7 @@ function withKeyEvents(WrappedComponent) {
         return;
       }
 
-      if (!SPECIAL_KEYS.includes(keyCode)) {
-        e.preventDefault();
-      }
+      e.preventDefault();
 
       let press = {
         [keys.UP]: this.moveUp,
@@ -124,12 +124,10 @@ function withKeyEvents(WrappedComponent) {
         [keys.TAB]: e.shiftKey ? this.moveLeft : this.moveRight,
         [keys.ENTER]: this.focus,
         [keys.BACKSPACE]: this.clearCell,
-        [keys.DELETE]: this.clearCell,
-        [keys.C]: (e.ctrlKey || e.metaKey) && this.copySelection,
-        [keys.V]: (e.ctrlKey || e.metaKey) && this.pasteSelection
+        [keys.DELETE]: this.clearCell
       };
 
-      press[keyCode] && press[keyCode]();
+      press[keyCode] && press[keyCode](e);
     };
 
     /**
@@ -167,17 +165,31 @@ function withKeyEvents(WrappedComponent) {
       this.setFocusedDirectly(false);
     };
 
-    copySelection = () => {
+    copySelection = e => {
+      e.preventDefault();
       let { row, column } = this.state.selection;
-      let data = this.getCellData(row, column);
+      let data = this.getCellData(row, column) || '';
 
-      clipboard.copy(data);
+      e.clipboardData.setData('text/plain', data);
     };
 
-    pasteSelection = async () => {
-      let data = await clipboard.read();
+    pasteSelection = e => {
+      e.preventDefault();
+      let data = clipboard.parse(e.clipboardData.getData('text/plain'));
 
-      this.writeToCell(data);
+      data.forEach((lines, rowIndex) => {
+        lines.forEach((cellData, colIndex) => {
+          let { row, column } = this.state.selection;
+
+          this.writeToCell(
+            {
+              row: row + rowIndex,
+              column: column + colIndex
+            },
+            cellData
+          );
+        });
+      });
     };
 
     scrollToCell = (row, column) => {
@@ -269,6 +281,10 @@ function withKeyEvents(WrappedComponent) {
     isCellEditable = (row, column) => {
       const cell = this.getCell(row, column);
 
+      if (!cell) {
+        return false;
+      }
+
       return cell.className.split(' ').includes('editable');
     };
 
@@ -311,11 +327,11 @@ function withKeyEvents(WrappedComponent) {
     };
 
     clearCell = () => {
-      this.writeToCell('');
+      this.writeToCell(this.state.selection, '');
     };
 
-    writeToCell = value => {
-      const { row, column } = this.state.selection;
+    writeToCell = (selection, value) => {
+      const { row, column } = selection;
 
       if (!this.isCellEditable(row, column)) {
         return;

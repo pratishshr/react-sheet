@@ -1,17 +1,12 @@
 /**
- * Copy text to clipboard.
+ * Parse data from clipboard
  *
- * @returns {Promise}
+ * @param {string} data
  */
-export function copy(text) {
-  return navigator.clipboard.writeText(text);
-}
+export function parse(data) {
+  if (!data) {
+    return '';
+  }
 
-/**
- * Read text from clipboard/
- *
- * @returns {Promise}
- */
-export function read() {
-  return navigator.clipboard.readText();
+  return data.split('\n').map(line => line.split('\t'));
 }
