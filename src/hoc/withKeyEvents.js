@@ -15,6 +15,16 @@ const ALLOWED_KEYS = [
   keys.BACKSPACE
 ];
 
+const ALLOWED_KEYS_WHILE_FOCUSED = [
+  keys.TAB,
+  keys.ENTER,
+  keys.ESCAPE,
+  keys.RIGHT,
+  keys.LEFT
+];
+
+const SPECIAL_KEY_WHILE_FOCUSED = [keys.RIGHT, keys.LEFT];
+
 function withKeyEvents(WrappedComponent) {
   return class KeyWrapper extends Component {
     constructor() {
@@ -27,7 +37,8 @@ function withKeyEvents(WrappedComponent) {
         focusedCell: {
           row: null,
           column: null
-        }
+        },
+        isFocusedDirectly: false
       };
       this.elem;
     }
@@ -36,17 +47,21 @@ function withKeyEvents(WrappedComponent) {
       this.removeListeners();
     }
 
+    componentDidUpdate() {
+      console.log(this.state);
+    }
+
     addListeners = () => {
       window.addEventListener('keydown', this.onKeyDown, false);
       window.addEventListener('keypress', this.onKeyPress, false);
     };
 
-    addEscapeListener = () => {
-      window.addEventListener('keydown', this.onEscapeKeyDown, false);
+    addListenersWhenFocused = () => {
+      window.addEventListener('keydown', this.onKeyDownWhenFocused, false);
     };
 
     removeEscapeListener = () => {
-      window.removeEventListener('keydown', this.onEscapeKeyDown, false);
+      window.removeEventListener('keydown', this.onKeyDownWhenFocused, false);
     };
 
     removeListeners = () => {
@@ -64,8 +79,9 @@ function withKeyEvents(WrappedComponent) {
           column: null
         }
       });
+
       window.removeEventListener('keydown', this.onKeyDown, false);
-      window.removeEventListener('keydown', this.onEscapeKeyDown, false);
+      window.removeEventListener('keydown', this.onKeyDownWhenFocused, false);
       window.removeEventListener('keypress', this.onKeyPress, false);
     };
 
@@ -73,43 +89,76 @@ function withKeyEvents(WrappedComponent) {
      * Focus while directly typing on selection.
      */
     onKeyPress = e => {
-      console.log(this.isFocused());
       if (!this.isFocused()) {
         this.focus();
         this.clearCell();
+        this.setFocusedDirectly(true);
       }
     };
 
-    onEscapeKeyDown = e => {
+    setFocusedDirectly = isFocusedDirectly => {
+      this.setState({ isFocusedDirectly });
+    };
+
+    /**
+     * Key events when not focused in the table.
+     */
+    onKeyDown = e => {
       const keyCode = e.keyCode;
 
-      if (keyCode === keys.ESCAPE) {
-        e.preventDefault();
-
-        this.blur();
-        this.addListeners();
-        this.removeEscapeListener();
+      if (!ALLOWED_KEYS.includes(keyCode)) {
+        return;
       }
-      if (keyCode === keys.ENTER) {
-        e.preventDefault();
 
-        this.onEnter();
-      }
-      if (keyCode === keys.TAB) {
-        e.preventDefault();
+      e.preventDefault();
 
-        this.blur();
-        this.addListeners();
-        this.removeEscapeListener();
-        this.moveRight();
-      }
+      let press = {
+        [keys.UP]: this.moveUp,
+        [keys.DOWN]: this.moveDown,
+        [keys.LEFT]: this.moveLeft,
+        [keys.RIGHT]: this.moveRight,
+        [keys.TAB]: e.shiftKey ? this.moveLeft : this.moveRight,
+        [keys.ENTER]: this.focus,
+        [keys.BACKSPACE]: this.clearCell,
+        [keys.DELETE]: this.clearCell
+      };
+
+      press[keyCode]();
     };
 
-    onEnter = () => {
+    /**
+     * Key events when focused in a particular cell.
+     */
+    onKeyDownWhenFocused = e => {
+      const keyCode = e.keyCode;
+
+      if (!ALLOWED_KEYS_WHILE_FOCUSED.includes(keyCode)) {
+        return;
+      }
+
+      const { isFocusedDirectly } = this.state;
+
+      let press = {
+        [keys.TAB]: this.moveRight,
+        [keys.ENTER]: this.moveDown,
+        [keys.RIGHT]: isFocusedDirectly && this.moveRight,
+        [keys.LEFT]: isFocusedDirectly && this.moveLeft
+      };
+
+      if (!SPECIAL_KEY_WHILE_FOCUSED.includes(keyCode) || isFocusedDirectly) {
+        e.preventDefault();
+
+        this.defocus();
+      }
+
+      press[keyCode] && press[keyCode]();
+    };
+
+    defocus = () => {
       this.blur();
-      this.moveDown();
       this.addListeners();
       this.removeEscapeListener();
+      this.setFocusedDirectly(false);
     };
 
     scrollToCell = (row, column) => {
@@ -140,7 +189,7 @@ function withKeyEvents(WrappedComponent) {
 
     isFocused = () => {
       const { row, column } = this.state.focusedCell;
-      console.log(row, column);
+
       if (row !== null && column !== null) {
         return true;
       }
@@ -155,29 +204,6 @@ function withKeyEvents(WrappedComponent) {
           column
         }
       });
-    };
-
-    onKeyDown = e => {
-      const keyCode = e.keyCode;
-
-      if (!ALLOWED_KEYS.includes(keyCode)) {
-        return;
-      }
-
-      e.preventDefault();
-
-      let press = {
-        [keys.UP]: this.moveUp,
-        [keys.DOWN]: this.moveDown,
-        [keys.LEFT]: this.moveLeft,
-        [keys.RIGHT]: this.moveRight,
-        [keys.TAB]: e.shiftKey ? this.moveLeft : this.moveRight,
-        [keys.ENTER]: this.focus,
-        [keys.BACKSPACE]: this.clearCell,
-        [keys.DELETE]: this.clearCell
-      };
-
-      press[keyCode]();
     };
 
     moveUp = () => {
@@ -241,7 +267,7 @@ function withKeyEvents(WrappedComponent) {
         input && input.focus();
 
         this.removeListeners();
-        this.addEscapeListener();
+        this.addListenersWhenFocused();
         this.setFocus(row, column);
       }
     };
@@ -295,6 +321,14 @@ function withKeyEvents(WrappedComponent) {
       return null;
     };
 
+    /**
+     * Enter event for select component.
+     */
+    onSelectEnter = () => {
+      this.defocus();
+      this.moveDown();
+    };
+
     render() {
       const { selection, focusedCell } = this.state;
 
@@ -304,7 +338,7 @@ function withKeyEvents(WrappedComponent) {
           focus={this.focus}
           onClick={this.addListeners}
           selection={selection}
-          onEnter={this.onEnter}
+          onEnter={this.onSelectEnter}
           focusedCell={focusedCell}
           setSelection={this.setSelection}
           {...this.props}

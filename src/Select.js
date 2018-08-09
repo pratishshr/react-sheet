@@ -115,18 +115,19 @@ class Select extends Component {
     }
 
     const { value } = selectedOption;
-    const { id, name, handleChange } = this.props;
+    const { id, name, handleChange, onEnter } = this.props;
 
+    onEnter && onEnter();
     handleChange(id, name, value);
   };
 
-  onClose = _debounce(() => {
-    const { onEnter } = this.props;
+  // onClose = _debounce(() => {
+  //   const { onEnter } = this.props;
 
-    if (onEnter) {
-      onEnter();
-    }
-  });
+  //   if (onEnter) {
+  //     onEnter();
+  //   }
+  // });
 
   render() {
     const {
