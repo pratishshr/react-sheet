@@ -208,13 +208,13 @@ function withKeyEvents(WrappedComponent) {
     pasteSelection = e => {
       e.preventDefault();
       let data = clipboard.parse(e.clipboardData.getData('text/plain'));
-      let state = {};
+      let state = this.props.state;
 
       data.forEach((lines, rowIndex) => {
         lines.forEach((cellData, colIndex) => {
           let { row, column } = this.state.selection;
-
-          this.writeToCell(
+          state = this.prepareState(
+            state,
             {
               row: row + rowIndex,
               column: column + colIndex
@@ -223,6 +223,8 @@ function withKeyEvents(WrappedComponent) {
           );
         });
       });
+
+      this.changeState(state);
     };
 
     scrollToCell = (row, column) => {
@@ -416,12 +418,15 @@ function withKeyEvents(WrappedComponent) {
 
     clearCell = () => {
       let cells = this.getSelectedCells();
+      let state = this.props.state;
 
       cells.forEach(row => {
         row.forEach(selection => {
-          this.writeToCell(selection, '');
+          state = this.prepareState(state, selection, '');
         });
       });
+
+      this.changeState(state);
     };
 
     changeState = state => {
@@ -446,13 +451,13 @@ function withKeyEvents(WrappedComponent) {
       changeStateInBulk(newState);
     };
 
-    prepareState = (selection, value) => {
+    prepareState = (state, selection, value) => {
       const { row, column } = selection;
 
       if (!this.isCellEditable(row, column)) {
-        return;
+        return state;
       }
-      const { state, data, columns, changeStateInBulk } = this.props;
+      const { data, columns, changeStateInBulk } = this.props;
       const rowData = data[row];
       const columnData = columns[column];
 
@@ -461,7 +466,7 @@ function withKeyEvents(WrappedComponent) {
         [rowData.id]: _set(columnData.accessor)(value)(state[rowData.id])
       };
 
-      changeStateInBulk(newState);
+      return newState;
     };
 
     getCell = (row, column) => {
@@ -506,19 +511,19 @@ function withKeyEvents(WrappedComponent) {
 
         let { dragCopyValue } = this.state;
 
-        setTimeout(() => {
-          if (dragCopyValue) {
-            let cells = this.getSelectedCells();
+        if (dragCopyValue) {
+          let state = this.props.state;
+          let cells = this.getSelectedCells();
 
-            cells.forEach(row => {
-              row.forEach(selection => {
-                this.writeToCell(selection, dragCopyValue);
-              });
+          cells.forEach(row => {
+            row.forEach(selection => {
+              state = this.prepareState(state, selection, dragCopyValue);
             });
+          });
 
-            this.setDragCopyValue(null);
-          }
-        }, 1);
+          this.setDragCopyValue(null);
+          this.changeState(state);
+        }
       };
     };
 
