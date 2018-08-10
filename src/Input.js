@@ -6,9 +6,20 @@ import * as keys from './constants/keys';
 const ALLOWED_KEYS = [keys.ESCAPE, keys.ENTER];
 
 class Input extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.cell;
+    this.state = {
+      value: props.value
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.state.value !== nextProps.value) {
+      this.setState({
+        value: nextProps.value
+      });
+    }
   }
 
   onChange = e => {
@@ -17,6 +28,13 @@ class Input extends Component {
     const { id, name, handleChange } = this.props;
 
     handleChange(id, name, value);
+  };
+
+  handleChange = e => {
+    e.preventDefault();
+    const value = e.target.value;
+
+    this.setState({ value });
   };
 
   clear = () => {
@@ -31,8 +49,17 @@ class Input extends Component {
     }
   };
 
+  onBlur = e => {
+    e.preventDefault();
+    const { value } = this.state;
+    const { id, name, handleChange } = this.props;
+
+    handleChange(id, name, value);
+  };
+
   render() {
-    const { name, value, inputProps, type, className } = this.props;
+    const { value } = this.state;
+    const { name, inputProps, type, className } = this.props;
 
     return (
       <div className={className}>
@@ -43,7 +70,8 @@ class Input extends Component {
           type={type}
           name={name}
           value={value}
-          onChange={this.onChange}
+          onChange={this.handleChange}
+          onBlur={this.onBlur}
           ref={elem => (this.input = elem)}
           onKeyDown={this.onKeyDown}
           onMouseDown={e => e.preventDefault()}
