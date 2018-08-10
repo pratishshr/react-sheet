@@ -453,11 +453,12 @@ function withKeyEvents(WrappedComponent) {
 
     prepareState = (state, selection, value) => {
       const { row, column } = selection;
+      const { data, columns, changeStateInBulk } = this.props;
 
-      if (!this.isCellEditable(row, column)) {
+      if (!this.isCellEditable(row, column) || !data[row]) {
         return state;
       }
-      const { data, columns, changeStateInBulk } = this.props;
+
       const rowData = data[row];
       const columnData = columns[column];
 
