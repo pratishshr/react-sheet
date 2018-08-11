@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 
 import CustomCell from './CustomCell';
 
+import { isBetween } from './utils/calculations';
+
 class Row extends Component {
   onDoubleClick = (selectedRow, selectedColumn) => {
     return () => {

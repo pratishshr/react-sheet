@@ -72,6 +72,7 @@ class Hagrid extends Component {
       setSelectionEnd,
       focus,
       onEnter,
+      isSelecting,
       focusedCell,
       onMouseUp,
       onMouseDown,
@@ -101,6 +102,7 @@ class Hagrid extends Component {
             data={data}
             width={headerWidth}
             focus={focus}
+            isSelecting={isSelecting}
             onEnter={onEnter}
             columns={columns}
             rowHeight={rowHeight}

@@ -512,7 +512,7 @@ function withKeyEvents(WrappedComponent) {
 
         let { dragCopyValue } = this.state;
 
-        if (dragCopyValue) {
+        if (dragCopyValue || dragCopyValue === 0) {
           let state = this.props.state;
           let cells = this.getSelectedCells();
 
@@ -545,11 +545,12 @@ function withKeyEvents(WrappedComponent) {
     };
 
     render() {
-      const { selection, selectionEnd, focusedCell } = this.state;
+      const { selection, isSelecting, selectionEnd, focusedCell } = this.state;
 
       return (
         <WrappedComponent
           removeAllListeners={this.removeAllListeners}
+          isSelecting={isSelecting}
           focus={this.focus}
           onClick={this.addListeners}
           selection={selection}

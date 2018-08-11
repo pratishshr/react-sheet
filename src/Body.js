@@ -18,7 +18,8 @@ function renderRow(
   onMouseUp,
   onMouseDown,
   onMouseOver,
-  setDragCopyValue
+  setDragCopyValue,
+  isSelecting
 ) {
   return ({ key, index, isScrolling, isVisible, style }) => {
     return (
@@ -36,6 +37,7 @@ function renderRow(
         setSelection={setSelection}
         setSelectionEnd={setSelectionEnd}
         onMouseUp={onMouseUp}
+        isSelecting={isSelecting}
         onMouseDown={onMouseDown}
         onMouseOver={onMouseOver}
         setDragCopyValue={setDragCopyValue}
@@ -70,6 +72,7 @@ class Body extends Component {
       setSelectionEnd,
       focusedCell,
       focus,
+      isSelecting,
       onEnter,
       selectionEnd = {},
       onMouseUp,
@@ -103,7 +106,8 @@ class Body extends Component {
                 onMouseUp,
                 onMouseDown,
                 onMouseOver,
-                setDragCopyValue
+                setDragCopyValue,
+                isSelecting
               )}
               ref={instance => (this.List = instance)}
               style={listStyle}

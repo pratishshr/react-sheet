@@ -24,3 +24,19 @@ export function getRange(start, end) {
 
   return arr;
 }
+
+export function isBetween(start, end, value) {
+  let startPos = start;
+  let endPos = end;
+
+  if (endPos < startPos) {
+    startPos = end;
+    endPos = start;
+  }
+
+  if (value >= startPos && value <= endPos) {
+    return true;
+  }
+
+  return false;
+}
