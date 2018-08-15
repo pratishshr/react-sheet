@@ -1,12 +1,25 @@
 import _get from 'lodash/get';
 import classNames from 'classnames';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import CustomCell from './CustomCell';
 
 import { isBetween } from './utils/calculations';
 
 class Row extends Component {
+  constructor() {
+    super();
+    this.state = {
+      displayAddRow: false
+    };
+  }
+
+  displayAddRow = displayAddRow => {
+    this.setState({
+      displayAddRow: displayAddRow
+    });
+  };
+
   onDoubleClick = (selectedRow, selectedColumn) => {
     return () => {
       const { focus } = this.props;
@@ -27,7 +40,10 @@ class Row extends Component {
     const negX = rowIndex <= row && rowIndex >= rowEnd;
     const negY = colIndex <= column && colIndex >= columnEnd;
 
-    if (!row && !column) {
+    if (
+      (row == null || row == undefined) &&
+      (column == null || column == undefined)
+    ) {
       return false;
     }
 
@@ -53,7 +69,8 @@ class Row extends Component {
       onMouseUp,
       onMouseDown,
       onMouseOver,
-      setDragCopyValue
+      setDragCopyValue,
+      addRow
     } = this.props;
 
     const { row: focusedRow = null, column: focusedColumn = null } =
@@ -62,7 +79,31 @@ class Row extends Component {
       selection || {};
 
     return (
-      <div className="table-row" style={style}>
+      <div
+        className="table-row"
+        style={style}
+        onMouseOver={() => {
+          this.displayAddRow(true);
+        }}
+        onMouseOut={() => {
+          this.displayAddRow(false);
+        }}
+      >
+        <button
+          style={{
+            display: this.state.displayAddRow ? 'block' : 'none',
+            height: 15,
+            width: 15,
+            background: '#007eff',
+            position: 'absolute',
+            top: style.height - 7.5,
+            zIndex: 999,
+            lineHeight: '12px',
+            color: 'white',
+            textAlign: 'center'
+          }}
+          onMouseDown={() => addRow(row.sortIndex)}
+        />
         {columns.map((column, colIndex) => {
           const { Cell, width, className } = column;
 

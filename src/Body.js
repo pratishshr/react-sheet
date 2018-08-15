@@ -19,11 +19,13 @@ function renderRow(
   onMouseDown,
   onMouseOver,
   setDragCopyValue,
-  isSelecting
+  isSelecting,
+  addRow
 ) {
   return ({ key, index, isScrolling, isVisible, style }) => {
     return (
       <Row
+        addRow={addRow}
         key={key}
         style={style}
         focus={focus}
@@ -78,7 +80,8 @@ class Body extends Component {
       onMouseUp,
       onMouseDown,
       onMouseOver,
-      setDragCopyValue
+      setDragCopyValue,
+      addRow
     } = this.props;
     return (
       <div
@@ -107,7 +110,8 @@ class Body extends Component {
                 onMouseDown,
                 onMouseOver,
                 setDragCopyValue,
-                isSelecting
+                isSelecting,
+                addRow
               )}
               ref={instance => (this.List = instance)}
               style={listStyle}

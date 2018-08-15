@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import _set from 'lodash/fp/set';
+import _cloneDeep from 'lodash/cloneDeep';
+import _mapValues from 'lodash/mapValues';
 
 import Hagrid, {
   Input,
@@ -10,6 +12,83 @@ import Hagrid, {
 } from '../../src';
 
 const KeyHagrid = withCheckboxColumn(withKeyEvents(Hagrid));
+
+const INITIAL_VALUE = {
+  input: {
+    depth: '',
+    soilType: '',
+    percentFines: '',
+    blowCount: '',
+    PL: '',
+    MC: '',
+    LL: '',
+    const: '',
+    currentUnitWeight: '',
+    preConsolidationPressure: '',
+    cohesion: '',
+    compressionIndex: '',
+    recompressionIndex: '',
+    comments: ''
+  },
+  calculated: {
+    elevation: null,
+    totalStress_SVo: null,
+    effectiveStress_ESVO: null,
+    energyCorrectionFactor_CE: null,
+    boreholeCorrectionFactor_CB: null,
+    rodLengthCorrectionFactor_CR: null,
+    linerCorrectionFactor_CS: null,
+    overburdenCorrectionFactor_CN: null,
+    deltaN: null,
+    N160: null,
+    N160_CS: null,
+    ESinKPA: null,
+    ESinPSF: null,
+    constrainedModulus: null
+  },
+  override: {
+    elevation: null,
+    currentUnitWeight: null,
+    totalStress_SVo: null,
+    effectiveStress_ESVO: null,
+    energyCorrectionFactor_CE: null,
+    boreholeCorrectionFactor_CB: null,
+    rodLengthCorrectionFactor_CR: null,
+    linerCorrectionFactor_CS: null,
+    overburdenCorrectionFactor_CN: null,
+    deltaN: null,
+    N160: null,
+    N160_CS: null,
+    ESinKPA: null,
+    ESinPSF: null,
+    constrainedModulus: null
+  }
+};
+
+function nextIndex(item) {
+  let keys = Object.keys(item).sort((a, b) => a - b);
+  let lastIndex = parseInt(keys[keys.length - 1], 10);
+
+  if (!lastIndex) {
+    return 1;
+  }
+
+  return ++lastIndex;
+}
+
+function nextSortIndex(item) {
+  let keys = Object.keys(item).sort(
+    (prev, next) => item[prev].sortIndex - item[next].sortIndex
+  );
+  let lastIndex = parseInt(keys[keys.length - 1], 10);
+
+  if (!lastIndex) {
+    return 1;
+  }
+
+  return ++lastIndex;
+}
+
 class Demo extends Component {
   constructor() {
     super();
@@ -236,7 +315,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 0
         },
         '2': {
           input: {
@@ -289,7 +369,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 1
         },
         '3': {
           input: {
@@ -342,7 +423,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 2
         },
         '4': {
           input: {
@@ -395,7 +477,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 3
         },
         '5': {
           input: {
@@ -448,7 +531,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 4
         },
         '6': {
           input: {
@@ -501,7 +585,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 5
         },
         '7': {
           input: {
@@ -554,7 +639,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 6
         },
         '8': {
           input: {
@@ -607,7 +693,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 7
         },
         '9': {
           input: {
@@ -660,7 +747,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 8
         },
         '10': {
           input: {
@@ -713,7 +801,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 9
         },
         '11': {
           input: {
@@ -766,7 +855,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 10
         },
         '12': {
           input: {
@@ -819,7 +909,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 11
         },
         '13': {
           input: {
@@ -872,7 +963,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 12
         },
         '14': {
           input: {
@@ -924,7 +1016,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 13
         },
         '15': {
           input: {
@@ -976,7 +1069,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 14
         },
         '16': {
           input: {
@@ -1028,7 +1122,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 15
         },
         '17': {
           input: {
@@ -1080,7 +1175,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 16
         },
         '18': {
           input: {
@@ -1132,7 +1228,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 17
         },
         '19': {
           input: {
@@ -1184,7 +1281,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 18
         },
         '20': {
           input: {
@@ -1236,7 +1334,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 19
         },
         '21': {
           input: {
@@ -1288,7 +1387,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 20
         },
         '22': {
           input: {
@@ -1340,7 +1440,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 21
         },
         '23': {
           input: {
@@ -1392,7 +1493,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 22
         },
         '24': {
           input: {
@@ -1444,7 +1546,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 23
         },
         '25': {
           input: {
@@ -1496,7 +1599,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 24
         },
         '26': {
           input: {
@@ -1548,7 +1652,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 25
         },
         '27': {
           input: {
@@ -1600,7 +1705,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 26
         },
         '28': {
           input: {
@@ -1652,7 +1758,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 27
         },
         '29': {
           input: {
@@ -1704,7 +1811,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 28
         },
         '30': {
           input: {
@@ -1756,7 +1864,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 29
         },
         '31': {
           input: {
@@ -1808,7 +1917,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 30
         },
         '32': {
           input: {
@@ -1860,7 +1970,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 31
         },
         '33': {
           input: {
@@ -1912,7 +2023,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 32
         },
         '34': {
           input: {
@@ -1964,7 +2076,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 33
         },
         '35': {
           input: {
@@ -2016,7 +2129,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 34
         },
         '36': {
           input: {
@@ -2068,7 +2182,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 35
         },
         '37': {
           input: {
@@ -2120,7 +2235,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 36
         },
         '38': {
           input: {
@@ -2172,7 +2288,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 37
         },
         '39': {
           input: {
@@ -2224,7 +2341,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 38
         },
         '40': {
           input: {
@@ -2276,7 +2394,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 39
         },
         '41': {
           input: {
@@ -2328,7 +2447,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 40
         },
         '42': {
           input: {
@@ -2380,7 +2500,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 41
         },
         '43': {
           input: {
@@ -2432,7 +2553,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 42
         },
         '44': {
           input: {
@@ -2484,7 +2606,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 43
         },
         '45': {
           input: {
@@ -2536,7 +2659,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 44
         },
         '46': {
           input: {
@@ -2588,7 +2712,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 45
         },
         '47': {
           input: {
@@ -2640,7 +2765,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 46
         },
         '48': {
           input: {
@@ -2692,7 +2818,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 47
         },
         '49': {
           input: {
@@ -2744,7 +2871,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 48
         },
         '50': {
           input: {
@@ -2796,7 +2924,8 @@ class Demo extends Component {
             boreholeCorrectionFactor_CB: null,
             rodLengthCorrectionFactor_CR: null,
             overburdenCorrectionFactor_CN: null
-          }
+          },
+          sortIndex: 49
         }
       }
     };
@@ -2825,10 +2954,35 @@ class Demo extends Component {
     });
   };
 
+  addRow = (index, id) => {
+    let data = _mapValues(this.state.data, row => {
+      if (row.sortIndex >= index + 1) {
+        return {
+          ...row,
+          sortIndex: row.sortIndex + 1
+        };
+      }
+
+      return row
+    });
+    
+    let newRow = _cloneDeep(INITIAL_VALUE);
+
+    newRow.id = nextIndex(this.state.data);
+    newRow.sortIndex = index + 1;
+
+    this.changeStateInBulk({
+      ...data,
+      [newRow.id]: newRow
+    });
+  };
+
   render() {
     const { data } = this.state;
     let rows = Object.keys(data)
-      .sort((a, b) => a - b)
+      .sort((a, b) => {
+        return data[a].sortIndex - data[b].sortIndex;
+      })
       .reduce(
         (acc, next) =>
           acc.concat({
@@ -2842,6 +2996,7 @@ class Demo extends Component {
       <div>
         <h1>React Sheet</h1>
         <KeyHagrid
+          addRow={this.addRow}
           state={data}
           data={rows}
           height={500}
