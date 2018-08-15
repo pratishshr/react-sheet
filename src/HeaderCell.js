@@ -14,7 +14,7 @@ class HeaderCell extends Component {
   }
 
   render() {
-    const { Header, width, headerClassname } = this.props.column;
+    const { Header, width, headerClassName } = this.props.column;
 
     return (
       <div
@@ -23,7 +23,7 @@ class HeaderCell extends Component {
           width: width || DEFAULT_WIDTH,
           maxWidth: width || DEFAULT_WIDTH
         }}
-        className={classNames('t-head', headerClassname)}
+        className={classNames('t-head', headerClassName)}
       >
         {Header}
       </div>
