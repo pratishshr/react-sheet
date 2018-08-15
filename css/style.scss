@@ -153,3 +153,29 @@ body {
 .fake-checkbox {
   height: 10px;
 }
+.add-btn{
+  &.hovered{
+    width: 100%;
+    border-bottom: 1px solid $blue;
+    position: absolute;
+    z-index: 9999;
+    bottom: 0;
+  }
+  button{
+    height: 14px;
+    width: 14px;
+    background: $blue;
+    position: absolute;
+    bottom: -7px;
+    z-index: 999;
+    color: white;
+    outline: none;
+    border: none;
+    text-align: center;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+}

@@ -90,21 +90,15 @@ class Row extends Component {
         }}
       >
         {addRow && (
-          <button
-            style={{
-              display: this.state.displayAddRow ? 'block' : 'none',
-              height: 15,
-              width: 15,
-              background: '#007eff',
-              position: 'absolute',
-              top: style.height - 7.5,
-              zIndex: 999,
-              lineHeight: '12px',
-              color: 'white',
-              textAlign: 'center'
-            }}
-            onMouseDown={() => addRow(row.sortIndex)}
-          />
+          <div className={classNames('add-btn', {hovered: this.state.displayAddRow})}>
+            <button
+              className="row-btn"
+              style={{
+                display: this.state.displayAddRow ? 'flex' : 'none',
+              }}
+              onMouseDown={() => addRow(row.sortIndex)}
+            >+</button>
+          </div>
         )}
         {columns.map((column, colIndex) => {
           const { Cell, width, className } = column;
