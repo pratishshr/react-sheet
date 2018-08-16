@@ -93,8 +93,8 @@ class Body extends Component {
           {width && (
             <List
               width={width}
-              height={bodyHeight || 300}
-              rowCount={data.length}
+              height={bodyHeight + 100 || 300}
+              rowCount={data.length + 1}
               rowHeight={rowHeight || 28}
               rowRenderer={renderRow(
                 data,
