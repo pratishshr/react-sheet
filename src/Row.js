@@ -70,7 +70,8 @@ class Row extends Component {
       onMouseDown,
       onMouseOver,
       setDragCopyValue,
-      addRow
+      addRow,
+      rowCount
     } = this.props;
 
     const { row: focusedRow = null, column: focusedColumn = null } =
@@ -89,17 +90,25 @@ class Row extends Component {
           this.displayAddRow(false);
         }}
       >
-        {addRow && (
-          <div className={classNames('add-btn', {hovered: this.state.displayAddRow})}>
-            <button
-              className="row-btn"
-              style={{
-                display: this.state.displayAddRow ? 'flex' : 'none',
-              }}
-              onMouseDown={() => addRow(row.sortIndex)}
-            >+</button>
-          </div>
-        )}
+        {console.log(rowCount, rowIndex)}
+        {addRow &&
+          rowCount !== rowIndex + 1 && (
+            <div
+              className={classNames('add-btn', {
+                hovered: this.state.displayAddRow
+              })}
+            >
+              <button
+                className="row-btn"
+                style={{
+                  display: this.state.displayAddRow ? 'flex' : 'none'
+                }}
+                onMouseDown={() => addRow(row.sortIndex)}
+              >
+                +
+              </button>
+            </div>
+          )}
         {columns.map((column, colIndex) => {
           const { Cell, width, className } = column;
 

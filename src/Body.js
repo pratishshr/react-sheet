@@ -42,6 +42,7 @@ function renderRow(
         isSelecting={isSelecting}
         onMouseDown={onMouseDown}
         onMouseOver={onMouseOver}
+        rowCount={data.length}
         setDragCopyValue={setDragCopyValue}
       />
     );
@@ -94,7 +95,7 @@ class Body extends Component {
             <List
               width={width}
               height={bodyHeight + 100 || 300}
-              rowCount={data.length + 1}
+              rowCount={data.length}
               rowHeight={rowHeight || 28}
               rowRenderer={renderRow(
                 data,
