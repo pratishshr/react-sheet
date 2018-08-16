@@ -8,7 +8,10 @@ export function parse(data) {
     return '';
   }
 
-  return data.split('\n').map(line => line.split('\t'));
+  return data
+    .replace(/[\n\r]+/g, '\n')
+    .split('\n')
+    .map(line => line.split('\t'));
 }
 
 /**

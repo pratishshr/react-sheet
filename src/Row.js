@@ -90,24 +90,6 @@ class Row extends Component {
           this.displayAddRow(false);
         }}
       >
-        {addRow &&
-          rowCount !== rowIndex + 1 && (
-            <div
-              className={classNames('add-btn', {
-                hovered: this.state.displayAddRow
-              })}
-            >
-              <button
-                className="row-btn"
-                style={{
-                  display: this.state.displayAddRow ? 'flex' : 'none'
-                }}
-                onMouseDown={() => addRow(row.sortIndex)}
-              >
-                +
-              </button>
-            </div>
-          )}
         {columns.map((column, colIndex) => {
           const { Cell, width, className } = column;
 
@@ -152,6 +134,24 @@ class Row extends Component {
             />
           );
         })}
+        {addRow &&
+          rowCount !== rowIndex + 1 && (
+            <div
+              className={classNames('add-btn', {
+                hovered: this.state.displayAddRow
+              })}
+            >
+              <button
+                className="row-btn"
+                style={{
+                  display: this.state.displayAddRow ? 'flex' : 'none'
+                }}
+                onMouseDown={() => addRow(row.sortIndex)}
+              >
+                +
+              </button>
+            </div>
+          )}
       </div>
     );
   }
