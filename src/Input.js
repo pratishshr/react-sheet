@@ -19,6 +19,15 @@ class Input extends Component {
     handleChange(id, name, value);
   };
 
+  onBlur = e => {
+    e.preventDefault();
+    const { id, name, handleBlur } = this.props;
+
+    if (handleBlur) {
+      handleBlur(id, name);
+    }
+  };
+
   clear = () => {
     const { id, name, handleChange } = this.props;
 
@@ -43,6 +52,7 @@ class Input extends Component {
           type={type}
           name={name}
           value={value}
+          onBlur={this.onBlur}
           onChange={this.onChange}
           ref={elem => (this.input = elem)}
           onKeyDown={this.onKeyDown}

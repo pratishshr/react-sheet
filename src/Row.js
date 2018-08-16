@@ -90,7 +90,6 @@ class Row extends Component {
           this.displayAddRow(false);
         }}
       >
-        {console.log(rowCount, rowIndex)}
         {addRow &&
           rowCount !== rowIndex + 1 && (
             <div
