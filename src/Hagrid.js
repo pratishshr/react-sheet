@@ -75,6 +75,7 @@ class Hagrid extends Component {
       isSelecting,
       addRow,
       focusedCell,
+      addedData,
       onMouseUp,
       onMouseDown,
       onMouseOver,
@@ -102,6 +103,7 @@ class Hagrid extends Component {
             addRow={addRow}
             ref={elem => (this.body = elem)}
             data={data}
+            addedData={addedData}
             width={headerWidth}
             focus={focus}
             isSelecting={isSelecting}
