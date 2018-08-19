@@ -20,7 +20,8 @@ function renderRow(
   onMouseOver,
   setDragCopyValue,
   isSelecting,
-  addRow
+  addRow,
+  addedData
 ) {
   return ({ key, index, isScrolling, isVisible, style }) => {
     return (
@@ -44,6 +45,7 @@ function renderRow(
         onMouseOver={onMouseOver}
         rowCount={data.length}
         setDragCopyValue={setDragCopyValue}
+        addedData={addedData}
       />
     );
   };
@@ -82,7 +84,8 @@ class Body extends Component {
       onMouseDown,
       onMouseOver,
       setDragCopyValue,
-      addRow
+      addRow,
+      addedData
     } = this.props;
     return (
       <div
@@ -112,7 +115,8 @@ class Body extends Component {
                 onMouseOver,
                 setDragCopyValue,
                 isSelecting,
-                addRow
+                addRow,
+                addedData
               )}
               ref={instance => (this.List = instance)}
               style={listStyle}

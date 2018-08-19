@@ -71,7 +71,8 @@ class Row extends Component {
       onMouseOver,
       setDragCopyValue,
       addRow,
-      rowCount
+      rowCount,
+      addedData
     } = this.props;
 
     const { row: focusedRow = null, column: focusedColumn = null } =
@@ -97,6 +98,7 @@ class Row extends Component {
             id: row.id,
             index: rowIndex,
             original: row,
+            addedData: addedData,
             value: _get(row, column.accessor, '')
           };
 

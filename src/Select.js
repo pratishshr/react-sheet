@@ -161,7 +161,7 @@ class Select extends Component {
 Select.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.string | PropTypes.bool,
   clearable: PropTypes.bool,
   searchable: PropTypes.bool,
   handleChange: PropTypes.func,
