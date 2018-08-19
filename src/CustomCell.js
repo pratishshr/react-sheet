@@ -9,7 +9,9 @@ class CustomCell extends Component {
       this.props.isSelectedFirst !== nextProps.isSelectedFirst ||
       this.props.rowData.value !== nextProps.rowData.value ||
       _get(this.props, 'customCell.props.className') !==
-        _get(nextProps, 'nextProps.customCell.props.className')
+        _get(nextProps, 'nextProps.customCell.props.className') ||
+      _get(this.props, 'customCell.props.value') !==
+        _get(nextProps, 'nextProps.customCell.props.value')
     ) {
       return true;
     }
