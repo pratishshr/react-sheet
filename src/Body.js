@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { List } from 'react-virtualized';
+import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import Row from './Row';
+import { callbackify } from 'util';
 
 // TODO: REFACTOR THIS!
 function renderRow(
@@ -69,7 +71,7 @@ class Body extends Component {
     const {
       data,
       width,
-      bodyHeight,
+      headerHeight,
       rowHeight,
       columns,
       selection = {},
@@ -90,38 +92,42 @@ class Body extends Component {
     return (
       <div
         className="table-body-row"
-        style={{ width: width || '1075px', height: bodyHeight || '' }}
+        style={{ width: width || '1075px', height: `calc(100% - ${headerHeight}px)`}}
         id="react-sheet-body"
       >
         <Scrollbars onScroll={this.handleScroll}>
-          {width && (
-            <List
-              width={width}
-              height={bodyHeight + 100 || 300}
-              rowCount={data.length}
-              rowHeight={rowHeight || 28}
-              rowRenderer={renderRow(
-                data,
-                columns,
-                selection,
-                focusedCell,
-                setSelection,
-                focus,
-                onEnter,
-                setSelectionEnd,
-                selectionEnd,
-                onMouseUp,
-                onMouseDown,
-                onMouseOver,
-                setDragCopyValue,
-                isSelecting,
-                addRow,
-                addedData
+          <AutoSizer onResize={() => {
+            console.log('resized');
+          }}>
+            {({width, height}) => (
+                <List
+                  width={width}
+                  height={height}
+                  rowCount={data.length}
+                  rowHeight={rowHeight || 28}
+                  rowRenderer={renderRow(
+                    data,
+                    columns,
+                    selection,
+                    focusedCell,
+                    setSelection,
+                    focus,
+                    onEnter,
+                    setSelectionEnd,
+                    selectionEnd,
+                    onMouseUp,
+                    onMouseDown,
+                    onMouseOver,
+                    setDragCopyValue,
+                    isSelecting,
+                    addRow,
+                    addedData
+                  )}
+                  ref={instance => (this.List = instance)}
+                  style={listStyle}
+                />
               )}
-              ref={instance => (this.List = instance)}
-              style={listStyle}
-            />
-          )}
+          </AutoSizer>
         </Scrollbars>
       </div>
     );

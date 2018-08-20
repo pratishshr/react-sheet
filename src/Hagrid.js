@@ -112,7 +112,7 @@ class Hagrid extends Component {
             rowHeight={rowHeight}
             selection={selection}
             selectionEnd={selectionEnd}
-            bodyHeight={tableHeight - headerHeight}
+            headerHeight={headerHeight}
             focusedCell={focusedCell}
             setSelection={setSelection}
             setSelectionEnd={setSelectionEnd}
