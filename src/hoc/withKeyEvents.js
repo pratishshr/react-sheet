@@ -491,7 +491,6 @@ function withKeyEvents(WrappedComponent) {
      */
     onSelectEnter = () => {
       this.defocus();
-      this.moveDown();
     };
 
     setIsSelecting = isSelecting => {
