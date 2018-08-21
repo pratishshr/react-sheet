@@ -219,7 +219,7 @@ function withKeyEvents(WrappedComponent) {
               row: row + rowIndex,
               column: column + colIndex
             },
-            cellData
+            cellData.trim()
           );
         });
       });
