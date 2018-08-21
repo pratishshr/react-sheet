@@ -37,6 +37,7 @@ body {
       flex-direction: column;
       justify-content: center;
       position: relative;
+      box-sizing: border-box;
       &.selected {
         box-shadow: inset 0 0 0px 1px $blue;
         background-color: rgba($orange, 0.08) !important;
@@ -98,7 +99,11 @@ body {
   .table-body-row {
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  
   }
+
   .Select {
     height: 100%;
     &.is-focused:not(.is-open) {

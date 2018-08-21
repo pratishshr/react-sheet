@@ -6,6 +6,17 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import Row from './Row';
 import { callbackify } from 'util';
 
+
+function detectPlatform(){
+  if(navigator.platform.indexOf('Mac') > -1){
+    return 'mac';
+  }
+  else if(navigator.platform.indexOf('Win') > -1){
+    return 'win';
+  }else{
+    return 'others';
+  }
+}
 // TODO: REFACTOR THIS!
 function renderRow(
   data,
@@ -96,12 +107,10 @@ class Body extends Component {
         id="react-sheet-body"
       >
         <Scrollbars onScroll={this.handleScroll}>
-          <AutoSizer onResize={() => {
-            console.log('resized');
-          }}>
+          <AutoSizer>
             {({width, height}) => (
                 <List
-                  width={width}
+                  width={(detectPlatform() == 'mac') ? width : width - 15}
                   height={height}
                   rowCount={data.length}
                   rowHeight={rowHeight || 28}
