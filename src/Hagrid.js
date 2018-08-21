@@ -95,7 +95,7 @@ class Hagrid extends Component {
       >
         <Scrollbars>
           <Header
-            width={headerWidth + 2}
+            width={headerWidth}
             columns={columns}
             setWidth={this.setWidth}
             setHeight={this.setHeight}
@@ -105,7 +105,7 @@ class Hagrid extends Component {
             ref={elem => (this.body = elem)}
             data={data}
             addedData={addedData}
-            width={headerWidth + 2}
+            width={headerWidth}
             focus={focus}
             isSelecting={isSelecting}
             onEnter={onEnter}
