@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import HeaderCell from './HeaderCell';
 
 const DEFAULT_WIDTH = 100;
-class Header extends Component {
+class Header extends PureComponent {
   componentDidMount() {
     this.addWidth();
     this.addHeight();

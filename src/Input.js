@@ -11,6 +11,17 @@ class Input extends Component {
     this.cell;
   }
 
+  shouldComponentUpdate(nextProps) {
+    if (
+      this.props.value !== nextProps.value ||
+      this.props.className !== nextProps.className
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
   onChange = e => {
     e.preventDefault();
     const value = e.target.value;

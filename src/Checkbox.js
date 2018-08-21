@@ -2,6 +2,14 @@ import classnames from 'classnames';
 import React, { Component } from 'react';
 
 class Checkbox extends Component {
+  shouldComponentUpdate(nextProps) {
+    if (this.props.isSelected !== nextProps.isSelected) {
+      return true;
+    }
+
+    return false;
+  }
+
   render() {
     const { isSelected, onClick } = this.props;
 

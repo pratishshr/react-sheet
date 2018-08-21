@@ -119,10 +119,9 @@ class Row extends Component {
               ref={elem => (this[`cell-${rowIndex}-${colIndex}`] = elem)}
               index={`cell-${rowIndex}-${colIndex}`}
               key={`${rowIndex}-${colIndex}`}
-              style={
-                {
-              flex: `${width}  0 auto`,
-              width: width 
+              style={{
+                flex: `${width}  0 auto`,
+                width: width
               }}
               rowData={rowData}
               isFocused={isFocused}
