@@ -11,7 +11,12 @@ $orange: rgb(160, 195, 255);
 body {
   margin: 0;
 }
-
+// .table-head-row, .table-body-row{
+//   padding-right: 17px;
+// }
+.table-header-group{
+  padding-right: 17px;
+}
 .data-table {
   height: 245px;
   * {
@@ -23,6 +28,7 @@ body {
   .table-row {
     display: flex;
     align-items: stretch;
+    // padding-right: 17px;
     .t-head {
       font-weight: bold;
       color: $para-text;
@@ -183,4 +189,7 @@ body {
     cursor: pointer;
     border-radius: 2px;
   }
+}
+.ReactVirtualized__Grid__innerScrollContainer{
+  padding-right: 17px;
 }
