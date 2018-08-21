@@ -79,7 +79,8 @@ class Hagrid extends Component {
       onMouseUp,
       onMouseDown,
       onMouseOver,
-      setDragCopyValue
+      setDragCopyValue,
+      responsive
     } = this.props;
     const { headerWidth, headerHeight } = this.state;
 
@@ -94,7 +95,7 @@ class Hagrid extends Component {
       >
         <Scrollbars>
           <Header
-            width={headerWidth}
+            width={headerWidth + 2}
             columns={columns}
             setWidth={this.setWidth}
             setHeight={this.setHeight}
@@ -104,7 +105,7 @@ class Hagrid extends Component {
             ref={elem => (this.body = elem)}
             data={data}
             addedData={addedData}
-            width={headerWidth}
+            width={headerWidth + 2}
             focus={focus}
             isSelecting={isSelecting}
             onEnter={onEnter}

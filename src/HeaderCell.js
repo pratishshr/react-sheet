@@ -20,8 +20,8 @@ class HeaderCell extends Component {
       <div
         key={Header}
         style={{
-          width: width || DEFAULT_WIDTH,
-          maxWidth: width || DEFAULT_WIDTH
+          flex: `${width || DEFAULT_WIDTH}  0 auto`,
+          width: width || DEFAULT_WIDTH
         }}
         className={classNames('t-head', headerClassName)}
       >

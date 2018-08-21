@@ -110,7 +110,7 @@ class Body extends Component {
           <AutoSizer>
             {({width, height}) => (
                 <List
-                  width={(detectPlatform() == 'mac') ? width : width - 15}
+                  width={(detectPlatform() == 'mac') ? width : width - 17}
                   height={height}
                   rowCount={data.length}
                   rowHeight={rowHeight || 28}
