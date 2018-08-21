@@ -111,7 +111,7 @@ class Body extends Component {
             {({width, height}) => (
                 <List
                   width={(detectPlatform() == 'mac') ? width : width - 17}
-                  height={height}
+                  height={height - 17}
                   rowCount={data.length}
                   rowHeight={rowHeight || 28}
                   rowRenderer={renderRow(
