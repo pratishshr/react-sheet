@@ -17,7 +17,7 @@ class Header extends PureComponent {
     const width = columns.reduce((acc, nextColumn) => {
       return acc + (nextColumn.width || DEFAULT_WIDTH);
     }, 0);
-
+    
     setWidth(width);
   }
 
@@ -30,7 +30,6 @@ class Header extends PureComponent {
 
   render() {
     const { width, columns } = this.props;
-
     return (
       <div id="rs-header" className="table-head-row" style={{ width }}>
         <div className="table-row table-header-group">
