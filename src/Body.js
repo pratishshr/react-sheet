@@ -1,22 +1,9 @@
 import React, { Component } from 'react';
 import { List } from 'react-virtualized';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
-import { Scrollbars } from 'react-custom-scrollbars';
 
 import Row from './Row';
-import { callbackify } from 'util';
 
-
-function detectPlatform(){
-  if(navigator.platform.indexOf('Mac') > -1){
-    return 'mac';
-  }
-  else if(navigator.platform.indexOf('Win') > -1){
-    return 'win';
-  }else{
-    return 'others';
-  }
-}
 // TODO: REFACTOR THIS!
 function renderRow(
   data,
@@ -65,16 +52,23 @@ function renderRow(
 }
 const listStyle = {
   overflowX: false,
-  overflowY: false
+  overflowY: 'auto'
 };
 class Body extends Component {
-  handleScroll = ({ target }) => {
-    const { scrollTop, scrollLeft } = target;
 
-    const { Grid: grid } = this.List;
+  constructor(){
+    super();
+    this.state = {
+      scrollWidth: 14
+    };
+  }
 
-    grid.handleScrollEvent({ scrollTop, scrollLeft });
-  };
+  getScrollBarWidth(e){
+    let target = document.querySelector(e);
+    this.setState({
+      scrollWidth: target.offsetWidth - target.scrollWidth
+    });
+  }
 
   List = null;
 
@@ -103,15 +97,14 @@ class Body extends Component {
     return (
       <div
         className="table-body-row"
-        style={{ width: width || '1075px', height: `calc(100% - ${headerHeight}px)`}}
+        style={{ width: width + this.state.scrollWidth || '1075px', height: `calc(100% - ${headerHeight}px)`}}
         id="react-sheet-body"
       >
-        <Scrollbars onScroll={this.handleScroll}>
           <AutoSizer>
             {({width, height}) => (
                 <List
-                  width={(detectPlatform() == 'mac') ? width : width - 17}
-                  height={height - 17}
+                  width={width}
+                  height={height}
                   rowCount={data.length}
                   rowHeight={rowHeight || 28}
                   rowRenderer={renderRow(
@@ -132,12 +125,13 @@ class Body extends Component {
                     addRow,
                     addedData
                   )}
-                  ref={instance => (this.List = instance)}
+                  onRowsRendered={() => {
+                    this.getScrollBarWidth('.ReactVirtualized__Grid')
+                  }}
                   style={listStyle}
                 />
               )}
           </AutoSizer>
-        </Scrollbars>
       </div>
     );
   }

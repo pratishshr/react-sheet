@@ -93,9 +93,8 @@ class Hagrid extends Component {
         className={classnames('data-table', className)}
         style={{ height: tableHeight || '' }}
       >
-        <Scrollbars>
           <Header
-            width={headerWidth}
+            width={(responsive) ? 'auto' : headerWidth}
             columns={columns}
             setWidth={this.setWidth}
             setHeight={this.setHeight}
@@ -105,7 +104,7 @@ class Hagrid extends Component {
             ref={elem => (this.body = elem)}
             data={data}
             addedData={addedData}
-            width={headerWidth}
+            width={(responsive) ? 'auto' : headerWidth}
             focus={focus}
             isSelecting={isSelecting}
             onEnter={onEnter}
@@ -122,7 +121,6 @@ class Hagrid extends Component {
             onMouseOver={onMouseOver}
             setDragCopyValue={setDragCopyValue}
           />
-        </Scrollbars>
       </div>
     );
   }
