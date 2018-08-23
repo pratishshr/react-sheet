@@ -1707,9 +1707,7 @@ class Demo extends Component {
             overburdenCorrectionFactor_CN: null
           },
           sortIndex: 26
-        },
-      
-
+        }
       }
     };
   }
@@ -1746,9 +1744,9 @@ class Demo extends Component {
         };
       }
 
-      return row
+      return row;
     });
-    
+
     let newRow = _cloneDeep(INITIAL_VALUE);
 
     newRow.id = nextIndex(this.state.data);
@@ -1788,7 +1786,7 @@ class Demo extends Component {
           setSelections={this.setSelections}
           selections={this.state.selections}
           changeStateInBulk={this.changeStateInBulk}
-          responsive={true}
+          responsive={false}
         />
       </div>
     );

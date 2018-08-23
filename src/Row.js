@@ -109,7 +109,10 @@ class Row extends Component {
             Cell &&
             Cell(rowData, {
               id: row.id,
-              onEnter,
+              onEnter: () => {
+                onEnter && onEnter();
+                this.displayAddRow(false);
+              },
               isFocused,
               index: rowIndex
             });

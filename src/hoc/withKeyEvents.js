@@ -491,6 +491,7 @@ function withKeyEvents(WrappedComponent) {
      */
     onSelectEnter = () => {
       this.defocus();
+      this.setIsSelecting(false);
     };
 
     setIsSelecting = isSelecting => {
@@ -506,8 +507,10 @@ function withKeyEvents(WrappedComponent) {
 
     onMouseUp = (rowIndex, colIndex) => {
       return () => {
-        this.setIsSelecting(false);
-        this.setSelectionEnd(rowIndex, colIndex);
+        if (this.state.isSelecting) {
+          this.setSelectionEnd(rowIndex, colIndex);
+          this.setIsSelecting(false);
+        }
 
         let { dragCopyValue } = this.state;
 
