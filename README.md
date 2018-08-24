@@ -1,5 +1,5 @@
 # hagrid
 
-A Grid component for React.
+Spreadsheet component for React.
 
 ## [WORK IN PROGRESS]
