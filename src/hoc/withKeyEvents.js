@@ -207,6 +207,11 @@ function withKeyEvents(WrappedComponent) {
 
     pasteSelection = e => {
       e.preventDefault();
+
+      if (this.props.disablePaste) {
+        return;
+      }
+
       let data = clipboard.parse(e.clipboardData.getData('text/plain'));
       let state = this.props.state;
 

@@ -1777,10 +1777,10 @@ class Demo extends Component {
       <div>
         <h1>React Sheet</h1>
         <KeyHagrid
-          addRow={this.addRow}
           state={data}
           data={rows}
           height={500}
+          addRow={this.addRow}
           columns={this.columns}
           handleChange={this.handleChange}
           setSelections={this.setSelections}
