@@ -1786,7 +1786,7 @@ class Demo extends Component {
           setSelections={this.setSelections}
           selections={this.state.selections}
           changeStateInBulk={this.changeStateInBulk}
-          responsive={false}
+          responsive={true}
         />
       </div>
     );

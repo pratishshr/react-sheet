@@ -60,7 +60,7 @@ class Body extends Component {
     super(props);
     this.state = {
       scrollWidth: this.props.ScrollbarWidth,
-      headerHeight: 42
+      headerHeight: null
     };
     
     setTimeout(() => { this.props.visibilityToggle(); },1);
@@ -89,6 +89,7 @@ class Body extends Component {
 
   componentDidMount(){
     this.resizeFunction();
+    this.setHeaderHeight();
   }
 
   List = null;
