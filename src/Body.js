@@ -56,18 +56,39 @@ const listStyle = {
 };
 class Body extends Component {
 
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
-      scrollWidth: 14
+      scrollWidth: this.props.ScrollbarWidth,
+      headerHeight: 42
     };
+    
+    setTimeout(() => { this.props.visibilityToggle(); },1);
   }
-
+  
   getScrollBarWidth(e){
     let target = document.querySelector(e);
     this.setState({
       scrollWidth: target.offsetWidth - target.scrollWidth
     });
+    this.props.scroller(target.offsetWidth - target.scrollWidth);
+  }
+
+  setHeaderHeight() {
+    const height = document.querySelector('#rs-header').offsetHeight;
+    this.setState({
+      headerHeight: height
+    });
+  }
+
+  resizeFunction(){
+    window.onresize = (event) => {
+      this.setHeaderHeight();
+    };
+  }
+
+  componentDidMount(){
+    this.resizeFunction();
   }
 
   List = null;
@@ -76,7 +97,6 @@ class Body extends Component {
     const {
       data,
       width,
-      headerHeight,
       rowHeight,
       columns,
       selection = {},
@@ -92,12 +112,24 @@ class Body extends Component {
       onMouseOver,
       setDragCopyValue,
       addRow,
-      addedData
+      addedData,
+      responsive
     } = this.props;
+
+    const styles = {
+      height: `calc(100% - ${this.state.headerHeight}px)`
+    };
+
+    if(responsive){
+      styles.minWidth = width + this.state.scrollWidth || '1000px';
+    }else{
+      styles.width = width + this.state.scrollWidth || '1000px';
+    }
+
     return (
       <div
         className="table-body-row"
-        style={{ width: width + this.state.scrollWidth || '1075px', height: `calc(100% - ${headerHeight}px)`}}
+        style={ styles }
         id="react-sheet-body"
       >
           <AutoSizer>
@@ -126,7 +158,7 @@ class Body extends Component {
                     addedData
                   )}
                   onRowsRendered={() => {
-                    this.getScrollBarWidth('.ReactVirtualized__Grid')
+                      this.getScrollBarWidth('.ReactVirtualized__Grid');
                   }}
                   style={listStyle}
                 />
