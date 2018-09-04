@@ -7,12 +7,13 @@ import Header from './Header';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 class Hagrid extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       tableHeight: null,
       headerWidth: null,
-      headerHeight: null
+      scrollbarWidth: null,
+      display: 'hidden'
     };
     this.body;
     this.dataTable;
@@ -30,10 +31,6 @@ class Hagrid extends Component {
 
   setWidth = width => {
     this.setState({ headerWidth: width });
-  };
-
-  setHeight = height => {
-    this.setState({ headerHeight: height });
   };
 
   setTableHeight = height => {
@@ -60,6 +57,18 @@ class Hagrid extends Component {
     }
   };
 
+  updateScroll = e => {
+    this.setState({
+      scrollbarWidth: e
+    });
+  }
+
+  updateVisibility = () => {
+    this.setState({
+      display: 'visible'
+    });
+  }
+
   render() {
     const {
       data,
@@ -80,7 +89,7 @@ class Hagrid extends Component {
       onMouseDown,
       onMouseOver,
       setDragCopyValue,
-      responsive
+      responsive,
     } = this.props;
     const { headerWidth, headerHeight } = this.state;
 
@@ -91,20 +100,23 @@ class Hagrid extends Component {
         onMouseDown={this.onClick}
         ref={elem => (this.dataTable = elem)}
         className={classnames('data-table', className)}
-        style={{ height: tableHeight || '' }}
+        style={{ height: tableHeight || '', visibility: this.state.display }}
       >
           <Header
-            width={(responsive) ? 'auto' : headerWidth}
+            width={ headerWidth + this.state.scrollbarWidth}
             columns={columns}
             setWidth={this.setWidth}
             setHeight={this.setHeight}
+            ScrollbarWidth={this.state.scrollbarWidth}
+            responsive={responsive}
           />
           <Body
+            responsive={responsive}
             addRow={addRow}
             ref={elem => (this.body = elem)}
             data={data}
             addedData={addedData}
-            width={(responsive) ? 'auto' : headerWidth}
+            width={headerWidth}
             focus={focus}
             isSelecting={isSelecting}
             onEnter={onEnter}
@@ -120,6 +132,9 @@ class Hagrid extends Component {
             onMouseDown={onMouseDown}
             onMouseOver={onMouseOver}
             setDragCopyValue={setDragCopyValue}
+            ScrollbarWidth={this.state.scrollbarWidth}
+            scroller={this.updateScroll}
+            visibilityToggle={this.updateVisibility}
           />
       </div>
     );

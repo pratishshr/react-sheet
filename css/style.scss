@@ -11,9 +11,6 @@ $orange: rgb(160, 195, 255);
 body {
   margin: 0;
 }
-.table-head-row{
-  padding-right: 14px;
-}
 .data-table {
   height: 245px;
   * {
@@ -21,7 +18,8 @@ body {
   }
   font-family: $font-family-sans;
   border-collapse: collapse;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   .table-row {
     display: flex;
     align-items: stretch;
@@ -157,6 +155,18 @@ body {
 //     top: 0;
 //     bottom: 0;
 
+//   }
+// }{
+// .ReactVirtualized__Grid{
+//   &::-webkit-scrollbar-thumb{
+//     width: 5px;
+//     background-color: red;
+//     border-radius: 15px;
+//   }
+//   &::-webkit-scrollbar{
+//     width: 5px;
+//     background-color: grey;
+//     border-radius: 15px;
 //   }
 // }
 .ReactVirtualized__Grid:focus {

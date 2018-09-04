@@ -6,7 +6,6 @@ const DEFAULT_WIDTH = 100;
 class Header extends PureComponent {
   componentDidMount() {
     this.addWidth();
-    this.addHeight();
   }
 
   /**
@@ -21,18 +20,19 @@ class Header extends PureComponent {
     setWidth(width);
   }
 
-  addHeight() {
-    const { setHeight } = this.props;
-    const height = document.querySelector('#rs-header').offsetHeight;
-
-    setHeight(height);
-  }
-
   render() {
-    const { width, columns } = this.props;
+    const { width, columns, responsive } = this.props;
+    const styles =  {};
+
+    if(responsive){
+      styles.minWidth = width || '1000px';
+    }else{
+      styles.width = width || '1000px';
+    }
+
     return (
-      <div id="rs-header" className="table-head-row" style={{ width }}>
-        <div className="table-row table-header-group">
+      <div id="rs-header" className="table-head-row" style={ styles }>
+        <div className="table-row table-header-group" style={{paddingRight: this.props.ScrollbarWidth}}>
           {columns.map((column, index) => {
             return <HeaderCell key={index} column={column} />;
           })}
