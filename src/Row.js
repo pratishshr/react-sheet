@@ -72,7 +72,8 @@ class Row extends Component {
       setDragCopyValue,
       addRow,
       rowCount,
-      addedData
+      addedData,
+      scrollLeft
     } = this.props;
 
     const { row: focusedRow = null, column: focusedColumn = null } =
@@ -145,6 +146,7 @@ class Row extends Component {
         {addRow &&
           rowCount !== rowIndex + 1 && (
             <div
+              style={{ transform: `translateX(${scrollLeft}px)` }}
               className={classNames('add-btn', {
                 hovered: this.state.displayAddRow
               })}

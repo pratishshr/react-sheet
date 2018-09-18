@@ -21,7 +21,8 @@ function renderRow(
   setDragCopyValue,
   isSelecting,
   addRow,
-  addedData
+  addedData,
+  scrollLeft
 ) {
   return ({ key, index, isScrolling, isVisible, style }) => {
     return (
@@ -46,6 +47,7 @@ function renderRow(
         rowCount={data.length}
         setDragCopyValue={setDragCopyValue}
         addedData={addedData}
+        scrollLeft={scrollLeft}
       />
     );
   };
@@ -87,9 +89,15 @@ class Body extends Component {
     };
   }
 
+  
+
   componentDidMount(){
     this.resizeFunction();
     this.setHeaderHeight();
+    setTimeout(() => {
+      this.props.fixable(this.props.scrollLeft);
+    },  1);
+
   }
 
   List = null;
@@ -114,7 +122,9 @@ class Body extends Component {
       setDragCopyValue,
       addRow,
       addedData,
-      responsive
+      responsive,
+      scrollLeft,
+      fixable
     } = this.props;
 
     const styles = {
@@ -156,10 +166,16 @@ class Body extends Component {
                     setDragCopyValue,
                     isSelecting,
                     addRow,
-                    addedData
+                    addedData,
+                    scrollLeft
                   )}
+                  onScroll ={() => {
+                      fixable(scrollLeft);
+                  }}
                   onRowsRendered={() => {
                       this.getScrollBarWidth('.ReactVirtualized__Grid');
+                      
+       
                   }}
                   style={listStyle}
                 />

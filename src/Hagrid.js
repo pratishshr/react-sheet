@@ -13,7 +13,8 @@ class Hagrid extends Component {
       tableHeight: null,
       headerWidth: null,
       scrollbarWidth: null,
-      display: 'hidden'
+      display: 'hidden',
+      scrollOffsetLeft: 0
     };
     this.body;
     this.dataTable;
@@ -23,6 +24,8 @@ class Hagrid extends Component {
     this.setTableHeight();
 
     document.addEventListener('click', this.onOutsideClick);
+
+    console.log(this.props.columns);
   }
 
   componentWillUnmount() {
@@ -69,6 +72,44 @@ class Hagrid extends Component {
     });
   }
 
+  fixable = (scroller) => {
+    let dataTable = document.querySelector('.data-table'),
+    scrollWidth = dataTable.scrollWidth,
+    offsetWidth = dataTable.offsetWidth,
+    fixCol = document.querySelectorAll('.fixed'),
+    lastColFix = document.querySelectorAll('.l-fixed');
+
+    fixCol.forEach((element, index) => {
+       element.style.transform = `translateX(${ scroller }px)`;
+       if (scroller > 0) {
+         element.classList.add('scrolled');
+       }else{
+         element.classList.remove('scrolled');
+       }
+    });
+  
+    // lastColFix.forEach((element, index) => {
+    //   element.style.transform = `translateX(-${ (scrollWidth - offsetWidth) - scroller}px)`;
+    //   if (scroller > 0) {
+    //     element.classList.add('scrolled');
+    //   }else{
+    //     element.classList.remove('scrolled');
+    //   }
+    // })
+  }
+
+  scrollInteract = (event) => {
+    let scrollLeft = event.target.scrollLeft;
+
+    if(event.target.classList.contains('data-table')) {
+     this.fixable(scrollLeft);
+
+     this.setState({
+      scrollOffsetLeft: scrollLeft
+     });
+    }
+  }
+
   render() {
     const {
       data,
@@ -90,6 +131,7 @@ class Hagrid extends Component {
       onMouseOver,
       setDragCopyValue,
       responsive,
+      scrollLeft
     } = this.props;
     const { headerWidth, headerHeight } = this.state;
 
@@ -101,6 +143,7 @@ class Hagrid extends Component {
         ref={elem => (this.dataTable = elem)}
         className={classnames('data-table', className)}
         style={{ height: tableHeight || '', visibility: this.state.display }}
+        onScroll = { this.scrollInteract } 
       >
           <Header
             width={ headerWidth + this.state.scrollbarWidth}
@@ -121,6 +164,7 @@ class Hagrid extends Component {
             isSelecting={isSelecting}
             onEnter={onEnter}
             columns={columns}
+            scrollLeft={this.state.scrollOffsetLeft}
             rowHeight={rowHeight}
             selection={selection}
             selectionEnd={selectionEnd}
@@ -135,6 +179,7 @@ class Hagrid extends Component {
             ScrollbarWidth={this.state.scrollbarWidth}
             scroller={this.updateScroll}
             visibilityToggle={this.updateVisibility}
+            fixable = {this.fixable}
           />
       </div>
     );
