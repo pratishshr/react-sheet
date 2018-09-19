@@ -1,5 +1,5 @@
 import '../css/style.scss';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import classnames from 'classnames';
 
 import Body from './Body';
@@ -13,7 +13,9 @@ class Hagrid extends Component {
       tableHeight: null,
       headerWidth: null,
       scrollbarWidth: null,
-      display: 'hidden'
+      display: 'hidden',
+      currentColProps: this.props.columns,
+      columnProp: this.props.columns
     };
     this.body;
     this.dataTable;
@@ -69,6 +71,16 @@ class Hagrid extends Component {
     });
   }
 
+  collapsable = () => {
+    let del = [1,2,3];
+    // let tryer = this.props.column;
+    let prop = this.props.columns.filter((col, index) => {
+        return !del.includes(index);
+    });
+    console.log(prop);
+
+  }
+
   render() {
     const {
       data,
@@ -96,6 +108,12 @@ class Hagrid extends Component {
     const { tableHeight } = this.state;
 
     return (
+      <Fragment>
+      <div className="collapsible-button">
+        <button onClick={ this.collapsable }>
+            collapse me bro
+        </button>
+      </div>
       <div
         onMouseDown={this.onClick}
         ref={elem => (this.dataTable = elem)}
@@ -137,6 +155,7 @@ class Hagrid extends Component {
             visibilityToggle={this.updateVisibility}
           />
       </div>
+      </Fragment>
     );
   }
 }
