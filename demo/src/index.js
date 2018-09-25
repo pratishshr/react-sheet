@@ -96,8 +96,9 @@ class Demo extends Component {
       {
         Header: 'ID',
         Cell: row => <span>{row.index + 1}</span>,
-        className: 'font-weight-normal',
-        width: 40
+        className: 'font-weight-normal fixed',
+        headerClassName: 'fixed',
+        width: 40,
       },
       {
         Header: <span>Soil Depth</span>,
@@ -258,7 +259,10 @@ class Demo extends Component {
       {
         Header: 'Constrained Modulus',
         accessor: 'calculated.constrainedModulus',
-        width: 100
+        width: 100,
+        className: "l-fixed",
+        headerClassName: 'l-fixed'
+
       }
     ];
     this.state = {
@@ -1786,7 +1790,7 @@ class Demo extends Component {
           setSelections={this.setSelections}
           selections={this.state.selections}
           changeStateInBulk={this.changeStateInBulk}
-          responsive={true}
+          responsive={false}
         />
       </div>
     );
