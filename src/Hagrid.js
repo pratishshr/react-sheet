@@ -24,8 +24,6 @@ class Hagrid extends Component {
     this.setTableHeight();
 
     document.addEventListener('click', this.onOutsideClick);
-
-    console.log(this.props.columns);
   }
 
   componentWillUnmount() {
