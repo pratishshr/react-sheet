@@ -169,13 +169,9 @@ class Body extends Component {
                     addedData,
                     scrollLeft
                   )}
-                  onScroll ={() => {
-                      fixable(scrollLeft);
-                  }}
                   onRowsRendered={() => {
                       this.getScrollBarWidth('.ReactVirtualized__Grid');
-                      
-       
+                      fixable(scrollLeft);
                   }}
                   style={listStyle}
                 />
