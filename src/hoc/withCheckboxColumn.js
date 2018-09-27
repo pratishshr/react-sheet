@@ -45,12 +45,11 @@ function withCheckboxColumn(WrappedComponent) {
     };
 
     removeSelection = index => {
-      this.props.setSelections(
-        this.props.selections.filter(selection => selection !== index)
-      );
+      this.props.setSelections(this.props.selections.filter(selection => selection !== index));
     };
 
     toggleSelection = index => {
+      console.log(index);
       let { selections } = this.props;
 
       if (selections.includes(index)) {
@@ -66,14 +65,10 @@ function withCheckboxColumn(WrappedComponent) {
       return {
         Header: (
           <div className="checkbox-wrap d-flex">
-            <Checkbox
-              isSelected={this.state.isSelectAllActive}
-              onClick={this.toggleSelectAll}
-            />
+            <Checkbox isSelected={this.state.isSelectAllActive} onClick={this.toggleSelectAll} />
           </div>
         ),
-        headerClassName:
-          'd-flex align-items-center justify-content-center fixed',
+        headerClassName: 'd-flex align-items-center justify-content-center fixed',
         accessor: 'isSelected',
         resizable: false,
         width: 36,
@@ -81,6 +76,7 @@ function withCheckboxColumn(WrappedComponent) {
         Cell: (row, { id }) => (
           <div className="checkbox-wrap d-flex">
             <Checkbox
+              id={id}
               isSelected={this.props.selections.includes(id)}
               onClick={() => this.toggleSelection(id)}
             />
@@ -93,9 +89,7 @@ function withCheckboxColumn(WrappedComponent) {
       const { columns, ...restProps } = this.props;
       const columnsWithCheckboxes = [this.getCheckboxColumn(), ...columns];
 
-      return (
-        <WrappedComponent columns={columnsWithCheckboxes} {...restProps} />
-      );
+      return <WrappedComponent columns={columnsWithCheckboxes} {...restProps} />;
     }
   };
 }
