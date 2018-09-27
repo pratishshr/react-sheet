@@ -8,10 +8,9 @@ class CustomCell extends Component {
       this.props.isSelected !== nextProps.isSelected ||
       this.props.isSelectedFirst !== nextProps.isSelectedFirst ||
       this.props.rowData.value !== nextProps.rowData.value ||
-      _get(this.props, 'customCell.props.className') !==
-        _get(nextProps, 'nextProps.customCell.props.className') ||
-      _get(this.props, 'customCell.props.value') !==
-        _get(nextProps, 'nextProps.customCell.props.value')
+      _get(this.props, 'customCell.props.className') !== _get(nextProps, 'nextProps.customCell.props.className') ||
+      _get(this.props, 'customCell.props.value') !== _get(nextProps, 'nextProps.customCell.props.value') ||
+      this.props.id !== nextProps.id
     ) {
       return true;
     }
