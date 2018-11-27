@@ -92,7 +92,6 @@ function nextSortIndex(item) {
 class Demo extends Component {
   constructor() {
     super();
-    this.demoRef = React.createRef();
     this.columns = [
       {
         Header: 'ID',
@@ -1790,7 +1789,6 @@ class Demo extends Component {
       <div>
         <h1>React Sheet</h1>
         <KeyHagrid
-          ref={this.demoRef}
           state={data}
           data={rows}
           height={500}

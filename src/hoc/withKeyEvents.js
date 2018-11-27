@@ -49,7 +49,6 @@ function withKeyEvents(WrappedComponent) {
         isSelecting: false,
         isFocusedDirectly: false,
         dragCopyValue: null
-        // pastedColumnAccessors: []
       };
       this.elem;
     }
@@ -573,7 +572,6 @@ function withKeyEvents(WrappedComponent) {
     render() {
       const { selection, isSelecting, selectionEnd, focusedCell, pastedColumnAccessors } = this.state;
 
-      // console.log('here', pastedColumnAccessors)
       return (
         <WrappedComponent
           removeAllListeners={this.removeAllListeners}
