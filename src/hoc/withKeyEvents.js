@@ -49,6 +49,7 @@ function withKeyEvents(WrappedComponent) {
         isSelecting: false,
         isFocusedDirectly: false,
         dragCopyValue: null
+        // pastedColumnAccessors: []
       };
       this.elem;
     }
@@ -214,6 +215,7 @@ function withKeyEvents(WrappedComponent) {
 
       let data = clipboard.parse(e.clipboardData.getData('text/plain'));
       let state = this.props.state;
+      let pastedColumnAccessors = [];
 
       data.forEach((lines, rowIndex) => {
         lines.forEach((cellData, colIndex) => {
@@ -226,9 +228,14 @@ function withKeyEvents(WrappedComponent) {
             },
             cellData.trim()
           );
+
+          if (!pastedColumnAccessors.includes(state.pastedColumnAccessor)){
+            pastedColumnAccessors.push(state.pastedColumnAccessor)
+          }
         });
       });
 
+      this.props.getPastedColumnAccessors && this.props.getPastedColumnAccessors(pastedColumnAccessors);
       this.changeState(state);
     };
 
@@ -466,9 +473,11 @@ function withKeyEvents(WrappedComponent) {
 
       const rowData = data[row];
       const columnData = columns[column];
+      const pastedColumnAccessor = columnData.accessor;
 
       let newState = {
         ...state,
+        pastedColumnAccessor,
         [rowData.id]: _set(columnData.accessor)(value)(state[rowData.id])
       };
 
@@ -518,6 +527,7 @@ function withKeyEvents(WrappedComponent) {
         }
 
         let { dragCopyValue } = this.state;
+        let pastedColumnAccessors = [];
 
         if (dragCopyValue || dragCopyValue === 0) {
           let state = this.props.state;
@@ -526,8 +536,13 @@ function withKeyEvents(WrappedComponent) {
           cells.forEach(row => {
             row.forEach(selection => {
               state = this.prepareState(state, selection, dragCopyValue);
+              if (!pastedColumnAccessors.includes(state.pastedColumnAccessor)) {
+                pastedColumnAccessors.push(state.pastedColumnAccessor)
+              }
             });
           });
+
+          this.props.getPastedColumnAccessors && this.props.getPastedColumnAccessors(pastedColumnAccessors);
 
           this.setDragCopyValue(null);
           this.changeState(state);
@@ -551,9 +566,14 @@ function withKeyEvents(WrappedComponent) {
       });
     };
 
-    render() {
-      const { selection, isSelecting, selectionEnd, focusedCell } = this.state;
+    getPastedColumnAccessors = () => {
+      return this.state.pastedColumnAccessors;
+    }
 
+    render() {
+      const { selection, isSelecting, selectionEnd, focusedCell, pastedColumnAccessors } = this.state;
+
+      // console.log('here', pastedColumnAccessors)
       return (
         <WrappedComponent
           removeAllListeners={this.removeAllListeners}

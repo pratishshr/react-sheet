@@ -94,7 +94,8 @@ function withCheckboxColumn(WrappedComponent) {
       const columnsWithCheckboxes = [this.getCheckboxColumn(), ...columns];
 
       return (
-        <WrappedComponent columns={columnsWithCheckboxes} {...restProps} />
+        <WrappedComponent
+          columns={columnsWithCheckboxes} {...restProps} />
       );
     }
   };
