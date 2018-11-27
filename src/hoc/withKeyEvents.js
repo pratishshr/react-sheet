@@ -433,11 +433,13 @@ function withKeyEvents(WrappedComponent) {
     clearCell = () => {
       let cells = this.getSelectedCells();
       let state = this.props.state;
-      let newStateWithAccessor = {};
+      let newStateWithAccessor = {
+        newState: state
+      };
 
       cells.forEach(row => {
         row.forEach(selection => {
-          newStateWithAccessor = this.prepareState(state, selection, '');
+          newStateWithAccessor = this.prepareState(newStateWithAccessor.newState, selection, '');
         });
       });
 
@@ -537,11 +539,13 @@ function withKeyEvents(WrappedComponent) {
         if (dragCopyValue || dragCopyValue === 0) {
           let state = this.props.state;
           let cells = this.getSelectedCells();
-          let newStateWithAccessor = {};
+          let newStateWithAccessor = {
+            newState: state
+          };
 
           cells.forEach(row => {
             row.forEach(selection => {
-              newStateWithAccessor = this.prepareState(state, selection, dragCopyValue);
+              newStateWithAccessor = this.prepareState(newStateWithAccessor.newState, selection, dragCopyValue);
               if (!pastedColumnAccessors.includes(newStateWithAccessor.pastedColumnAccessor)) {
                 pastedColumnAccessors.push(newStateWithAccessor.pastedColumnAccessor)
               }
