@@ -1785,6 +1785,8 @@ class Demo extends Component {
         []
       );
 
+    console.log('asdf', this.state.pastedColumnAccessors)
+
     return (
       <div>
         <h1>React Sheet</h1>
