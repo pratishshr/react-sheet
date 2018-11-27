@@ -570,7 +570,7 @@ function withKeyEvents(WrappedComponent) {
     }
 
     render() {
-      const { selection, isSelecting, selectionEnd, focusedCell, pastedColumnAccessors } = this.state;
+      const { selection, isSelecting, selectionEnd, focusedCell } = this.state;
 
       return (
         <WrappedComponent
