@@ -149,6 +149,7 @@ class Select extends Component {
         openOnFocus={true}
         clearable={clearable}
         onClose={this.onClose}
+        onFocus={this.onFocus}
         searchable={searchable}
         onChange={this.onChange}
         noResultsText={noResultsText}

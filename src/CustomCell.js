@@ -27,6 +27,7 @@ class CustomCell extends Component {
       className,
       customCell,
       onDoubleClick,
+      onClick,
       onMouseDown,
       onMouseUp,
       onMouseOver,
@@ -43,6 +44,7 @@ class CustomCell extends Component {
         onMouseUp={onMouseUp}
         onMouseOver={onMouseOver}
         onDoubleClick={onDoubleClick}
+        onClick={onClick}
       >
         {customCell || rowData.value}
         {isSelectedFirst && (

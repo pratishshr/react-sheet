@@ -57,6 +57,11 @@ function withKeyEvents(WrappedComponent) {
       this.removeAllListeners();
     }
 
+    // onClick = (rowIndex, colIndex, isDropdown) => {
+    //   this.addListeners();
+    //   isDropdown;
+    // }
+
     addListeners = () => {
       window.addEventListener('keydown', this.onKeyDown, false);
       window.addEventListener('keypress', this.onKeyPress, false);
