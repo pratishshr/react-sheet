@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { List } from 'react-virtualized';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
+import scrollbarSize from 'dom-helpers/util/scrollbarSize';
 
 import Row from './Row';
 
@@ -54,26 +55,18 @@ function renderRow(
 }
 const listStyle = {
   overflowX: false,
-  overflowY: 'auto'
+  overflowY: 'hidden'
 };
 class Body extends Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      scrollWidth: this.props.ScrollbarWidth,
       headerHeight: null
     };
-    
-    setTimeout(() => { this.props.visibilityToggle(); },1);
-  }
-  
-  getScrollBarWidth(e){
-    let target = document.querySelector(e);
-    this.setState({
-      scrollWidth: target.offsetWidth - target.scrollWidth
-    });
-    this.props.scroller(target.offsetWidth - target.scrollWidth);
+
+    setTimeout(() => {
+      this.props.visibilityToggle();
+    }, 1);
   }
 
   setHeaderHeight() {
@@ -83,21 +76,18 @@ class Body extends Component {
     });
   }
 
-  resizeFunction(){
-    window.onresize = (event) => {
+  resizeFunction() {
+    window.onresize = event => {
       this.setHeaderHeight();
     };
   }
 
-  
-
-  componentDidMount(){
+  componentDidMount() {
     this.resizeFunction();
     this.setHeaderHeight();
     setTimeout(() => {
       this.props.fixable(this.props.scrollLeft);
-    },  1);
-
+    }, 1);
   }
 
   List = null;
@@ -130,53 +120,44 @@ class Body extends Component {
     const styles = {
       height: `calc(100% - ${this.state.headerHeight}px)`
     };
-
-    if(responsive){
-      styles.minWidth = width + this.state.scrollWidth || '1000px';
-    }else{
-      styles.width = width + this.state.scrollWidth || '1000px';
-    }
+    styles.width = width || '1000px';
 
     return (
-      <div
-        className="table-body-row"
-        style={ styles }
-        id="react-sheet-body"
-      >
-          <AutoSizer>
-            {({width, height}) => (
-                <List
-                  width={width}
-                  height={height}
-                  rowCount={data.length}
-                  rowHeight={rowHeight || 28}
-                  rowRenderer={renderRow(
-                    data,
-                    columns,
-                    selection,
-                    focusedCell,
-                    setSelection,
-                    focus,
-                    onEnter,
-                    setSelectionEnd,
-                    selectionEnd,
-                    onMouseUp,
-                    onMouseDown,
-                    onMouseOver,
-                    setDragCopyValue,
-                    isSelecting,
-                    addRow,
-                    addedData,
-                    scrollLeft
-                  )}
-                  onRowsRendered={() => {
-                      this.getScrollBarWidth('.ReactVirtualized__Grid');
-                      fixable(scrollLeft);
-                  }}
-                  style={listStyle}
-                />
+      <div className="table-body-row" style={styles} id="react-sheet-body">
+        <AutoSizer>
+          {({ width, height }) => (
+            <List
+              width={width}
+              height={height}
+              rowCount={data.length}
+              rowHeight={rowHeight || 28}
+              rowRenderer={renderRow(
+                data,
+                columns,
+                selection,
+                focusedCell,
+                setSelection,
+                focus,
+                onEnter,
+                setSelectionEnd,
+                selectionEnd,
+                onMouseUp,
+                onMouseDown,
+                onMouseOver,
+                setDragCopyValue,
+                isSelecting,
+                addRow,
+                addedData,
+                scrollLeft
               )}
-          </AutoSizer>
+              onRowsRendered={() => {
+                // this.getScrollBarWidth('.ReactVirtualized__Grid');
+                fixable(scrollLeft);
+              }}
+              style={listStyle}
+            />
+          )}
+        </AutoSizer>
       </div>
     );
   }

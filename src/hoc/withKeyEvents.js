@@ -8,24 +8,9 @@ import * as clipboard from '../utils/clipboard';
 
 import * as keys from '../constants/keys';
 
-const ALLOWED_KEYS = [
-  keys.UP,
-  keys.LEFT,
-  keys.DOWN,
-  keys.RIGHT,
-  keys.ENTER,
-  keys.TAB,
-  keys.DELETE,
-  keys.BACKSPACE
-];
+const ALLOWED_KEYS = [keys.UP, keys.LEFT, keys.DOWN, keys.RIGHT, keys.ENTER, keys.TAB, keys.DELETE, keys.BACKSPACE];
 
-const ALLOWED_KEYS_WHILE_FOCUSED = [
-  keys.TAB,
-  keys.ENTER,
-  keys.ESCAPE,
-  keys.RIGHT,
-  keys.LEFT
-];
+const ALLOWED_KEYS_WHILE_FOCUSED = [keys.TAB, keys.ENTER, keys.ESCAPE, keys.RIGHT, keys.LEFT];
 
 const SPECIAL_KEYS_WHILE_FOCUSED = [keys.RIGHT, keys.LEFT];
 
@@ -269,6 +254,11 @@ function withKeyEvents(WrappedComponent) {
           column: column
         }
       });
+      if (this.state.selectionEnd.row <= row) {
+        this.scrollToCell(row - 1, column);
+      } else {
+        this.scrollToCell(row + 1, column);
+      }
     };
 
     isFocused = () => {
@@ -303,8 +293,7 @@ function withKeyEvents(WrappedComponent) {
       let { selection } = this.state;
       let { data } = this.props;
 
-      let row =
-        selection.row < data.length - 1 ? selection.row + 1 : selection.row;
+      let row = selection.row < data.length - 1 ? selection.row + 1 : selection.row;
       let column = selection.column;
 
       this.setSelection(row, column);
@@ -323,10 +312,7 @@ function withKeyEvents(WrappedComponent) {
       let { columns } = this.props;
 
       let row = selection.row;
-      let column =
-        selection.column < columns.length - 1
-          ? selection.column + 1
-          : selection.column;
+      let column = selection.column < columns.length - 1 ? selection.column + 1 : selection.column;
 
       this.setSelection(row, column);
     };
@@ -453,7 +439,7 @@ function withKeyEvents(WrappedComponent) {
         [rowData.id]: _set(columnData.accessor)(value)(state[rowData.id])
       };
 
-      changeStateInBulk(newState);
+      newState;
     };
 
     prepareState = (state, selection, value) => {
