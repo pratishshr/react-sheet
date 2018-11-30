@@ -13,6 +13,117 @@ class PortalSelect extends ReactSelect {
 
     this.portalTop = null;
     this.portalLeft = null;
+    this.handleKeyDown = this.customHandleKeyDown.bind(this);
+  }
+
+  customHandleKeyDown(event) {
+    if (this.props.disabled) return;
+
+    if (typeof this.props.onInputKeyDown === 'function') {
+      this.props.onInputKeyDown(event);
+      if (event.defaultPrevented) {
+        return;
+      }
+    }
+
+    switch (event.keyCode) {
+      case 8:
+        // backspace
+        if (!this.state.inputValue && this.props.backspaceRemoves) {
+          event.preventDefault();
+          this.popValue();
+        }
+        break;
+      case 9:
+        // tab
+        if (event.shiftKey || !this.state.isOpen || !this.props.tabSelectsValue) {
+          break;
+        }
+        event.preventDefault();
+        this.selectFocusedOption();
+        break;
+      case 13:
+        // enter
+        event.preventDefault();
+        event.stopPropagation();
+        if (this.state.isOpen) {
+          this.selectFocusedOption();
+        } else {
+          // this.focusNextOption();
+          this.setState({
+            isOpen: true
+          })
+        }
+        break;
+      case 27:
+        // escape
+        event.preventDefault();
+        if (this.state.isOpen) {
+          this.closeMenu();
+          this.props.onEscape();
+          event.stopPropagation();
+        } else if (this.props.clearable && this.props.escapeClearsValue) {
+          this.clearValue(event);
+          event.stopPropagation();
+        }
+        break;
+      case 32:
+        // space
+        if (this.props.searchable) {
+          break;
+        }
+        event.preventDefault();
+        if (!this.state.isOpen) {
+          this.focusNextOption();
+          break;
+        }
+        event.stopPropagation();
+        this.selectFocusedOption();
+        break;
+      case 38:
+        // up
+        event.preventDefault();
+        this.focusPreviousOption();
+        break;
+      case 40:
+        // down
+        event.preventDefault();
+        this.focusNextOption();
+        break;
+      case 33:
+        // page up
+        event.preventDefault();
+        this.focusPageUpOption();
+        break;
+      case 34:
+        // page down
+        event.preventDefault();
+        this.focusPageDownOption();
+        break;
+      case 35:
+        // end key
+        if (event.shiftKey) {
+          break;
+        }
+        event.preventDefault();
+        this.focusEndOption();
+        break;
+      case 36:
+        // home key
+        if (event.shiftKey) {
+          break;
+        }
+        event.preventDefault();
+        this.focusStartOption();
+        break;
+      case 46:
+        // delete
+        if (!this.state.inputValue && this.props.deleteRemoves) {
+          event.preventDefault();
+          this.popValue();
+        }
+        break;
+    }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -136,6 +247,7 @@ class Select extends Component {
       options,
       clearable = false,
       searchable = false,
+      onEscape,
       noResultsText = 'Not Found'
     } = this.props;
 
@@ -149,6 +261,7 @@ class Select extends Component {
         openOnFocus={true}
         clearable={clearable}
         onClose={this.onClose}
+        onEscape={onEscape}
         onFocus={this.onFocus}
         searchable={searchable}
         onChange={this.onChange}

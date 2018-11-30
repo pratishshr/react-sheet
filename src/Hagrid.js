@@ -120,6 +120,7 @@ class Hagrid extends Component {
       setSelectionEnd,
       focus,
       onEnter,
+      onEscape,
       isSelecting,
       addRow,
       focusedCell,
@@ -161,6 +162,7 @@ class Hagrid extends Component {
             focus={focus}
             isSelecting={isSelecting}
             onEnter={onEnter}
+            onEscape={onEscape}
             columns={columns}
             scrollLeft={this.state.scrollOffsetLeft}
             rowHeight={rowHeight}
