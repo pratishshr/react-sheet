@@ -16,6 +16,11 @@ class PortalSelect extends ReactSelect {
     this.handleKeyDown = this.customHandleKeyDown.bind(this);
   }
 
+  /**
+   * This function is copy of react select library's handleKeyDown
+   * Additional
+   * @param {object} event 
+   */
   customHandleKeyDown(event) {
     if (this.props.disabled) return;
 
@@ -52,7 +57,8 @@ class PortalSelect extends ReactSelect {
           // this.focusNextOption();
           this.setState({
             isOpen: true
-          })
+          });
+          this.selectFocusedOption();
         }
         break;
       case 27:
@@ -61,7 +67,7 @@ class PortalSelect extends ReactSelect {
         if (this.state.isOpen) {
           this.closeMenu();
           this.props.onEscape();
-          event.stopPropagation();
+          // event.stopPropagation();
         } else if (this.props.clearable && this.props.escapeClearsValue) {
           this.clearValue(event);
           event.stopPropagation();
@@ -83,12 +89,12 @@ class PortalSelect extends ReactSelect {
       case 38:
         // up
         event.preventDefault();
-        this.focusPreviousOption();
+        this.state.isOpen && this.focusPreviousOption();
         break;
       case 40:
         // down
         event.preventDefault();
-        this.focusNextOption();
+        this.state.isOpen && this.focusNextOption();
         break;
       case 33:
         // page up
@@ -232,13 +238,13 @@ class Select extends Component {
     handleChange(id, name, value);
   };
 
-  onClose = _debounce(() => {
-    const { onEnter } = this.props;
+  // onClose = _debounce(() => {
+  //   const { onEnter } = this.props;
 
-    if (onEnter) {
-      onEnter();
-    }
-  });
+  //   if (onEnter) {
+  //     onEnter();
+  //   }
+  // });
 
   render() {
     const {

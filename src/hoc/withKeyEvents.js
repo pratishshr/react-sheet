@@ -502,7 +502,7 @@ function withKeyEvents(WrappedComponent) {
      * Enter event for select component.
      */
     onSelectEnter = () => {
-      console.log('called select enter');
+      // console.log('called select enter');
       this.defocus();
       this.setIsSelecting(false);
     };
@@ -510,6 +510,7 @@ function withKeyEvents(WrappedComponent) {
     onSelectEscape = () => {
       // console.log('escape in keyEvents', this.state)
       this.defocus();
+      // this.setFocus(null, null);
       // this.focus();
       // this.addListenersWhenFocused();
       // this.focus();
