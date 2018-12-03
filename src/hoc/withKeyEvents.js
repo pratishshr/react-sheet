@@ -48,7 +48,8 @@ function withKeyEvents(WrappedComponent) {
         },
         isSelecting: false,
         isFocusedDirectly: false,
-        dragCopyValue: null
+        dragCopyValue: null,
+        isPastedRecently: false
       };
       this.elem;
     }
@@ -124,6 +125,7 @@ function withKeyEvents(WrappedComponent) {
         this.focus();
         this.clearCell();
         this.setFocusedDirectly(true);
+        this.setIsPastedRecently();
       }
     };
 
@@ -155,6 +157,7 @@ function withKeyEvents(WrappedComponent) {
       };
 
       press[keyCode] && press[keyCode](e);
+      this.setIsPastedRecently();
     };
 
     /**
@@ -183,6 +186,7 @@ function withKeyEvents(WrappedComponent) {
       }
 
       press[keyCode] && press[keyCode]();
+      this.setIsPastedRecently();
     };
 
     defocus = () => {
@@ -230,6 +234,7 @@ function withKeyEvents(WrappedComponent) {
       });
 
       this.changeState(state);
+      this.setIsPastedRecently(true);
     };
 
     scrollToCell = (row, column) => {
@@ -507,6 +512,7 @@ function withKeyEvents(WrappedComponent) {
       return () => {
         this.setIsSelecting(true);
         this.setSelection(rowIndex, colIndex);
+        this.setIsPastedRecently();
       };
     };
 
@@ -531,6 +537,7 @@ function withKeyEvents(WrappedComponent) {
 
           this.setDragCopyValue(null);
           this.changeState(state);
+          this.setIsPastedRecently(true);
         }
       };
     };
@@ -551,8 +558,14 @@ function withKeyEvents(WrappedComponent) {
       });
     };
 
+    setIsPastedRecently = (value = false) => {
+      this.setState({
+        isPastedRecently: value
+      })
+    }
+
     render() {
-      const { selection, isSelecting, selectionEnd, focusedCell } = this.state;
+      const { selection, isSelecting, selectionEnd, focusedCell, isPastedRecently } = this.state;
 
       return (
         <WrappedComponent
