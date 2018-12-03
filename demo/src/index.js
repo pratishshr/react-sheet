@@ -1772,7 +1772,7 @@ class Demo extends Component {
 
  
   render() {
-    const { data, pastedColumnAccessors } = this.state;
+    const { data } = this.state;
     let rows = Object.keys(data)
       .sort((a, b) => {
         return data[a].sortIndex - data[b].sortIndex;
