@@ -92,6 +92,7 @@ function nextSortIndex(item) {
 class Demo extends Component {
   constructor() {
     super();
+
     this.columns = [
       {
         Header: 'ID',
