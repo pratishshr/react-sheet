@@ -267,6 +267,7 @@ class Demo extends Component {
     ];
     this.state = {
       selections: [],
+      pastedColumnAccessors: [],
       data: {
         '1': {
           input: {
@@ -1739,6 +1740,12 @@ class Demo extends Component {
     });
   };
 
+  getPastedColumnAccessors = pastedColumnAccessors => {
+    this.setState({
+      pastedColumnAccessors
+    });
+  };
+
   addRow = (index, id) => {
     let data = _mapValues(this.state.data, row => {
       if (row.sortIndex >= index + 1) {
@@ -1762,6 +1769,7 @@ class Demo extends Component {
     });
   };
 
+ 
   render() {
     const { data } = this.state;
     let rows = Object.keys(data)
@@ -1788,6 +1796,7 @@ class Demo extends Component {
           columns={this.columns}
           handleChange={this.handleChange}
           setSelections={this.setSelections}
+          getPastedColumnAccessors={this.getPastedColumnAccessors}
           selections={this.state.selections}
           changeStateInBulk={this.changeStateInBulk}
           responsive={false}

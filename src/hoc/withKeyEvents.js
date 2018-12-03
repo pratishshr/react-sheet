@@ -214,22 +214,31 @@ function withKeyEvents(WrappedComponent) {
 
       let data = clipboard.parse(e.clipboardData.getData('text/plain'));
       let state = this.props.state;
+      let pastedColumnAccessors = [];
+      let newStateWithAccessor = {
+        newState: state
+      };
 
       data.forEach((lines, rowIndex) => {
         lines.forEach((cellData, colIndex) => {
           let { row, column } = this.state.selection;
-          state = this.prepareState(
-            state,
+          newStateWithAccessor = newStateWithAccessor.newState && this.prepareState(
+            newStateWithAccessor.newState,
             {
               row: row + rowIndex,
               column: column + colIndex
             },
             cellData.trim()
           );
+
+          if (!pastedColumnAccessors.includes(newStateWithAccessor.pastedColumnAccessor)){
+            pastedColumnAccessors.push(newStateWithAccessor.pastedColumnAccessor)
+          }
         });
       });
 
-      this.changeState(state);
+      this.props.getPastedColumnAccessors && this.props.getPastedColumnAccessors(pastedColumnAccessors);
+      this.changeState(newStateWithAccessor.newState);
     };
 
     scrollToCell = (row, column) => {
@@ -424,14 +433,17 @@ function withKeyEvents(WrappedComponent) {
     clearCell = () => {
       let cells = this.getSelectedCells();
       let state = this.props.state;
+      let newStateWithAccessor = {
+        newState: state
+      };
 
       cells.forEach(row => {
         row.forEach(selection => {
-          state = this.prepareState(state, selection, '');
+          newStateWithAccessor = this.prepareState(newStateWithAccessor.newState, selection, '');
         });
       });
 
-      this.changeState(state);
+      this.changeState(newStateWithAccessor.newState);
     };
 
     changeState = state => {
@@ -466,13 +478,17 @@ function withKeyEvents(WrappedComponent) {
 
       const rowData = data[row];
       const columnData = columns[column];
+      const pastedColumnAccessor = columnData.accessor;
 
       let newState = {
         ...state,
         [rowData.id]: _set(columnData.accessor)(value)(state[rowData.id])
       };
 
-      return newState;
+      return {
+        newState,
+        pastedColumnAccessor
+      };
     };
 
     getCell = (row, column) => {
@@ -518,19 +534,28 @@ function withKeyEvents(WrappedComponent) {
         }
 
         let { dragCopyValue } = this.state;
+        let pastedColumnAccessors = [];
 
         if (dragCopyValue || dragCopyValue === 0) {
           let state = this.props.state;
           let cells = this.getSelectedCells();
+          let newStateWithAccessor = {
+            newState: state
+          };
 
           cells.forEach(row => {
             row.forEach(selection => {
-              state = this.prepareState(state, selection, dragCopyValue);
+              newStateWithAccessor = this.prepareState(newStateWithAccessor.newState, selection, dragCopyValue);
+              if (!pastedColumnAccessors.includes(newStateWithAccessor.pastedColumnAccessor)) {
+                pastedColumnAccessors.push(newStateWithAccessor.pastedColumnAccessor)
+              }
             });
           });
 
+          this.props.getPastedColumnAccessors && this.props.getPastedColumnAccessors(pastedColumnAccessors);
+
           this.setDragCopyValue(null);
-          this.changeState(state);
+          this.changeState(newStateWithAccessor.newState);
         }
       };
     };
