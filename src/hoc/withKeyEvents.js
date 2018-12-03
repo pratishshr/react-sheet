@@ -565,7 +565,7 @@ function withKeyEvents(WrappedComponent) {
     }
 
     render() {
-      const { selection, isSelecting, selectionEnd, focusedCell, isPastedRecently } = this.state;
+      const { selection, isSelecting, selectionEnd, focusedCell } = this.state;
 
       return (
         <WrappedComponent
