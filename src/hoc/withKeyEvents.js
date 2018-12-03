@@ -125,7 +125,7 @@ function withKeyEvents(WrappedComponent) {
         this.focus();
         this.clearCell();
         this.setFocusedDirectly(true);
-        this.setIsPastedRecently();
+        this.setIsPastedRecently(false);
       }
     };
 
@@ -157,7 +157,7 @@ function withKeyEvents(WrappedComponent) {
       };
 
       press[keyCode] && press[keyCode](e);
-      this.setIsPastedRecently();
+      this.setIsPastedRecently(false);
     };
 
     /**
@@ -186,7 +186,7 @@ function withKeyEvents(WrappedComponent) {
       }
 
       press[keyCode] && press[keyCode]();
-      this.setIsPastedRecently();
+      this.setIsPastedRecently(false);
     };
 
     defocus = () => {
@@ -512,7 +512,7 @@ function withKeyEvents(WrappedComponent) {
       return () => {
         this.setIsSelecting(true);
         this.setSelection(rowIndex, colIndex);
-        this.setIsPastedRecently();
+        this.setIsPastedRecently(false);
       };
     };
 
