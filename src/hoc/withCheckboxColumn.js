@@ -51,6 +51,7 @@ function withCheckboxColumn(WrappedComponent) {
     };
 
     toggleSelection = index => {
+      console.log(index);
       let { selections } = this.props;
 
       if (selections.includes(index)) {
@@ -72,15 +73,15 @@ function withCheckboxColumn(WrappedComponent) {
             />
           </div>
         ),
-        headerClassName:
-          'd-flex align-items-center justify-content-center fixed',
+        headerClassName: 'd-flex align-items-center justify-content-center',
         accessor: 'isSelected',
         resizable: false,
         width: 36,
-        className: 'd-flex align-items-center justify-content-center fixed',
+        className: 'd-flex align-items-center justify-content-center',
         Cell: (row, { id }) => (
           <div className="checkbox-wrap d-flex">
             <Checkbox
+              id={id}
               isSelected={this.props.selections.includes(id)}
               onClick={() => this.toggleSelection(id)}
             />

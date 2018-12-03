@@ -171,7 +171,7 @@ class Body extends Component {
                   )}
                   onRowsRendered={() => {
                       this.getScrollBarWidth('.ReactVirtualized__Grid');
-                      fixable(scrollLeft);
+                      // fixable(scrollLeft);
                   }}
                   style={listStyle}
                 />
