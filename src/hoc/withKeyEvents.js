@@ -231,7 +231,7 @@ function withKeyEvents(WrappedComponent) {
             cellData.trim()
           );
 
-          if (!pastedColumnAccessors.includes(newStateWithAccessor.pastedColumnAccessor)){
+          if (newStateWithAccessor.pastedColumnAccessor && !pastedColumnAccessors.includes(newStateWithAccessor.pastedColumnAccessor)){
             pastedColumnAccessors.push(newStateWithAccessor.pastedColumnAccessor)
           }
         });
@@ -470,15 +470,17 @@ function withKeyEvents(WrappedComponent) {
 
     prepareState = (state, selection, value) => {
       const { row, column } = selection;
-      const { data, columns, changeStateInBulk } = this.props;
+      const { data, columns } = this.props;
+      const columnData = columns[column];
+      const pastedColumnAccessor = columnData.accessor;
 
       if (!this.isCellEditable(row, column) || !data[row]) {
-        return state;
+        return {
+          newState: state
+        };
       }
 
       const rowData = data[row];
-      const columnData = columns[column];
-      const pastedColumnAccessor = columnData.accessor;
 
       let newState = {
         ...state,
@@ -546,7 +548,7 @@ function withKeyEvents(WrappedComponent) {
           cells.forEach(row => {
             row.forEach(selection => {
               newStateWithAccessor = this.prepareState(newStateWithAccessor.newState, selection, dragCopyValue);
-              if (!pastedColumnAccessors.includes(newStateWithAccessor.pastedColumnAccessor)) {
+              if (newStateWithAccessor.pastedColumnAccessor && !pastedColumnAccessors.includes(newStateWithAccessor.pastedColumnAccessor)) {
                 pastedColumnAccessors.push(newStateWithAccessor.pastedColumnAccessor)
               }
             });
