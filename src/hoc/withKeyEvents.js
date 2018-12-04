@@ -48,8 +48,7 @@ function withKeyEvents(WrappedComponent) {
         },
         isSelecting: false,
         isFocusedDirectly: false,
-        dragCopyValue: null,
-        isPastedRecently: false
+        dragCopyValue: null
       };
       this.elem;
     }
@@ -125,7 +124,6 @@ function withKeyEvents(WrappedComponent) {
         this.focus();
         this.clearCell();
         this.setFocusedDirectly(true);
-        this.setIsPastedRecently(false);
       }
     };
 
@@ -157,7 +155,6 @@ function withKeyEvents(WrappedComponent) {
       };
 
       press[keyCode] && press[keyCode](e);
-      this.setIsPastedRecently(false);
     };
 
     /**
@@ -186,7 +183,6 @@ function withKeyEvents(WrappedComponent) {
       }
 
       press[keyCode] && press[keyCode]();
-      this.setIsPastedRecently(false);
     };
 
     defocus = () => {
@@ -241,8 +237,7 @@ function withKeyEvents(WrappedComponent) {
         });
       });
 
-      this.changeState(newStateWithAccessor.newState);
-      this.setIsPastedRecently(true);
+      this.changeState(newStateWithAccessor.newState, pastedColumnAccessors, true);
       this.props.getPastedColumnAccessors && this.props.getPastedColumnAccessors(pastedColumnAccessors);
     };
 
@@ -451,8 +446,8 @@ function withKeyEvents(WrappedComponent) {
       this.changeState(newStateWithAccessor.newState);
     };
 
-    changeState = state => {
-      this.props.changeStateInBulk(state);
+    changeState = (state, pastedColumnAccessors = [], isPastedRecently = false) => {
+      this.props.changeStateInBulk(state, pastedColumnAccessors, isPastedRecently);
     };
 
     writeToCell = (selection, value) => {
@@ -528,7 +523,6 @@ function withKeyEvents(WrappedComponent) {
       return () => {
         this.setIsSelecting(true);
         this.setSelection(rowIndex, colIndex);
-        this.setIsPastedRecently(false);
       };
     };
 
@@ -561,8 +555,7 @@ function withKeyEvents(WrappedComponent) {
           this.props.getPastedColumnAccessors && this.props.getPastedColumnAccessors(pastedColumnAccessors);
 
           this.setDragCopyValue(null);
-          this.changeState(newStateWithAccessor.newState);
-          this.setIsPastedRecently(true);
+          this.changeState(newStateWithAccessor.newState, pastedColumnAccessors, true);
         }
       };
     };
@@ -582,12 +575,6 @@ function withKeyEvents(WrappedComponent) {
         dragCopyValue: value
       });
     };
-
-    setIsPastedRecently = (value = false) => {
-      this.setState({
-        isPastedRecently: value
-      })
-    }
 
     render() {
       const { selection, isSelecting, selectionEnd, focusedCell } = this.state;
