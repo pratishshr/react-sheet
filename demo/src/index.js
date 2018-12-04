@@ -1769,7 +1769,6 @@ class Demo extends Component {
       [newRow.id]: newRow
     });
   };
-
  
   render() {
     const { data } = this.state;
@@ -1797,7 +1796,6 @@ class Demo extends Component {
           columns={this.columns}
           handleChange={this.handleChange}
           setSelections={this.setSelections}
-          getPastedColumnAccessors={this.getPastedColumnAccessors}
           selections={this.state.selections}
           changeStateInBulk={this.changeStateInBulk}
           responsive={false}
