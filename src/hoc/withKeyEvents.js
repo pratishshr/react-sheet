@@ -237,8 +237,8 @@ function withKeyEvents(WrappedComponent) {
         });
       });
 
-      this.changeState(newStateWithAccessor.newState, pastedColumnAccessors, true);
-      this.props.getPastedColumnAccessors && this.props.getPastedColumnAccessors(pastedColumnAccessors);
+      this.changeState(newStateWithAccessor.newState);
+      this.props.onPaste && this.props.onPaste(newStateWithAccessor.newState, pastedColumnAccessors, true);
     };
 
     scrollToCell = (row, column) => {
@@ -446,8 +446,8 @@ function withKeyEvents(WrappedComponent) {
       this.changeState(newStateWithAccessor.newState);
     };
 
-    changeState = (state, pastedColumnAccessors = [], isPastedRecently = false) => {
-      this.props.changeStateInBulk(state, pastedColumnAccessors, isPastedRecently);
+    changeState = state => {
+      this.props.changeStateInBulk(state);
     };
 
     writeToCell = (selection, value) => {
@@ -552,10 +552,9 @@ function withKeyEvents(WrappedComponent) {
             });
           });
 
-          this.props.getPastedColumnAccessors && this.props.getPastedColumnAccessors(pastedColumnAccessors);
-
           this.setDragCopyValue(null);
-          this.changeState(newStateWithAccessor.newState, pastedColumnAccessors, true);
+          this.changeState(newStateWithAccessor.newState)
+          this.props.onPaste && this.props.onPaste(newStateWithAccessor.newState, pastedColumnAccessors, true);
         }
       };
     };
