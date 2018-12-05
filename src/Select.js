@@ -241,14 +241,6 @@ class Select extends Component {
     handleChange(id, name, value);
   };
 
-  // onClose = _debounce(() => {
-  //   const { onEnter } = this.props;
-
-  //   if (onEnter) {
-  //     onEnter();
-  //   }
-  // });
-
   render() {
     const {
       name,
