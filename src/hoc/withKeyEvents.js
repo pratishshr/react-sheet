@@ -359,8 +359,6 @@ function withKeyEvents(WrappedComponent) {
     focus = () => {
       const { row, column } = this.state.selection;
 
-      // console.log('focus called');
-
       const cell = this.getCell(row, column);
       const input = cell.querySelector('input');
 
@@ -515,7 +513,6 @@ function withKeyEvents(WrappedComponent) {
      * Enter event for select component.
      */
     onSelectEnter = () => {
-      // console.log('called select enter');
       this.defocus();
       this.setIsSelecting(false);
     };
@@ -587,8 +584,6 @@ function withKeyEvents(WrappedComponent) {
     render() {
       const { selection, isSelecting, selectionEnd, focusedCell } = this.state;
 
-      // console.log('focused cell', focusedCell)
-
       return (
         <WrappedComponent
           removeAllListeners={this.removeAllListeners}
@@ -598,7 +593,6 @@ function withKeyEvents(WrappedComponent) {
           selection={selection}
           selectionEnd={selectionEnd}
           onEnter={this.onSelectEnter}
-          onEscape={this.onSelectEscape}
           focusedCell={focusedCell}
           onMouseUp={this.onMouseUp}
           onMouseDown={this.onMouseDown}

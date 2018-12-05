@@ -75,7 +75,6 @@ class Row extends Component {
       selection,
       focusedCell,
       onEnter,
-      onEscape,
       onMouseUp,
       onMouseDown,
       onMouseOver,
@@ -125,7 +124,6 @@ class Row extends Component {
                 onEnter && onEnter();
                 this.displayAddRow(false);
               },
-              onEscape,
               isFocused,
               index: rowIndex
             });

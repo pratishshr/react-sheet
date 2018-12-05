@@ -64,7 +64,6 @@ class PortalSelect extends ReactSelect {
           this.closeMenu();
           const selectedOption = this.findSelectedOption(this.props.options, this.props.value);
           this.setValue(selectedOption);
-          this.props.onEscape();
         } else if (this.props.clearable && this.props.escapeClearsValue) {
           this.clearValue(event);
           event.stopPropagation();
@@ -248,7 +247,6 @@ class Select extends Component {
       options,
       clearable = false,
       searchable = false,
-      onEscape,
       noResultsText = 'Not Found'
     } = this.props;
 
@@ -262,7 +260,6 @@ class Select extends Component {
         openOnFocus={true}
         clearable={clearable}
         onClose={this.onClose}
-        onEscape={onEscape}
         onFocus={this.onFocus}
         searchable={searchable}
         onChange={this.onChange}
