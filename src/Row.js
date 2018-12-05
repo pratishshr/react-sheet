@@ -52,10 +52,7 @@ class Row extends Component {
     const negX = rowIndex <= row && rowIndex >= rowEnd;
     const negY = colIndex <= column && colIndex >= columnEnd;
 
-    if (
-      (row == null || row == undefined) &&
-      (column == null || column == undefined)
-    ) {
+    if ((row == null || row == undefined) && (column == null || column == undefined)) {
       return false;
     }
 
@@ -89,10 +86,8 @@ class Row extends Component {
       scrollLeft
     } = this.props;
 
-    const { row: focusedRow = null, column: focusedColumn = null } =
-      focusedCell || {};
-    const { row: selectedRow = null, column: selectedColumn = null } =
-      selection || {};
+    const { row: focusedRow = null, column: focusedColumn = null } = focusedCell || {};
+    const { row: selectedRow = null, column: selectedColumn = null } = selection || {};
 
     return (
       <div
@@ -137,6 +132,7 @@ class Row extends Component {
 
           return (
             <CustomCell
+              id={row.id}
               ref={elem => (this[`cell-${rowIndex}-${colIndex}`] = elem)}
               index={`cell-${rowIndex}-${colIndex}`}
               key={`${rowIndex}-${colIndex}`}

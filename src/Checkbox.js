@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 class Checkbox extends Component {
   shouldComponentUpdate(nextProps) {
-    if (this.props.isSelected !== nextProps.isSelected) {
+    if (this.props.isSelected !== nextProps.isSelected || this.props.id !== nextProps.id) {
       return true;
     }
 

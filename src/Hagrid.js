@@ -46,9 +46,7 @@ class Hagrid extends Component {
     onClick && onClick();
   };
 
-  isVisible = elem =>
-    !!elem &&
-    !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
+  isVisible = elem => !!elem && !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
 
   onOutsideClick = event => {
     if (!this.dataTable.contains(event.target)) {
@@ -62,30 +60,30 @@ class Hagrid extends Component {
     this.setState({
       scrollbarWidth: e
     });
-  }
+  };
 
   updateVisibility = () => {
     this.setState({
       display: 'visible'
     });
-  }
+  };
 
-  fixable = (scroller) => {
+  fixable = scroller => {
     let dataTable = document.querySelector('.data-table'),
-    scrollWidth = dataTable.scrollWidth,
-    offsetWidth = dataTable.offsetWidth,
-    fixCol = document.querySelectorAll('.fixed'),
-    lastColFix = document.querySelectorAll('.l-fixed');
+      scrollWidth = dataTable.scrollWidth,
+      offsetWidth = dataTable.offsetWidth,
+      fixCol = document.querySelectorAll('.fixed'),
+      lastColFix = document.querySelectorAll('.l-fixed');
 
     fixCol.forEach((element, index) => {
-       element.style.transform = `translateX(${ scroller }px)`;
-       if (scroller > 0) {
-         element.classList.add('scrolled');
-       }else{
-         element.classList.remove('scrolled');
-       }
+      element.style.transform = `translateX(${scroller}px)`;
+      if (scroller > 0) {
+        element.classList.add('scrolled');
+      } else {
+        element.classList.remove('scrolled');
+      }
     });
-  
+
     // lastColFix.forEach((element, index) => {
     //   element.style.transform = `translateX(-${ (scrollWidth - offsetWidth) - scroller}px)`;
     //   if (scroller > 0) {
@@ -94,19 +92,19 @@ class Hagrid extends Component {
     //     element.classList.remove('scrolled');
     //   }
     // })
-  }
+  };
 
-  scrollInteract = (event) => {
+  scrollInteract = event => {
     let scrollLeft = event.target.scrollLeft;
 
-    if(event.target.classList.contains('data-table')) {
-     this.fixable(scrollLeft);
+    if (event.target.classList.contains('data-table')) {
+      this.fixable(scrollLeft);
 
-     this.setState({
-      scrollOffsetLeft: scrollLeft
-     });
+      this.setState({
+        scrollOffsetLeft: scrollLeft
+      });
     }
-  }
+  };
 
   render() {
     const {
@@ -142,45 +140,43 @@ class Hagrid extends Component {
         ref={elem => (this.dataTable = elem)}
         className={classnames('data-table', className)}
         style={{ height: tableHeight || '', visibility: this.state.display }}
-        onScroll = { this.scrollInteract } 
       >
-          <Header
-            width={ headerWidth + this.state.scrollbarWidth}
-            columns={columns}
-            setWidth={this.setWidth}
-            setHeight={this.setHeight}
-            ScrollbarWidth={this.state.scrollbarWidth}
-            responsive={responsive}
-          />
-          <Body
-            responsive={responsive}
-            addRow={addRow}
-            ref={elem => (this.body = elem)}
-            data={data}
-            addedData={addedData}
-            width={headerWidth}
-            focus={focus}
-            isSelecting={isSelecting}
-            onEnter={onEnter}
-            onEscape={onEscape}
-            columns={columns}
-            scrollLeft={this.state.scrollOffsetLeft}
-            rowHeight={rowHeight}
-            selection={selection}
-            selectionEnd={selectionEnd}
-            headerHeight={headerHeight}
-            focusedCell={focusedCell}
-            setSelection={setSelection}
-            setSelectionEnd={setSelectionEnd}
-            onMouseUp={onMouseUp}
-            onMouseDown={onMouseDown}
-            onMouseOver={onMouseOver}
-            setDragCopyValue={setDragCopyValue}
-            ScrollbarWidth={this.state.scrollbarWidth}
-            scroller={this.updateScroll}
-            visibilityToggle={this.updateVisibility}
-            fixable = {this.fixable}
-          />
+        <Header
+          width={headerWidth + this.state.scrollbarWidth}
+          columns={columns}
+          setWidth={this.setWidth}
+          setHeight={this.setHeight}
+          ScrollbarWidth={this.state.scrollbarWidth}
+          responsive={responsive}
+        />
+        <Body
+          responsive={responsive}
+          addRow={addRow}
+          ref={elem => (this.body = elem)}
+          data={data}
+          addedData={addedData}
+          width={headerWidth}
+          focus={focus}
+          isSelecting={isSelecting}
+          onEnter={onEnter}
+          columns={columns}
+          scrollLeft={this.state.scrollOffsetLeft}
+          rowHeight={rowHeight}
+          selection={selection}
+          selectionEnd={selectionEnd}
+          headerHeight={headerHeight}
+          focusedCell={focusedCell}
+          setSelection={setSelection}
+          setSelectionEnd={setSelectionEnd}
+          onMouseUp={onMouseUp}
+          onMouseDown={onMouseDown}
+          onMouseOver={onMouseOver}
+          setDragCopyValue={setDragCopyValue}
+          ScrollbarWidth={this.state.scrollbarWidth}
+          scroller={this.updateScroll}
+          visibilityToggle={this.updateVisibility}
+          fixable={this.fixable}
+        />
       </div>
     );
   }

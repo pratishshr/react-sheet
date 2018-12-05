@@ -92,6 +92,7 @@ function nextSortIndex(item) {
 class Demo extends Component {
   constructor() {
     super();
+
     this.columns = [
       {
         Header: 'ID',
@@ -297,6 +298,7 @@ class Demo extends Component {
     ];
     this.state = {
       selections: [],
+      pastedColumnAccessors: [],
       data: {
         '1': {
           input: {
@@ -1769,6 +1771,12 @@ class Demo extends Component {
     });
   };
 
+  getPastedColumnAccessors = pastedColumnAccessors => {
+    this.setState({
+      pastedColumnAccessors
+    });
+  };
+
   addRow = (index, id) => {
     let data = _mapValues(this.state.data, row => {
       if (row.sortIndex >= index + 1) {
@@ -1791,7 +1799,7 @@ class Demo extends Component {
       [newRow.id]: newRow
     });
   };
-
+ 
   render() {
     const { data } = this.state;
     let rows = Object.keys(data)
