@@ -54,11 +54,7 @@ class PortalSelect extends ReactSelect {
         if (this.state.isOpen) {
           this.selectFocusedOption();
         } else {
-          // this.focusNextOption();
-          this.setState({
-            isOpen: true
-          });
-          this.selectFocusedOption();
+          this.focusNextOption();
         }
         break;
       case 27:
@@ -66,8 +62,9 @@ class PortalSelect extends ReactSelect {
         event.preventDefault();
         if (this.state.isOpen) {
           this.closeMenu();
+          const selectedOption = this.findSelectedOption(this.props.options, this.props.value);
+          this.setValue(selectedOption);
           this.props.onEscape();
-          // event.stopPropagation();
         } else if (this.props.clearable && this.props.escapeClearsValue) {
           this.clearValue(event);
           event.stopPropagation();
@@ -139,6 +136,12 @@ class PortalSelect extends ReactSelect {
       this.portalTop = null;
       this.portalLeft = null;
     }
+  }
+
+  findSelectedOption = (options, value) => {
+    const valueIndex = options.findIndex(option => option.value === value);
+
+    return valueIndex === -1 ? '' : options[valueIndex];
   }
 
   renderOuter(options, valueArray, focusedOption) {
