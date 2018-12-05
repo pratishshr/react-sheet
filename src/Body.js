@@ -13,6 +13,7 @@ function renderRow(
   setSelection,
   focus,
   onEnter,
+  onEscape,
   setSelectionEnd,
   selectionEnd,
   onMouseUp,
@@ -33,6 +34,7 @@ function renderRow(
         focus={focus}
         rowIndex={index}
         onEnter={onEnter}
+        onEscape={onEscape}
         row={data[index]}
         columns={columns}
         selection={selection}
@@ -115,6 +117,7 @@ class Body extends Component {
       focus,
       isSelecting,
       onEnter,
+      onEscape,
       selectionEnd = {},
       onMouseUp,
       onMouseDown,
@@ -158,6 +161,7 @@ class Body extends Component {
                     setSelection,
                     focus,
                     onEnter,
+                    onEscape,
                     setSelectionEnd,
                     selectionEnd,
                     onMouseUp,

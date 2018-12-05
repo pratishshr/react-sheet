@@ -124,7 +124,7 @@ class Demo extends Component {
         headerClassName: 'editable',
         className: 'editable selectable',
         width: 100,
-        Cell: (row, { isFocused, onEnter }) => (
+        Cell: (row, { isFocused, onEnter, onEscape }) => (
           <Select
             searchable
             id={row.original.id}
@@ -134,6 +134,7 @@ class Demo extends Component {
             noResultsText="No data found"
             handleChange={this.handleChange}
             onEnter={onEnter}
+            onEscape={onEscape}
             options={[
               {
                 label: '1',
@@ -176,6 +177,35 @@ class Demo extends Component {
             name="input.const"
             value={row.value}
             handleChange={this.handleChange}
+          />
+        )
+      },
+      {
+        Header: 'Soil Type asd',
+        accessor: 'input.soilTypeAsd',
+        headerClassName: 'editable',
+        className: 'editable selectable',
+        width: 100,
+        Cell: (row, { isFocused, onEnter }) => (
+          <Select
+            searchable
+            id={row.original.id}
+            isFocused={isFocused}
+            name="input.soilTypeAsd"
+            value={row.value}
+            noResultsText="No data found"
+            handleChange={this.handleChange}
+            onEnter={onEnter}
+            options={[
+              {
+                label: '1',
+                value: '1'
+              },
+              {
+                label: '2',
+                value: '2'
+              }
+            ]}
           />
         )
       },
