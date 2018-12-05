@@ -521,12 +521,7 @@ function withKeyEvents(WrappedComponent) {
     };
 
     onSelectEscape = () => {
-      // console.log('escape in keyEvents', this.state)
       this.defocus();
-      // this.setFocus(null, null);
-      // this.focus();
-      // this.addListenersWhenFocused();
-      // this.focus();
     }
 
     setIsSelecting = isSelecting => {
