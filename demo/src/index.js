@@ -124,7 +124,7 @@ class Demo extends Component {
         headerClassName: 'editable',
         className: 'editable selectable',
         width: 100,
-        Cell: (row, { isFocused, onEnter, onEscape }) => (
+        Cell: (row, { isFocused, onEnter }) => (
           <Select
             searchable
             id={row.original.id}
@@ -134,7 +134,6 @@ class Demo extends Component {
             noResultsText="No data found"
             handleChange={this.handleChange}
             onEnter={onEnter}
-            onEscape={onEscape}
             options={[
               {
                 label: '1',

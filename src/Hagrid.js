@@ -118,7 +118,6 @@ class Hagrid extends Component {
       setSelectionEnd,
       focus,
       onEnter,
-      onEscape,
       isSelecting,
       addRow,
       focusedCell,
