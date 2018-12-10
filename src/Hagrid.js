@@ -52,12 +52,6 @@ class Hagrid extends Component {
     }
   };
 
-  updateScroll = e => {
-    this.setState({
-      scrollbarWidth: e
-    });
-  };
-
   // this is the main function to trigger fixable
   fixable = scroller => {
     if (this.props.fixable) {
@@ -240,7 +234,6 @@ class Hagrid extends Component {
             onMouseDown={onMouseDown}
             onMouseOver={onMouseOver}
             setDragCopyValue={setDragCopyValue}
-            scroller={this.updateScroll}
             fixable={fixable.fixable ? this.fixable : undefined}
             scrollInit={this.setScroller}
           />

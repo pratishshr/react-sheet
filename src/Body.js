@@ -23,7 +23,7 @@ function renderRow(
   addedData,
   scrollLeft
 ) {
-  return ({ key, index, isScrolling, isVisible, style }) => {
+  return ({ key, index, style }) => {
     return (
       <Row
         addRow={addRow}
