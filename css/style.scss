@@ -7,6 +7,7 @@ $para-text: #9faab7;
 $table-font: 12px;
 $blue: #1fb6ff;
 $blue-selected: #f0f3f9;
+$black: #000;
 body {
   margin: 0;
 }
@@ -219,18 +220,18 @@ body {
 
 .ReactSheet-table {
   position: relative;
+  height: 100%;
   .scrollBar-container {
     position: absolute;
     right: 0;
-    background: rgba(black, 0.3);
+    background: transparent;
     width: 10px;
     height: 100%;
     z-index: 9999;
     .scrollThumb {
-      display: block;
-      width: 6px;
-      // margin: 0 auto;
-      background-color: white;
+      display: none;
+      width: 7px;
+      background-color: rgba($black, 0.2);
       height: 50px;
       border-radius: 25px;
       position: absolute;

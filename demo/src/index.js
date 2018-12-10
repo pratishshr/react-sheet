@@ -4,12 +4,7 @@ import _set from 'lodash/fp/set';
 import _cloneDeep from 'lodash/cloneDeep';
 import _mapValues from 'lodash/mapValues';
 
-import Hagrid, {
-  Input,
-  Select,
-  withKeyEvents,
-  withCheckboxColumn
-} from '../../src';
+import Hagrid, { Input, Select, withKeyEvents, withCheckboxColumn } from '../../src';
 
 const KeyHagrid = withCheckboxColumn(withKeyEvents(Hagrid));
 
@@ -77,9 +72,7 @@ function nextIndex(item) {
 }
 
 function nextSortIndex(item) {
-  let keys = Object.keys(item).sort(
-    (prev, next) => item[prev].sortIndex - item[next].sortIndex
-  );
+  let keys = Object.keys(item).sort((prev, next) => item[prev].sortIndex - item[next].sortIndex);
   let lastIndex = parseInt(keys[keys.length - 1], 10);
 
   if (!lastIndex) {
@@ -92,13 +85,14 @@ function nextSortIndex(item) {
 class Demo extends Component {
   constructor() {
     super();
+
     this.columns = [
       {
         Header: 'ID',
         Cell: row => <span>{row.index + 1}</span>,
         className: 'font-weight-normal fixed',
         headerClassName: 'fixed',
-        width: 40,
+        width: 40
       },
       {
         Header: <span>Soil Depth</span>,
@@ -175,6 +169,35 @@ class Demo extends Component {
             name="input.const"
             value={row.value}
             handleChange={this.handleChange}
+          />
+        )
+      },
+      {
+        Header: 'Soil Type asd',
+        accessor: 'input.soilTypeAsd',
+        headerClassName: 'editable',
+        className: 'editable selectable',
+        width: 100,
+        Cell: (row, { isFocused, onEnter }) => (
+          <Select
+            searchable
+            id={row.original.id}
+            isFocused={isFocused}
+            name="input.soilTypeAsd"
+            value={row.value}
+            noResultsText="No data found"
+            handleChange={this.handleChange}
+            onEnter={onEnter}
+            options={[
+              {
+                label: '1',
+                value: '1'
+              },
+              {
+                label: '2',
+                value: '2'
+              }
+            ]}
           />
         )
       },
@@ -260,13 +283,13 @@ class Demo extends Component {
         Header: 'Constrained Modulus',
         accessor: 'calculated.constrainedModulus',
         width: 100,
-        className: "l-fixed",
+        className: 'l-fixed',
         headerClassName: 'l-fixed'
-
       }
     ];
     this.state = {
       selections: [],
+      pastedColumnAccessors: [],
       data: {
         '1': {
           input: {
@@ -1739,6 +1762,12 @@ class Demo extends Component {
     });
   };
 
+  getPastedColumnAccessors = pastedColumnAccessors => {
+    this.setState({
+      pastedColumnAccessors
+    });
+  };
+
   addRow = (index, id) => {
     let data = _mapValues(this.state.data, row => {
       if (row.sortIndex >= index + 1) {
@@ -1790,7 +1819,7 @@ class Demo extends Component {
           setSelections={this.setSelections}
           selections={this.state.selections}
           changeStateInBulk={this.changeStateInBulk}
-          responsive={false}
+          fixable={{ fixable: true, col: 2 }}
         />
       </div>
     );

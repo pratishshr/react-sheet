@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { List } from 'react-virtualized';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
-import scrollbarSize from 'dom-helpers/util/scrollbarSize';
-
 import Row from './Row';
 
 // TODO: REFACTOR THIS!
@@ -63,10 +61,6 @@ class Body extends Component {
     this.state = {
       headerHeight: null
     };
-
-    setTimeout(() => {
-      this.props.visibilityToggle();
-    }, 1);
   }
 
   setHeaderHeight() {
@@ -85,9 +79,11 @@ class Body extends Component {
   componentDidMount() {
     this.resizeFunction();
     this.setHeaderHeight();
-    setTimeout(() => {
-      this.props.fixable(this.props.scrollLeft);
-    }, 1);
+    if (this.props.fixable) {
+      setTimeout(() => {
+        this.props.fixable(this.props.scrollLeft);
+      }, 1);
+    }
   }
 
   List = null;
@@ -112,9 +108,9 @@ class Body extends Component {
       setDragCopyValue,
       addRow,
       addedData,
-      responsive,
       scrollLeft,
-      fixable
+      fixable,
+      scrollInit
     } = this.props;
 
     const styles = {
@@ -151,8 +147,10 @@ class Body extends Component {
                 scrollLeft
               )}
               onRowsRendered={() => {
-                // this.getScrollBarWidth('.ReactVirtualized__Grid');
-                fixable(scrollLeft);
+                if (fixable) {
+                  fixable(scrollLeft);
+                }
+                scrollInit();
               }}
               style={listStyle}
             />

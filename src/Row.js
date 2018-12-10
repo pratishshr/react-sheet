@@ -20,15 +20,27 @@ class Row extends Component {
     });
   };
 
-  onDoubleClick = (selectedRow, selectedColumn) => {
+  onDoubleClick = (selectedRow, selectedColumn, isDropdown) => {
+      if (!isDropdown) {
+        return () => {
+          const { focus } = this.props;
+          
+          if (focus) {
+            focus(selectedRow, selectedColumn);
+          }
+        }
+      }
+  };
+
+  onClick = (selectedRow, selectedColumn, isDropdown) => {
     return () => {
       const { focus } = this.props;
 
-      if (focus) {
+      if (isDropdown && focus) {
         focus(selectedRow, selectedColumn);
       }
-    };
-  };
+    }
+  }
 
   isSelected = (rowIndex, colIndex) => {
     const { selection = {}, selectionEnd = {} } = this.props;
@@ -90,6 +102,9 @@ class Row extends Component {
         {columns.map((column, colIndex) => {
           const { Cell, width, className } = column;
 
+          // Track if column is a dropdown
+          const isDropdown = className && className.split(' ').includes('selectable');
+
           let rowData = {
             id: row.id,
             index: rowIndex,
@@ -132,10 +147,11 @@ class Row extends Component {
               className={classNames('t-columns', className, {
                 selected: isSelected
               })}
+              onClick={this.onClick(rowIndex, colIndex, isDropdown || false)}
               onMouseUp={onMouseUp && onMouseUp(rowIndex, colIndex)}
               onMouseDown={onMouseDown && onMouseDown(rowIndex, colIndex)}
               onMouseOver={onMouseOver && onMouseOver(rowIndex, colIndex)}
-              onDoubleClick={this.onDoubleClick(selectedRow, selectedColumn)}
+              onDoubleClick={this.onDoubleClick(selectedRow, selectedColumn, isDropdown || false)}
             />
           );
         })}

@@ -4,7 +4,6 @@ import classnames from 'classnames';
 
 import Body from './Body';
 import Header from './Header';
-import { Scrollbars } from 'react-custom-scrollbars';
 
 class Hagrid extends Component {
   constructor(props) {
@@ -12,8 +11,6 @@ class Hagrid extends Component {
     this.state = {
       tableHeight: null,
       headerWidth: null,
-      scrollbarWidth: null,
-      display: 'hidden',
       scrollOffsetLeft: 0
     };
     this.body;
@@ -22,11 +19,6 @@ class Hagrid extends Component {
 
   componentDidMount() {
     this.setTableHeight();
-
-    setTimeout(() => {
-      this.setScroller();
-    }, 500);
-
     document.addEventListener('click', this.onOutsideClick);
   }
 
@@ -66,41 +58,26 @@ class Hagrid extends Component {
     });
   };
 
-  updateVisibility = () => {
-    this.setState({
-      display: 'visible'
-    });
-  };
-
   fixable = scroller => {
-    let dataTable = document.querySelector('.data-table'),
-      scrollWidth = dataTable.scrollWidth,
-      offsetWidth = dataTable.offsetWidth,
-      row = document.querySelectorAll('.table-row');
+    if (this.props.fixable) {
+      let dataTable = document.querySelector('.data-table'),
+        scrollWidth = dataTable.scrollWidth,
+        offsetWidth = dataTable.offsetWidth,
+        row = document.querySelectorAll('.table-row');
 
-    row.forEach((element, index) => {
-      for (let i = 0; i < 2; i++) {
-        element.childNodes[i].style.transform = `translateX(${scroller}px)`;
-        if (scroller > 0) {
-          element.childNodes[i].style.zIndex = `999`;
-          element.childNodes[i].style.background = `white`;
-          element.childNodes[i].style.boxShadow = `1px 0px 3px 0px rgba(0, 0, 0, 0.14)`;
-          element.childNodes[i].classList.add('scrolled');
-        } else {
-          element.childNodes[i].classList.remove('scrolled');
-          element.childNodes[i].style.boxShadow = null;
+      row.forEach((element, index) => {
+        for (let i = 0; i < this.props.fixable.col; i++) {
+          element.childNodes[i].style.transform = `translateX(${scroller}px)`;
+          if (scroller > 0) {
+            element.childNodes[i].style.zIndex = `999`;
+            element.childNodes[i].style.background = `white`;
+            element.childNodes[i].style.boxShadow = `1px 0px 3px 0px rgba(0, 0, 0, 0.14)`;
+          } else {
+            element.childNodes[i].style.boxShadow = null;
+          }
         }
-      }
-    });
-
-    // lastColFix.forEach((element, index) => {
-    //   element.style.transform = `translateX(-${ (scrollWidth - offsetWidth) - scroller}px)`;
-    //   if (scroller > 0) {
-    //     element.classList.add('scrolled');
-    //   }else{
-    //     element.classList.remove('scrolled');
-    //   }
-    // })
+      });
+    }
   };
 
   scrollInteract = event => {
@@ -115,14 +92,22 @@ class Hagrid extends Component {
     }
   };
 
-  setScroller() {
+  setScroller = () => {
     let scrollable = document.querySelector('.ReactVirtualized__Grid');
     let scrollBar = document.querySelector('.scrollThumb');
-    if (scrollable.scrollHeight > scrollable.offsetHeight) {
+
+    let scrollHeight = scrollable.scrollHeight;
+    let offsetHeight = scrollable.offsetHeight;
+
+    let thumbHeight = (offsetHeight / scrollHeight) * 100;
+
+    thumbHeight = thumbHeight < 15 ? 15 : thumbHeight;
+
+    if (scrollHeight > offsetHeight) {
       scrollBar.style.display = 'block';
-      scrollBar.style.height = scrollable.scrollHeight - scrollable.offsetHeight + 'px';
+      scrollBar.style.height = thumbHeight + '%';
     }
-  }
+  };
 
   DragObject = event => {
     event.preventDefault();
@@ -172,9 +157,6 @@ class Hagrid extends Component {
   };
 
   wheeler = event => {
-    console.log(event);
-    // debugger;
-    // event.preventDefault();
     let scrollable = document.querySelector('.ReactVirtualized__Grid');
     scrollable.scrollTop += event.deltaY;
 
@@ -211,6 +193,8 @@ class Hagrid extends Component {
 
     const { tableHeight } = this.state;
 
+    let fixable = this.props.fixable ? this.props.fixable : { fixable: false };
+
     return (
       <div className="ReactSheet-table">
         <div className="scrollBar-container">
@@ -220,16 +204,15 @@ class Hagrid extends Component {
           onMouseDown={this.onClick}
           ref={elem => (this.dataTable = elem)}
           className={classnames('data-table', className)}
-          style={{ height: tableHeight || '', visibility: this.state.display }}
-          onScroll={this.scrollInteract}
+          style={{ height: tableHeight || '' }}
+          onScroll={fixable.fixable ? this.scrollInteract : undefined}
           onWheel={this.wheeler}
         >
           <Header
-            width={headerWidth + this.state.scrollbarWidth}
+            width={headerWidth}
             columns={columns}
             setWidth={this.setWidth}
             setHeight={this.setHeight}
-            ScrollbarWidth={this.state.scrollbarWidth}
             responsive={responsive}
           />
           <Body
@@ -255,10 +238,9 @@ class Hagrid extends Component {
             onMouseDown={onMouseDown}
             onMouseOver={onMouseOver}
             setDragCopyValue={setDragCopyValue}
-            ScrollbarWidth={this.state.scrollbarWidth}
             scroller={this.updateScroll}
-            visibilityToggle={this.updateVisibility}
-            fixable={this.fixable}
+            fixable={fixable.fixable ? this.fixable : undefined}
+            scrollInit={this.setScroller}
           />
         </div>
       </div>
