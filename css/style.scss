@@ -217,26 +217,3 @@ body {
     border-radius: 2px;
   }
 }
-
-.ReactSheet-table {
-  position: relative;
-  height: 100%;
-  .scrollBar-container {
-    position: absolute;
-    right: 0;
-    background: transparent;
-    width: 10px;
-    height: 100%;
-    z-index: 9999;
-    .scrollThumb {
-      display: none;
-      width: 7px;
-      background-color: rgba($black, 0.2);
-      height: 50px;
-      border-radius: 25px;
-      position: absolute;
-      left: 50%;
-      margin-left: -3px;
-    }
-  }
-}
