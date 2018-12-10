@@ -58,6 +58,7 @@ class Hagrid extends Component {
     });
   };
 
+  // this is the main function to trigger fixable
   fixable = scroller => {
     if (this.props.fixable) {
       let dataTable = document.querySelector('.data-table'),
@@ -84,6 +85,7 @@ class Hagrid extends Component {
     let scrollLeft = event.target.scrollLeft;
 
     if (event.target.classList.contains('data-table')) {
+      // Calls fixable when scroll starts
       this.fixable(scrollLeft);
 
       this.setState({
