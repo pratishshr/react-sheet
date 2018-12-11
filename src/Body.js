@@ -117,6 +117,8 @@ class Body extends Component {
     };
     styles.width = width || '1000px';
 
+    console.log('body body');
+
     return (
       <div className="table-body-row" style={styles} id="react-sheet-body">
         <AutoSizer>
