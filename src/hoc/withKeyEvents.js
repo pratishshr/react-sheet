@@ -207,17 +207,22 @@ function withKeyEvents(WrappedComponent) {
       data.forEach((lines, rowIndex) => {
         lines.forEach((cellData, colIndex) => {
           let { row, column } = this.state.selection;
-          newStateWithAccessor = newStateWithAccessor.newState && this.prepareState(
-            newStateWithAccessor.newState,
-            {
-              row: row + rowIndex,
-              column: column + colIndex
-            },
-            cellData.trim()
-          );
+          newStateWithAccessor =
+            newStateWithAccessor.newState &&
+            this.prepareState(
+              newStateWithAccessor.newState,
+              {
+                row: row + rowIndex,
+                column: column + colIndex
+              },
+              cellData.trim()
+            );
 
-          if (newStateWithAccessor.pastedColumnAccessor && !pastedColumnAccessors.includes(newStateWithAccessor.pastedColumnAccessor)){
-            pastedColumnAccessors.push(newStateWithAccessor.pastedColumnAccessor)
+          if (
+            newStateWithAccessor.pastedColumnAccessor &&
+            !pastedColumnAccessors.includes(newStateWithAccessor.pastedColumnAccessor)
+          ) {
+            pastedColumnAccessors.push(newStateWithAccessor.pastedColumnAccessor);
           }
         });
       });
@@ -263,11 +268,6 @@ function withKeyEvents(WrappedComponent) {
           column: column
         }
       });
-      if (this.state.selectionEnd.row <= row) {
-        this.scrollToCell(row - 1, column);
-      } else {
-        this.scrollToCell(row + 1, column);
-      }
     };
 
     isFocused = () => {
@@ -534,14 +534,17 @@ function withKeyEvents(WrappedComponent) {
           cells.forEach(row => {
             row.forEach(selection => {
               newStateWithAccessor = this.prepareState(newStateWithAccessor.newState, selection, dragCopyValue);
-              if (newStateWithAccessor.pastedColumnAccessor && !pastedColumnAccessors.includes(newStateWithAccessor.pastedColumnAccessor)) {
-                pastedColumnAccessors.push(newStateWithAccessor.pastedColumnAccessor)
+              if (
+                newStateWithAccessor.pastedColumnAccessor &&
+                !pastedColumnAccessors.includes(newStateWithAccessor.pastedColumnAccessor)
+              ) {
+                pastedColumnAccessors.push(newStateWithAccessor.pastedColumnAccessor);
               }
             });
           });
 
           this.setDragCopyValue(null);
-          this.changeState(newStateWithAccessor.newState)
+          this.changeState(newStateWithAccessor.newState);
           this.props.onPaste && this.props.onPaste(newStateWithAccessor.newState, pastedColumnAccessors, true);
         }
       };
