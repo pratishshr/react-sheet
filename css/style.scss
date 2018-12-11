@@ -1,13 +1,13 @@
 $font-segoe-normal: 'Segoe UI';
 $font-family-sans-fallback: 'Arial', sans-serif;
-$font-family-sans: $font-segoe-normal, 'Source Sans Pro', 'Helvetica Neue',
-  'Helvetica', $font-family-sans-fallback;
+$font-family-sans: $font-segoe-normal, 'Source Sans Pro', 'Helvetica Neue', 'Helvetica', $font-family-sans-fallback;
 $element-border: #e6e6e6;
 $light-blue: lighten(#bbe9ff, 8%);
 $para-text: #9faab7;
 $table-font: 12px;
 $blue: #1fb6ff;
-$blue-selected: #f0f3f9 ;
+$blue-selected: #f0f3f9;
+$black: #000;
 body {
   margin: 0;
 }
@@ -23,7 +23,12 @@ body {
   .table-row {
     display: flex;
     align-items: stretch;
-    // padding-right: 17px;
+    .scrolled {
+      z-index: 999;
+      position: relative;
+      background: white;
+      box-shadow: 1px 0px 3px 0px rgba(0, 0, 0, 0.14);
+    }
     .t-head {
       font-weight: bold;
       color: $para-text;
@@ -39,6 +44,7 @@ body {
       justify-content: center;
       position: relative;
       box-sizing: border-box;
+
       &.selected {
         box-shadow: inset 0 0 0px 1px $blue;
         background-color: $blue-selected !important;
@@ -102,7 +108,6 @@ body {
     flex-direction: column;
     overflow: hidden;
     box-sizing: border-box;
-  
   }
 
   .Select {
@@ -211,19 +216,4 @@ body {
     cursor: pointer;
     border-radius: 2px;
   }
-}
-.fixed{
-  z-index: 999;
-  position: relative;
-  background: white;
-  &.scrolled{
-    box-shadow: 1px 0px 3px 0px rgba(0, 0, 0, 0.14);
-  }
-}
-.l-fixed{
-  z-index: 999;
-  position: relative;
-  overflow: visible;
-  background: white;
-
 }

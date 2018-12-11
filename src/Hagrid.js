@@ -4,7 +4,6 @@ import classnames from 'classnames';
 
 import Body from './Body';
 import Header from './Header';
-import { Scrollbars } from 'react-custom-scrollbars';
 
 class Hagrid extends Component {
   constructor(props) {
@@ -12,8 +11,6 @@ class Hagrid extends Component {
     this.state = {
       tableHeight: null,
       headerWidth: null,
-      scrollbarWidth: null,
-      display: 'hidden',
       scrollOffsetLeft: 0
     };
     this.body;
@@ -22,7 +19,6 @@ class Hagrid extends Component {
 
   componentDidMount() {
     this.setTableHeight();
-
     document.addEventListener('click', this.onOutsideClick);
   }
 
@@ -56,48 +52,34 @@ class Hagrid extends Component {
     }
   };
 
-  updateScroll = e => {
-    this.setState({
-      scrollbarWidth: e
-    });
-  };
-
-  updateVisibility = () => {
-    this.setState({
-      display: 'visible'
-    });
-  };
-
+  // this is the main function to trigger fixable
   fixable = scroller => {
-    let dataTable = document.querySelector('.data-table'),
-      scrollWidth = dataTable.scrollWidth,
-      offsetWidth = dataTable.offsetWidth,
-      fixCol = document.querySelectorAll('.fixed'),
-      lastColFix = document.querySelectorAll('.l-fixed');
+    if (this.props.fixable) {
+      let dataTable = document.querySelector('.data-table'),
+        scrollWidth = dataTable.scrollWidth,
+        offsetWidth = dataTable.offsetWidth,
+        row = document.querySelectorAll('.table-row');
 
-    fixCol.forEach((element, index) => {
-      element.style.transform = `translateX(${scroller}px)`;
-      if (scroller > 0) {
-        element.classList.add('scrolled');
-      } else {
-        element.classList.remove('scrolled');
-      }
-    });
-
-    // lastColFix.forEach((element, index) => {
-    //   element.style.transform = `translateX(-${ (scrollWidth - offsetWidth) - scroller}px)`;
-    //   if (scroller > 0) {
-    //     element.classList.add('scrolled');
-    //   }else{
-    //     element.classList.remove('scrolled');
-    //   }
-    // })
+      row.forEach((element, index) => {
+        for (let i = 0; i < this.props.fixable.col; i++) {
+          element.childNodes[i].style.transform = `translateX(${scroller}px)`;
+          if (scroller > 0) {
+            element.childNodes[i].style.zIndex = `999`;
+            element.childNodes[i].style.background = `white`;
+            element.childNodes[i].style.boxShadow = `1px 0px 3px 0px rgba(0, 0, 0, 0.14)`;
+          } else {
+            element.childNodes[i].style.boxShadow = null;
+          }
+        }
+      });
+    }
   };
 
   scrollInteract = event => {
     let scrollLeft = event.target.scrollLeft;
 
     if (event.target.classList.contains('data-table')) {
+      // Calls fixable when scroll starts
       this.fixable(scrollLeft);
 
       this.setState({
@@ -125,31 +107,25 @@ class Hagrid extends Component {
       onMouseUp,
       onMouseDown,
       onMouseOver,
-      setDragCopyValue,
-      responsive,
-      scrollLeft
+      setDragCopyValue
     } = this.props;
     const { headerWidth, headerHeight } = this.state;
 
     const { tableHeight } = this.state;
+
+    let fixable = this.props.fixable ? this.props.fixable : { fixable: false };
 
     return (
       <div
         onMouseDown={this.onClick}
         ref={elem => (this.dataTable = elem)}
         className={classnames('data-table', className)}
-        style={{ height: tableHeight || '', visibility: this.state.display }}
+        style={{ height: tableHeight || '' }}
+        onScroll={fixable.fixable ? this.scrollInteract : undefined}
+        onWheel={this.wheeler}
       >
-        <Header
-          width={headerWidth + this.state.scrollbarWidth}
-          columns={columns}
-          setWidth={this.setWidth}
-          setHeight={this.setHeight}
-          ScrollbarWidth={this.state.scrollbarWidth}
-          responsive={responsive}
-        />
+        <Header width={headerWidth} columns={columns} setWidth={this.setWidth} setHeight={this.setHeight} />
         <Body
-          responsive={responsive}
           addRow={addRow}
           ref={elem => (this.body = elem)}
           data={data}
@@ -171,10 +147,7 @@ class Hagrid extends Component {
           onMouseDown={onMouseDown}
           onMouseOver={onMouseOver}
           setDragCopyValue={setDragCopyValue}
-          ScrollbarWidth={this.state.scrollbarWidth}
-          scroller={this.updateScroll}
-          visibilityToggle={this.updateVisibility}
-          fixable={this.fixable}
+          fixable={fixable.fixable ? this.fixable : undefined}
         />
       </div>
     );

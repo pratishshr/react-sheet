@@ -4,12 +4,7 @@ import _set from 'lodash/fp/set';
 import _cloneDeep from 'lodash/cloneDeep';
 import _mapValues from 'lodash/mapValues';
 
-import Hagrid, {
-  Input,
-  Select,
-  withKeyEvents,
-  withCheckboxColumn
-} from '../../src';
+import Hagrid, { Input, Select, withKeyEvents, withCheckboxColumn } from '../../src';
 
 const KeyHagrid = withCheckboxColumn(withKeyEvents(Hagrid));
 
@@ -77,9 +72,7 @@ function nextIndex(item) {
 }
 
 function nextSortIndex(item) {
-  let keys = Object.keys(item).sort(
-    (prev, next) => item[prev].sortIndex - item[next].sortIndex
-  );
+  let keys = Object.keys(item).sort((prev, next) => item[prev].sortIndex - item[next].sortIndex);
   let lastIndex = parseInt(keys[keys.length - 1], 10);
 
   if (!lastIndex) {
@@ -99,7 +92,7 @@ class Demo extends Component {
         Cell: row => <span>{row.index + 1}</span>,
         className: 'font-weight-normal fixed',
         headerClassName: 'fixed',
-        width: 40,
+        width: 40
       },
       {
         Header: <span>Soil Depth</span>,
@@ -290,9 +283,8 @@ class Demo extends Component {
         Header: 'Constrained Modulus',
         accessor: 'calculated.constrainedModulus',
         width: 100,
-        className: "l-fixed",
+        className: 'l-fixed',
         headerClassName: 'l-fixed'
-
       }
     ];
     this.state = {
@@ -1798,7 +1790,7 @@ class Demo extends Component {
       [newRow.id]: newRow
     });
   };
- 
+
   render() {
     const { data } = this.state;
     let rows = Object.keys(data)
@@ -1827,7 +1819,7 @@ class Demo extends Component {
           setSelections={this.setSelections}
           selections={this.state.selections}
           changeStateInBulk={this.changeStateInBulk}
-          responsive={false}
+          fixable={{ fixable: true, col: 2 }}
         />
       </div>
     );
