@@ -1,6 +1,6 @@
 {
   "name": "react-sheet",
-  "version": "0.0.85",
+  "version": "0.0.86",
   "description": "Spreadsheet component for react",
   "main": "lib/index.js",
   "module": "es/index.js",
