@@ -1,5 +1,6 @@
 import _get from 'lodash/get';
 import _set from 'lodash/fp/set';
+import _throttle from 'lodash/throttle';
 import React, { Component } from 'react';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
@@ -43,6 +44,34 @@ function withKeyEvents(WrappedComponent) {
     }
 
     addListeners = () => {
+      let isOut = false;
+      let interval;
+
+      window.addEventListener('mousemove', e => {
+        if (this.state.isSelecting) {
+          let mouseX = e.clientX;
+          let mouseY = e.clientY;
+          let tableRect = document.querySelector('.table-body-row').getBoundingClientRect();
+          let tableBottom = tableRect.bottom;
+          let velocity = 20;
+
+          if (mouseY > tableBottom && !isOut) {
+            isOut = true;
+
+            let scrollable = document.querySelector('.ReactVirtualized__Grid');
+
+            clearInterval(interval);
+            interval = setInterval(() => {
+              scrollable.scrollTop += velocity;
+            }, 1000 / 60);
+          } else if (mouseY < tableBottom) {
+            clearInterval(interval);
+          }
+        } else {
+          clearInterval(interval);
+        }
+      });
+
       window.addEventListener('keydown', this.onKeyDown, false);
       window.addEventListener('keypress', this.onKeyPress, false);
       window.addEventListener('copy', this.copySelection, false);
