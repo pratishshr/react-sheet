@@ -37,41 +37,56 @@ function withKeyEvents(WrappedComponent) {
         dragCopyValue: null
       };
       this.elem;
+      this.isOut = false;
+      this.interval;
     }
 
     componentWillUnmount() {
       this.removeAllListeners();
     }
 
-    addListeners = () => {
-      let isOut = false;
-      let interval;
+    mouseMove = e => {
+      if (this.state.isSelecting) {
+        let mouseX = e.clientX;
+        let mouseY = e.clientY;
+        let tableRect = document.querySelector('.table-body-row').getBoundingClientRect();
+        let tableBottom = tableRect.bottom;
+        let tableTop = tableRect.top;
+        let tableLeft = tableRect.left;
+        let tableRight = tableRect.right;
+        let velocity = 30;
+        let scrollable = document.querySelector('.ReactVirtualized__Grid');
+        let dataTable = document.querySelector('.data-table');
 
-      window.addEventListener('mousemove', e => {
-        if (this.state.isSelecting) {
-          let mouseX = e.clientX;
-          let mouseY = e.clientY;
-          let tableRect = document.querySelector('.table-body-row').getBoundingClientRect();
-          let tableBottom = tableRect.bottom;
-          let velocity = 20;
+        if (this.isOut) {
+          this.isOut = false;
+          this.interval = setInterval(() => {
+            this.wheeler();
+            //for horizontal scroll
+            if (mouseX > tableRight || mouseX > window.innerWidth) {
+              dataTable.scrollLeft += velocity;
+            } else if (mouseX < tableLeft || mouseX < 0) {
+              dataTable.scrollLeft -= velocity;
+            }
 
-          if (mouseY > tableBottom && !isOut) {
-            isOut = true;
-
-            let scrollable = document.querySelector('.ReactVirtualized__Grid');
-
-            clearInterval(interval);
-            interval = setInterval(() => {
+            //for vertical scroll
+            if (mouseY > tableBottom) {
               scrollable.scrollTop += velocity;
-            }, 1000 / 60);
-          } else if (mouseY < tableBottom) {
-            clearInterval(interval);
-          }
+            } else if (mouseY < tableTop) {
+              scrollable.scrollTop -= velocity;
+            }
+          }, 1000 / 120);
         } else {
-          clearInterval(interval);
+          this.isOut = true;
+          clearInterval(this.interval);
         }
-      });
+      } else {
+        clearInterval(this.interval);
+      }
+    };
 
+    addListeners = () => {
+      window.addEventListener('mousemove', this.mouseMove, false);
       window.addEventListener('keydown', this.onKeyDown, false);
       window.addEventListener('keypress', this.onKeyPress, false);
       window.addEventListener('copy', this.copySelection, false);
@@ -119,7 +134,6 @@ function withKeyEvents(WrappedComponent) {
           column: null
         }
       });
-
       window.removeEventListener('keydown', this.onKeyDown, false);
       window.removeEventListener('keydown', this.onKeyDownWhenFocused, false);
       window.removeEventListener('keypress', this.onKeyPress, false);
@@ -128,6 +142,7 @@ function withKeyEvents(WrappedComponent) {
       window.removeEventListener('paste', this.pasteSelection, false);
       window.removeEventListener('selectstart', this.preventDefault, false);
       window.removeEventListener('mouseup', this.onMouseUpOutside, false);
+      window.removeEventListener('mousemove', this.mouseMove, false);
     };
 
     /**
@@ -267,6 +282,18 @@ function withKeyEvents(WrappedComponent) {
         block: 'nearest',
         inline: 'nearest'
       });
+
+      this.wheeler();
+    };
+
+    wheeler = () => {
+      let scrollable = document.querySelector('.ReactVirtualized__Grid');
+
+      let thumb = document.querySelector('.scrollThumb');
+      let position = scrollable.scrollTop / (scrollable.scrollHeight - scrollable.offsetHeight),
+        scrollPos = position * (thumb.parentNode.offsetHeight - thumb.offsetHeight);
+
+      thumb.style.top = scrollPos + 'px';
     };
 
     setSelection = (row, column) => {

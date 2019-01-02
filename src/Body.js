@@ -53,7 +53,7 @@ function renderRow(
 }
 const listStyle = {
   overflowX: false,
-  overflowY: 'auto'
+  overflowY: 'hidden'
 };
 class Body extends Component {
   constructor(props) {
@@ -109,7 +109,8 @@ class Body extends Component {
       addRow,
       addedData,
       scrollLeft,
-      fixable
+      fixable,
+      scrollInit
     } = this.props;
 
     const styles = {
@@ -149,6 +150,7 @@ class Body extends Component {
                 if (fixable) {
                   fixable(scrollLeft);
                 }
+                scrollInit();
               }}
               style={listStyle}
             />
