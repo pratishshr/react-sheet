@@ -47,6 +47,7 @@ function withKeyEvents(WrappedComponent) {
 
     mouseMove = e => {
       if (this.state.isSelecting) {
+        e.preventDefault();
         let mouseX = e.clientX;
         let mouseY = e.clientY;
         let tableRect = document.querySelector('.table-body-row').getBoundingClientRect();
@@ -58,14 +59,15 @@ function withKeyEvents(WrappedComponent) {
         let scrollable = document.querySelector('.ReactVirtualized__Grid');
         let dataTable = document.querySelector('.data-table');
 
+        let dataTableRect = dataTable.getBoundingClientRect();
+
         if (this.isOut) {
           this.isOut = false;
           this.interval = setInterval(() => {
             this.wheeler();
-            //for horizontal scroll
-            if (mouseX > tableRight || mouseX > window.innerWidth) {
+            if (mouseX > tableRight || mouseX > dataTableRect.right) {
               dataTable.scrollLeft += velocity;
-            } else if (mouseX < tableLeft || mouseX < 0) {
+            } else if (mouseX < tableLeft || mouseX < dataTableRect.left + 20) {
               dataTable.scrollLeft -= velocity;
             }
 
