@@ -1,5 +1,6 @@
 import _get from 'lodash/get';
 import _set from 'lodash/fp/set';
+import _throttle from 'lodash/throttle';
 import React, { Component } from 'react';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
@@ -36,13 +37,58 @@ function withKeyEvents(WrappedComponent) {
         dragCopyValue: null
       };
       this.elem;
+      this.isOut = false;
+      this.interval;
     }
 
     componentWillUnmount() {
       this.removeAllListeners();
     }
 
+    mouseMove = e => {
+      if (this.state.isSelecting) {
+        e.preventDefault();
+        let mouseX = e.clientX;
+        let mouseY = e.clientY;
+        let tableRect = document.querySelector('.table-body-row').getBoundingClientRect();
+        let tableBottom = tableRect.bottom;
+        let tableTop = tableRect.top;
+        let tableLeft = tableRect.left;
+        let tableRight = tableRect.right;
+        let velocity = 30;
+        let scrollable = document.querySelector('.ReactVirtualized__Grid');
+        let dataTable = document.querySelector('.data-table');
+
+        let dataTableRect = dataTable.getBoundingClientRect();
+
+        if (this.isOut) {
+          this.isOut = false;
+          this.interval = setInterval(() => {
+            this.wheeler();
+            if (mouseX > tableRight || mouseX > dataTableRect.right) {
+              dataTable.scrollLeft += velocity;
+            } else if (mouseX < tableLeft || mouseX < dataTableRect.left + 20) {
+              dataTable.scrollLeft -= velocity;
+            }
+
+            //for vertical scroll
+            if (mouseY > tableBottom) {
+              scrollable.scrollTop += velocity;
+            } else if (mouseY < tableTop) {
+              scrollable.scrollTop -= velocity;
+            }
+          }, 1000 / 120);
+        } else {
+          this.isOut = true;
+          clearInterval(this.interval);
+        }
+      } else {
+        clearInterval(this.interval);
+      }
+    };
+
     addListeners = () => {
+      window.addEventListener('mousemove', this.mouseMove, false);
       window.addEventListener('keydown', this.onKeyDown, false);
       window.addEventListener('keypress', this.onKeyPress, false);
       window.addEventListener('copy', this.copySelection, false);
@@ -90,7 +136,6 @@ function withKeyEvents(WrappedComponent) {
           column: null
         }
       });
-
       window.removeEventListener('keydown', this.onKeyDown, false);
       window.removeEventListener('keydown', this.onKeyDownWhenFocused, false);
       window.removeEventListener('keypress', this.onKeyPress, false);
@@ -99,6 +144,7 @@ function withKeyEvents(WrappedComponent) {
       window.removeEventListener('paste', this.pasteSelection, false);
       window.removeEventListener('selectstart', this.preventDefault, false);
       window.removeEventListener('mouseup', this.onMouseUpOutside, false);
+      window.removeEventListener('mousemove', this.mouseMove, false);
     };
 
     /**
@@ -238,6 +284,18 @@ function withKeyEvents(WrappedComponent) {
         block: 'nearest',
         inline: 'nearest'
       });
+
+      this.wheeler();
+    };
+
+    wheeler = () => {
+      let scrollable = document.querySelector('.ReactVirtualized__Grid');
+
+      let thumb = document.querySelector('.scrollThumb');
+      let position = scrollable.scrollTop / (scrollable.scrollHeight - scrollable.offsetHeight),
+        scrollPos = position * (thumb.parentNode.offsetHeight - thumb.offsetHeight);
+
+      thumb.style.top = scrollPos + 'px';
     };
 
     setSelection = (row, column) => {
