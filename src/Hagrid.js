@@ -154,6 +154,10 @@ class Hagrid extends Component {
 
   wheeler = event => {
     let scrollable = document.querySelector('.ReactVirtualized__Grid');
+
+    if (event.target.classList.contains('Select-option')) {
+      return;
+    }
     scrollable.scrollTop += event.deltaY;
 
     let thumb = document.querySelector('.scrollThumb');
